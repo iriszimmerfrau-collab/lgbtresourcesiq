@@ -1,4 +1,11 @@
+astro.config.mjs
 
+package.json
+
+tsconfig.json
+
+public/
+src/
 # generated types
 .astro/
 
