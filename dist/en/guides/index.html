@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-ancestors 'none'"><meta http-equiv="X-Frame-Options" content="DENY"><meta name="referrer" content="no-referrer"><meta name="robots" content="index, follow"><title>Guides | Iraqi Social Progress Collective</title><meta name="description" content="Practical guides on health, safety, and identity for queer Iraqis."><meta name="keywords" content="queer Iraq, LGBTQ Iraq, trans Iraq, gay Iraq, HRT Iraq, hormones Iraq, gender identity, mental health, مثليين, متحولين, العراق"><link rel="canonical" href="https://example.com/en/guides/"><link rel="alternate" hreflang="en" href="https://example.com/en/guides/"><link rel="alternate" hreflang="ar" href="https://example.com/ar/guides/"><link rel="alternate" hreflang="x-default" href="https://example.com/"><meta property="og:title" content="Guides | Iraqi Social Progress Collective"><meta property="og:description" content="Practical guides on health, safety, and identity for queer Iraqis."><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="ar_IQ"><meta property="og:url" content="https://example.com/en/guides/"><meta property="og:site_name" content="Iraqi Social Progress Collective"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Guides | Iraqi Social Progress Collective"><meta name="twitter:description" content="Practical guides on health, safety, and identity for queer Iraqis."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script>
+      (function(){try{var p=window.location.pathname,l=p.split('/')[1];if(l==='en'||l==='ar')localStorage.setItem('ispc-lang',l);}catch(e){}})();
+    </script><link rel="stylesheet" href="/_astro/BaseLayout.HT2QVvVO.css"></head> <body class="bg-offwhite text-body min-h-screen flex flex-col"> <!-- Noscript fallback: always-visible plain link --><noscript><style>
+    .qe-noscript {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 999999;
+      background: #c4382b;
+      color: #fff;
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      text-decoration: none;
+      line-height: 1;
+    }
+    .qe-noscript:hover { background: #a03020; }
+  </style><a href="https://www.google.com" class="qe-noscript" rel="noopener noreferrer">Quick Exit</a></noscript><!-- JS-enhanced button (hidden until JS runs) --><div id="qe-container" style="display:none;"><!-- Desktop: top-right rectangle --><button id="qe-desktop" type="button" aria-label="Leave this site immediately" style="position:fixed;top:16px;right:16px;z-index:999999;background:#c4382b;color:#fff;border:none;cursor:pointer;padding:10px 20px;font-weight:700;font-size:0.875rem;line-height:1;letter-spacing:0.02em;">Quick Exit</button><!-- Mobile: bottom-right circle --><button id="qe-mobile" type="button" aria-label="Leave this site immediately" style="position:fixed;bottom:24px;right:24px;z-index:999999;background:#c4382b;color:#fff;border:none;cursor:pointer;width:56px;height:56px;border-radius:50%;font-size:1.5rem;font-weight:700;line-height:1;display:none;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><path d="M15 5L10 10M10 10L5 15M10 10L15 15M10 10L5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg></button></div><!-- White cover div (hidden until exit triggers) --><div id="qe-cover" style="position:fixed;inset:0;background:#fff;z-index:999999;display:none;" aria-hidden="true"></div><!-- Exit logic: inlined for maximum reliability, zero dependencies --><script>
+(function() {
+  var DECOY = 'https://www.google.com';
+  var container = document.getElementById('qe-container');
+  var cover = document.getElementById('qe-cover');
+  var btnDesktop = document.getElementById('qe-desktop');
+  var btnMobile = document.getElementById('qe-mobile');
+
+  // Show JS-enhanced buttons, apply responsive visibility
+  if (container) {
+    container.style.display = 'block';
+    function applyResponsive() {
+      var w = window.innerWidth;
+      if (btnDesktop) btnDesktop.style.display = w >= 768 ? 'block' : 'none';
+      if (btnMobile) btnMobile.style.display = w < 768 ? 'flex' : 'none';
+      if (btnMobile) {
+        btnMobile.style.alignItems = 'center';
+        btnMobile.style.justifyContent = 'center';
+      }
+    }
+    applyResponsive();
+    window.addEventListener('resize', applyResponsive);
+  }
+
+  function triggerExit() {
+    // 1. White cover — immediately hide all content
+    if (cover) cover.style.display = 'block';
+    // 2. Open decoy in new tab
+    try { window.open(DECOY, '_blank'); } catch(e) {}
+    // 3. Replace current tab (removes from back button history)
+    window.location.replace(DECOY);
+  }
+
+  // Button clicks
+  if (btnDesktop) btnDesktop.addEventListener('click', triggerExit);
+  if (btnMobile) btnMobile.addEventListener('click', triggerExit);
+
+  // ESC key — works even when focus is inside inputs
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') triggerExit();
+  });
+
+  // Triple-spacebar within 500ms
+  var spaceTimes = [];
+  document.addEventListener('keydown', function(e) {
+    if (e.code !== 'Space') return;
+    var tag = e.target && e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    var now = Date.now();
+    spaceTimes.push(now);
+    var cutoff = now - 500;
+    var recent = [];
+    for (var i = 0; i < spaceTimes.length; i++) {
+      if (spaceTimes[i] >= cutoff) recent.push(spaceTimes[i]);
+    }
+    spaceTimes = recent;
+    if (spaceTimes.length >= 3) {
+      e.preventDefault();
+      triggerExit();
+    }
+  });
+})();
+</script>  <header class="bg-navy text-cream"> <nav class="max-w-[1080px] mx-auto px-4 flex items-center justify-between h-14" aria-label="Main navigation"> <a href="/en/" class="font-heading font-bold text-cream no-underline text-base tracking-tight"> Iraqi Social Progress Collective </a> <!-- Desktop nav --> <div class="hidden md:flex items-center gap-5"> <a href="/en/" class="text-sm no-underline transition-colors text-cream/70 hover:text-white"> Home </a><a href="/en/about" class="text-sm no-underline transition-colors text-cream/70 hover:text-white"> About </a><a href="/en/safety" class="text-sm no-underline transition-colors text-cream/70 hover:text-white"> Safety </a><a href="/en/community" class="text-sm no-underline transition-colors text-cream/70 hover:text-white"> Community </a><a href="/en/guides" class="text-sm no-underline transition-colors text-white font-semibold" aria-current="page"> Guides </a><a href="/en/stories" class="text-sm no-underline transition-colors text-cream/70 hover:text-white"> Stories </a><a href="/en/news" class="text-sm no-underline transition-colors text-cream/70 hover:text-white"> News </a> <a href="/ar/guides" aria-label="Switch to Arabic" class="text-cream hover:text-white no-underline text-sm font-semibold tracking-wide transition-colors"> العربية </a> </div> <!-- Mobile hamburger --> <button id="mobile-menu-btn" type="button" class="md:hidden text-cream p-2" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M3 12h18M3 6h18M3 18h18"></path> </svg> </button> </nav> <!-- Mobile menu (hidden by default) --> <div id="mobile-menu" class="md:hidden hidden bg-navy border-t border-cream/10 px-4 pb-4"> <a href="/en/" class="block py-2 text-sm no-underline transition-colors text-cream/70 hover:text-white"> Home </a><a href="/en/about" class="block py-2 text-sm no-underline transition-colors text-cream/70 hover:text-white"> About </a><a href="/en/safety" class="block py-2 text-sm no-underline transition-colors text-cream/70 hover:text-white"> Safety </a><a href="/en/community" class="block py-2 text-sm no-underline transition-colors text-cream/70 hover:text-white"> Community </a><a href="/en/guides" class="block py-2 text-sm no-underline transition-colors text-white font-semibold" aria-current="page"> Guides </a><a href="/en/stories" class="block py-2 text-sm no-underline transition-colors text-cream/70 hover:text-white"> Stories </a><a href="/en/news" class="block py-2 text-sm no-underline transition-colors text-cream/70 hover:text-white"> News </a> <div class="pt-2 border-t border-cream/10 mt-2"> <a href="/ar/guides" aria-label="Switch to Arabic" class="text-cream hover:text-white no-underline text-sm font-semibold tracking-wide transition-colors"> العربية </a> </div> </div> </header> <script>
+(function() {
+  var btn = document.getElementById('mobile-menu-btn');
+  var menu = document.getElementById('mobile-menu');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', function() {
+    var open = !menu.classList.contains('hidden');
+    menu.classList.toggle('hidden');
+    btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+  });
+})();
+</script> <main class="flex-1 mx-auto w-full px-4 py-8 max-w-[1080px]">  <section class="py-8"> <h1 class="text-3xl font-bold mb-2">Guides</h1> <p class="text-muted mb-8">Practical guides on health, safety, and identity.</p> <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> <a href="/en/guides/hrt-overview" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">HRT in Iraq — overview</h3> <p class="text-muted text-sm leading-relaxed mb-3">A practical, harm-reduction guide to hormone replacement therapy in Iraq. Sourcing, dosing, monitoring, and risks.</p>  </div> </a><a href="/en/guides/hrt-what-is-hrt" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">What is HRT?</h3> <p class="text-muted text-sm leading-relaxed mb-3">An introduction to hormone replacement therapy and the two-component model used in trans-feminine and trans-masculine transition.</p>  </div> </a><a href="/en/guides/hrt-feminizing" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">Feminizing HRT</h3> <p class="text-muted text-sm leading-relaxed mb-3">Estrogen and antiandrogen options available in Iraq, including dosing, administration, and the critical CPA meningioma warning.</p>  </div> </a><a href="/en/guides/hrt-masculinizing" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">Masculinizing HRT</h3> <p class="text-muted text-sm leading-relaxed mb-3">Testosterone options available in Iraq, dosing, expected timeline, and risks for trans-masculine HRT.</p>  </div> </a><a href="/en/guides/hrt-sourcing-iraq" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">Sourcing HRT in Iraq</h3> <p class="text-muted text-sm leading-relaxed mb-3">How to actually obtain Estrofem, Androcur, and Androfarm from Iraqi pharmacies. The show-the-photo method, the مذخر system, and tips for navigating conservative pharmacists.</p>  </div> </a><a href="/en/guides/hrt-pharmacy-script" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">Pharmacy script — what to say</h3> <p class="text-muted text-sm leading-relaxed mb-3">Tested Arabic-language scripts the collective has used to obtain HRT medications from Iraqi pharmacies, with English translations.</p>  </div> </a><a href="/en/guides/hrt-monitoring" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">HRT monitoring — labs to get and where</h3> <p class="text-muted text-sm leading-relaxed mb-3">What blood work matters on hormone therapy, target ranges for trans-feminine and trans-masculine HRT, and where to find Iraqi private labs that handle hormone panels.</p>  </div> </a><a href="/en/guides/hrt-risks" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">HRT risks — an honest look</h3> <p class="text-muted text-sm leading-relaxed mb-3">Cardiovascular, hepatic, neurological, bone, and mental health risks of hormone therapy. Honest information about what can go wrong.</p>  </div> </a><a href="/en/guides/mental-health" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">Mental health for queer Iraqis</h3> <p class="text-muted text-sm leading-relaxed mb-3">Honest words about gender dysphoria, depression, anxiety, family violence, and crisis. Coping strategies that work in a context where therapy is rarely safe.</p>  </div> </a><a href="/en/guides/honor-violence" class="block no-underline group"> <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5"> <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">Honor violence — recognizing the threat and planning to survive</h3> <p class="text-muted text-sm leading-relaxed mb-3">What honor violence is, warning signs, safety planning, fleeing guidance, and the limits of asylum. Written for queer Iraqis at risk from their own families.</p>  </div> </a> </div> </section>  </main> <footer class="bg-navy text-cream/80 mt-auto"> <div class="max-w-[1080px] mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm"> <div> <p class="font-bold text-cream mb-2">Iraqi Social Progress Collective</p> <p class="leading-relaxed">The Iraqi Social Progress Collective is a grassroots mutual aid network for queer Iraqis and questioning people inside Iraq.</p> </div> <div> <p class="font-bold text-cream mb-2">Quick links</p> <ul class="space-y-1 list-none p-0"> <li><a href="/en/about" class="text-cream/70 hover:text-white no-underline">About</a></li> <li><a href="/en/safety" class="text-cream/70 hover:text-white no-underline">Safety</a></li> <li><a href="/en/community" class="text-cream/70 hover:text-white no-underline">Community</a></li> <li><a href="/en/guides" class="text-cream/70 hover:text-white no-underline">Guides</a></li> </ul> </div> <div> <p class="font-bold text-cream mb-2">Privacy</p> <p class="leading-relaxed">We do not track visitors. No cookies. No analytics.</p> </div> </div> <div class="border-t border-cream/10 text-center text-xs py-4 text-cream/50">
+&copy; 2026 Iraqi Social Progress Collective </div> </footer> </body></html>
