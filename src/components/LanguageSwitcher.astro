@@ -1,0 +1,22 @@
+---
+import type { Lang } from '@i18n/languages';
+import { t, switchLangPath } from '@i18n/utils';
+
+interface Props {
+  lang: Lang;
+  currentPath: string;
+}
+
+const { lang, currentPath } = Astro.props;
+const otherPath = switchLangPath(currentPath);
+const switchLabel = t(lang, 'lang.switchLabel');
+const switchText = t(lang, 'lang.switch');
+---
+
+<a
+  href={otherPath}
+  aria-label={switchLabel}
+  class="text-cream hover:text-white no-underline text-sm font-semibold tracking-wide transition-colors"
+>
+  {switchText}
+</a>

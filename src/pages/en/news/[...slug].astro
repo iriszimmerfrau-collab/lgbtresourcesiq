@@ -1,0 +1,52 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ArticleLayout from '@layouts/ArticleLayout.astro';
+import { estimateReadingTime, getSlugFromId } from '@lib/collections';
+
+export async function getStaticPaths() {
+  const news = await getCollection('news', (e: CollectionEntry<'news'>) => e.data.lang === 'en' && !e.data.draft);
+  return news.map((item) => ({
+    params: { slug: getSlugFromId(item.id) },
+    props: { item },
+  }));
+}
+
+interface Props {
+  item: CollectionEntry<'news'>;
+}
+
+const { item } = Astro.props as Props;
+const { Content } = await render(item);
+const lang = 'en' as const;
+const readingTime = estimateReadingTime(item.body ?? '');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: item.data.title,
+  description: item.data.description,
+  datePublished: item.data.pubDate.toISOString(),
+  inLanguage: 'en',
+};
+---
+
+<ArticleLayout
+  title={item.data.title}
+  description={item.data.description}
+  lang={lang}
+  pubDate={item.data.pubDate}
+  readingTime={readingTime}
+  jsonLd={jsonLd}
+>
+  <Content />
+  {item.data.source && (
+    <footer class="mt-12 pt-6 border-t border-muted/20 text-sm text-muted">
+      <p>
+        <strong>Source:</strong>{' '}
+        {item.data.sourceUrl
+          ? <a href={item.data.sourceUrl} target="_blank" rel="noopener noreferrer">{item.data.source}</a>
+          : item.data.source}
+      </p>
+    </footer>
+  )}
+</ArticleLayout>

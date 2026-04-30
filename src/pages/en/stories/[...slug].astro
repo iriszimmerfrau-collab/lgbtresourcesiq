@@ -1,0 +1,55 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ArticleLayout from '@layouts/ArticleLayout.astro';
+import Callout from '@components/Callout.astro';
+import { estimateReadingTime, getSlugFromId } from '@lib/collections';
+import { t } from '@i18n/utils';
+
+export async function getStaticPaths() {
+  const stories = await getCollection('stories', (e: CollectionEntry<'stories'>) => e.data.lang === 'en' && !e.data.draft);
+  return stories.map((story) => ({
+    params: { slug: getSlugFromId(story.id) },
+    props: { story },
+  }));
+}
+
+interface Props {
+  story: CollectionEntry<'stories'>;
+}
+
+const { story } = Astro.props as Props;
+const { Content } = await render(story);
+const lang = 'en' as const;
+const readingTime = estimateReadingTime(story.body ?? '');
+
+const byline = story.data.anonymous
+  ? t(lang, 'stories.anonymous')
+  : (story.data.pseudonym ?? t(lang, 'stories.anonymous'));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: story.data.title,
+  description: story.data.description,
+  datePublished: story.data.pubDate.toISOString(),
+  inLanguage: 'en',
+  author: { '@type': 'Person', name: byline },
+};
+---
+
+<ArticleLayout
+  title={story.data.title}
+  description={story.data.description}
+  lang={lang}
+  pubDate={story.data.pubDate}
+  readingTime={readingTime}
+  jsonLd={jsonLd}
+>
+  {story.data.contentWarning && (
+    <Callout type="warning">
+      <strong>{t(lang, 'stories.contentWarning')}:</strong> {story.data.contentWarning}
+    </Callout>
+  )}
+  <p class="text-sm text-muted italic mb-6">— {byline}</p>
+  <Content />
+</ArticleLayout>

@@ -1,0 +1,72 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import Card from '@components/Card.astro';
+import { t } from '@i18n/utils';
+
+const lang = 'ar' as const;
+---
+
+<BaseLayout
+  title={t(lang, 'nav.home')}
+  description="التجمع العراقي للتقدم الاجتماعي هو شبكة تكافلية شعبية للعراقيين الكويريين. معلومات، مجتمع، وتضامن — بخصوصية."
+  lang={lang}
+  showBanner
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'التجمع العراقي للتقدم الاجتماعي',
+    description: 'شبكة تكافلية شعبية للعراقيين الكويريين والمتسائلين داخل العراق.',
+    url: new URL('/ar/', Astro.site).href,
+  }}
+>
+  <!-- Hero -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-2xl">
+      <SectionDivider />
+      <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">{t(lang, 'home.hero.title')}</h1>
+      <p class="text-lg text-muted leading-relaxed mb-8">{t(lang, 'home.hero.subtitle')}</p>
+      <div class="flex flex-wrap gap-4">
+        <a href="/ar/guides" class="inline-block bg-navy text-cream no-underline px-6 py-3 font-semibold text-sm hover:bg-navy/90 transition-colors">
+          {t(lang, 'home.cta.guides')}
+        </a>
+        <a href="/ar/community" class="inline-block border-2 border-navy text-navy no-underline px-6 py-3 font-semibold text-sm hover:bg-navy hover:text-cream transition-colors">
+          {t(lang, 'home.cta.community')}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three cards -->
+  <section class="py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <Card
+        title={t(lang, 'home.card.identity.title')}
+        description={t(lang, 'home.card.identity.desc')}
+        href="/ar/guides"
+        lang="ar"
+      />
+      <Card
+        title={t(lang, 'home.card.health.title')}
+        description={t(lang, 'home.card.health.desc')}
+        href="/ar/guides"
+        lang="ar"
+      />
+      <Card
+        title={t(lang, 'home.card.safety.title')}
+        description={t(lang, 'home.card.safety.desc')}
+        href="/ar/safety"
+        lang="ar"
+      />
+    </div>
+  </section>
+
+  <!-- About blurb -->
+  <section class="py-12 max-w-2xl">
+    <SectionDivider />
+    <h2 class="text-2xl font-bold mb-4">{t(lang, 'home.about.title')}</h2>
+    <p class="text-muted leading-relaxed mb-4">{t(lang, 'home.about.p1')}</p>
+    <p class="text-muted leading-relaxed mb-4">{t(lang, 'home.about.p2')}</p>
+    <p class="text-muted leading-relaxed">{t(lang, 'home.about.p3')}</p>
+  </section>
+</BaseLayout>

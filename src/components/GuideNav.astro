@@ -1,0 +1,57 @@
+---
+import type { Lang } from '@i18n/languages';
+import { t, localizedPath } from '@i18n/utils';
+import { getGuidesByParent, getSlugFromId } from '@lib/collections';
+
+interface Props {
+  lang: Lang;
+  parentGuide: string;
+  currentSlug: string;
+}
+
+const { lang, parentGuide, currentSlug } = Astro.props;
+const pages = await getGuidesByParent(lang, parentGuide);
+const currentIndex = pages.findIndex(p => getSlugFromId(p.id) === currentSlug);
+const prev = currentIndex > 0 ? pages[currentIndex - 1] : null;
+const next = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : null;
+---
+
+<nav class="mt-12 pt-6 border-t border-muted/20" aria-label="Guide navigation">
+  <!-- Page list -->
+  <div class="mb-6">
+    <ol class="list-none p-0 space-y-1">
+      {pages.map((page, i) => {
+        const slug = getSlugFromId(page.id);
+        const isCurrent = slug === currentSlug;
+        return (
+          <li>
+            <a
+              href={localizedPath(lang, `/guides/${slug}`)}
+              class:list={[
+                'text-sm no-underline block py-1',
+                isCurrent ? 'text-navy font-semibold' : 'text-muted hover:text-terracotta',
+              ]}
+              aria-current={isCurrent ? 'page' : undefined}
+            >
+              {i + 1}. {page.data.title}
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+
+  <!-- Prev/Next -->
+  <div class="flex justify-between gap-4">
+    {prev ? (
+      <a href={localizedPath(lang, `/guides/${getSlugFromId(prev.id)}`)} class="text-sm text-terracotta no-underline hover:underline">
+        &larr; {t(lang, 'nav.previous')}
+      </a>
+    ) : <span />}
+    {next ? (
+      <a href={localizedPath(lang, `/guides/${getSlugFromId(next.id)}`)} class="text-sm text-terracotta no-underline hover:underline">
+        {t(lang, 'nav.next')} &rarr;
+      </a>
+    ) : <span />}
+  </div>
+</nav>

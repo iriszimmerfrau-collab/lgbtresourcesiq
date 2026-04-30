@@ -1,0 +1,246 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import Callout from '@components/Callout.astro';
+
+const lang = 'en' as const;
+---
+
+<BaseLayout
+  title="Safety"
+  description="Practical digital safety guidance for queer Iraqis. VPN recommendations, browser history clearing, encrypted communication, and device security."
+  lang={lang}
+  articleWidth
+>
+  <article class="prose">
+    <SectionDivider />
+    <h1>Your Safety</h1>
+
+    <p>
+      This page covers practical steps you can take to protect yourself online.
+      None of this is theoretical — it is written for people living in environments
+      where being discovered can have serious consequences.
+    </p>
+
+    <Callout type="danger">
+      <p class="font-semibold">Do not use this site on a shared or monitored device.</p>
+      <p>
+        If someone else has access to your phone, tablet, or computer, they may be
+        able to see that you visited this site. Use a personal device that only you
+        unlock.
+      </p>
+    </Callout>
+
+    <!-- Quick Exit -->
+    <SectionDivider />
+    <h2>How the Quick Exit Works</h2>
+
+    <p>
+      Pressing <kbd class="bg-navy/10 px-1.5 py-0.5 rounded text-sm font-mono">ESC</kbd>
+      or tapping the <strong>Quick Exit</strong> button instantly removes the page from
+      view and redirects to a neutral website. It also replaces the current entry in your
+      browser history so the back button will not return here.
+    </p>
+
+    <h3>What Quick Exit Does NOT Do</h3>
+
+    <p>Be honest with yourself about the limitations:</p>
+
+    <ul>
+      <li>It does <strong>not</strong> delete your full browser history. Previous visits to this site may still appear.</li>
+      <li>It does <strong>not</strong> clear bookmarks, autofill suggestions, or saved passwords.</li>
+      <li>It does <strong>not</strong> hide your visit from router logs or network monitoring. Your internet provider or anyone monitoring the network can still see that you connected to this domain.</li>
+    </ul>
+
+    <Callout type="warning">
+      <p class="font-semibold">Quick Exit is a panic button, not a privacy solution.</p>
+      <p>
+        It helps if someone glances at your screen. It does not make your visit
+        invisible. For real privacy, you need a VPN and to clear your history manually.
+      </p>
+    </Callout>
+
+    <!-- VPN -->
+    <SectionDivider />
+    <h2>Use a VPN</h2>
+
+    <p>
+      A VPN encrypts your internet traffic and hides which websites you visit from
+      your internet provider, your router, and anyone monitoring the local network.
+      <strong>A VPN is the single most important tool for your safety.</strong>
+    </p>
+
+    <h3>Recommended VPN Services</h3>
+
+    <ul>
+      <li>
+        <strong>Proton VPN</strong> — has a free tier with no data limits. Based in
+        Switzerland. No logs. Download from
+        <a href="https://protonvpn.com" target="_blank" rel="noopener noreferrer">protonvpn.com</a>.
+      </li>
+      <li>
+        <strong>Cloudflare WARP</strong> — free, fast, and simple. It encrypts your
+        DNS and traffic. Not a full VPN but significantly better than nothing.
+        Download from
+        <a href="https://one.one.one.one" target="_blank" rel="noopener noreferrer">1.1.1.1</a>.
+      </li>
+    </ul>
+
+    <Callout type="info">
+      <p>
+        <strong>Private/Incognito mode</strong> prevents your browser from saving
+        history on your device, but it does <strong>not</strong> hide your traffic
+        from the network. Use incognito mode <em>together</em> with a VPN, not
+        instead of one.
+      </p>
+    </Callout>
+
+    <!-- Browser History -->
+    <SectionDivider />
+    <h2>Clearing Browser History</h2>
+
+    <p>
+      After visiting this site, clear your browser history. Here are step-by-step
+      instructions for the most common Android browsers.
+    </p>
+
+    <h3>Chrome (Android)</h3>
+
+    <ol>
+      <li>Open Chrome and tap the three-dot menu (<strong>&#8942;</strong>) in the top right.</li>
+      <li>Tap <strong>History</strong>.</li>
+      <li>Tap <strong>Clear browsing data</strong>.</li>
+      <li>Select <strong>Browsing history</strong>, <strong>Cookies and site data</strong>, and <strong>Cached images and files</strong>.</li>
+      <li>Set the time range to <strong>All time</strong> or select individual entries to delete.</li>
+      <li>Tap <strong>Clear data</strong>.</li>
+    </ol>
+
+    <h3>Samsung Internet</h3>
+
+    <ol>
+      <li>Open Samsung Internet and tap the hamburger menu (<strong>&#9776;</strong>) at the bottom.</li>
+      <li>Tap <strong>Settings</strong>.</li>
+      <li>Tap <strong>Personal browsing data</strong>.</li>
+      <li>Tap <strong>Delete browsing data</strong>.</li>
+      <li>Check all boxes and tap <strong>Delete</strong>.</li>
+    </ol>
+
+    <h3>Firefox (Android)</h3>
+
+    <ol>
+      <li>Open Firefox and tap the three-dot menu (<strong>&#8942;</strong>).</li>
+      <li>Tap <strong>Settings</strong>.</li>
+      <li>Scroll to <strong>Delete browsing data on quit</strong> — enable this for automatic clearing.</li>
+      <li>To clear manually: go back, tap the three-dot menu, then <strong>Delete browsing data</strong>.</li>
+      <li>Select all categories and tap <strong>Delete</strong>.</li>
+    </ol>
+
+    <!-- Email -->
+    <SectionDivider />
+    <h2>Secure Email</h2>
+
+    <p>
+      Do not use your personal email for anything related to activism, community
+      participation, or this site.
+    </p>
+
+    <Callout type="danger">
+      <p class="font-semibold">Never reuse an activist email for personal accounts.</p>
+      <p>
+        If one account is compromised, reused emails let attackers connect your
+        activist identity to your real identity. Keep them completely separate.
+      </p>
+    </Callout>
+
+    <p>
+      We recommend <strong>ProtonMail</strong> for secure, encrypted email. It is
+      free, based in Switzerland, and does not require a phone number to register.
+      Sign up at
+      <a href="https://proton.me" target="_blank" rel="noopener noreferrer">proton.me</a>.
+    </p>
+
+    <!-- Passwords and 2FA -->
+    <SectionDivider />
+    <h2>Passwords and Two-Factor Authentication</h2>
+
+    <p>
+      Use a <strong>strong, unique password</strong> for every account. A strong
+      password is long (at least 12 characters), random, and not reused anywhere
+      else. Consider using a password manager like Bitwarden (free) to generate and
+      store passwords.
+    </p>
+    <p>
+      Enable <strong>two-factor authentication (2FA)</strong> on every account that
+      supports it — especially email. 2FA means that even if someone learns your
+      password, they cannot log in without a second code from your phone.
+    </p>
+
+    <!-- Photos and EXIF -->
+    <SectionDivider />
+    <h2>Photo Safety and EXIF Data</h2>
+
+    <Callout type="warning">
+      <p class="font-semibold">Photos contain hidden location data.</p>
+      <p>
+        Most phone cameras embed GPS coordinates, timestamps, and device
+        information into every photo. This metadata is called EXIF data. If you
+        share a photo, anyone who receives it may be able to see exactly where and
+        when it was taken.
+      </p>
+    </Callout>
+
+    <p>
+      Before sharing any photo, strip the EXIF data. You can do this by:
+    </p>
+    <ul>
+      <li>Taking a screenshot of the photo instead of sending the original.</li>
+      <li>Using an EXIF removal app (search "EXIF remover" in your app store).</li>
+      <li>Disabling location access for your camera app in your phone settings.</li>
+    </ul>
+
+    <!-- Instagram -->
+    <SectionDivider />
+    <h2>Instagram Safety</h2>
+
+    <ul>
+      <li>Set your account to <strong>private</strong>.</li>
+      <li>Do not use your real name or a recognizable photo as your profile picture.</li>
+      <li>Turn off <strong>Activity Status</strong> so people cannot see when you are online.</li>
+      <li>Review your <strong>Close Friends</strong> list regularly.</li>
+      <li>Be careful with story location stickers and tagged locations — they reveal where you are.</li>
+      <li>Do not accept follow requests from people you do not know.</li>
+      <li>Disable <strong>Similar Account Suggestions</strong> in settings so Instagram does not recommend your account to people who follow accounts like yours.</li>
+    </ul>
+
+    <!-- Mock Location -->
+    <SectionDivider />
+    <h2>Mock Location Apps</h2>
+
+    <p>
+      Some apps and services use your GPS location. You can install a
+      <strong>mock-location app</strong> to spoof your GPS coordinates and make it
+      appear as if you are somewhere else. This can be useful if you use
+      location-based apps and do not want your real location exposed.
+    </p>
+    <p>
+      Search "mock location" or "fake GPS" in your app store. On Android, you will
+      need to enable Developer Options and set the mock-location app as your
+      default.
+    </p>
+
+    <Callout type="info">
+      <p>
+        Mock location hides your GPS position from apps, but it does
+        <strong>not</strong> hide your IP address. For that, you still need a VPN.
+      </p>
+    </Callout>
+
+    <hr />
+
+    <p class="text-muted text-sm italic">
+      No single tool makes you perfectly safe. Layers of precaution — VPN, history
+      clearing, separate accounts, careful sharing — add up. Take what you can from
+      this page and build habits around it.
+    </p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Card from '@components/Card.astro';
+import { t } from '@i18n/utils';
+import { getCollectionByLang, getSlugFromId } from '@lib/collections';
+
+const lang = 'en' as const;
+const news = await getCollectionByLang('news', lang);
+
+news.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<BaseLayout
+  title={t(lang, 'nav.news')}
+  description="News and updates relevant to queer Iraqis and the broader community."
+  lang={lang}
+>
+  <section class="py-8">
+    <h1 class="text-3xl font-bold mb-2">{t(lang, 'nav.news')}</h1>
+    <p class="text-muted mb-8">News and updates relevant to the community.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {news.map((item) => (
+        <Card
+          title={item.data.title}
+          description={item.data.description}
+          href={`/en/news/${getSlugFromId(item.id)}`}
+          date={item.data.pubDate}
+          lang={lang}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

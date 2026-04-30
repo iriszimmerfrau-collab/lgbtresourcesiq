@@ -1,0 +1,106 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+
+const lang = 'en' as const;
+---
+
+<BaseLayout
+  title="About"
+  description="The Iraqi Social Progress Collective is a grassroots mutual aid network by and for queer Iraqis. Learn about our mission, principles, and how we are structured."
+  lang={lang}
+  articleWidth
+>
+  <article class="prose">
+    <SectionDivider />
+    <h1>About the Collective</h1>
+
+    <p>
+      The Iraqi Social Progress Collective is a grassroots mutual aid network for
+      queer Iraqis and questioning people inside Iraq. We exist because our community
+      needs practical information, safe spaces to connect, and solidarity that comes
+      from people who understand the reality of being queer in Iraq.
+    </p>
+    <p>
+      We share health information, digital safety guidance, and community resources.
+      Everything we do is built around trust, privacy, and harm reduction.
+    </p>
+
+    <SectionDivider />
+    <h2>Our Principles</h2>
+
+    <ul>
+      <li>
+        <strong>Mutual aid, not charity.</strong> We are peers helping peers. No one
+        here is above or below anyone else. We share what we know so that others can
+        benefit, and we learn from each other.
+      </li>
+      <li>
+        <strong>Privacy-first.</strong> We do not track visitors. We do not use
+        cookies or analytics. We do not collect personal information. Every decision
+        we make prioritizes the safety of the people who use this site.
+      </li>
+      <li>
+        <strong>Made by Iraqis, for Iraqis.</strong> This project is created by
+        people who live or have lived the Iraqi queer experience. Our information is
+        written with Iraqi realities in mind — not imported from Western contexts
+        without adaptation.
+      </li>
+      <li>
+        <strong>Not affiliated with any government or party.</strong> We are
+        independent. We have no ties to any political party, government body, NGO,
+        or foreign organization. Our loyalty is to our community alone.
+      </li>
+    </ul>
+
+    <SectionDivider />
+    <h2>What We Are NOT</h2>
+
+    <p>It is important to be honest about our limits. The collective is:</p>
+
+    <ul>
+      <li>
+        <strong>Not a charity.</strong> We do not distribute funds or material aid.
+        We are a peer network that shares information and community support.
+      </li>
+      <li>
+        <strong>Not a media outlet.</strong> We are not journalists. We share
+        curated information and community-written guides, not news coverage.
+      </li>
+      <li>
+        <strong>Not asylum-seeking assistance.</strong> We cannot help with asylum
+        applications, legal cases, or relocation. If you need that kind of help,
+        please seek out organizations that specialize in refugee and asylum support.
+      </li>
+      <li>
+        <strong>Not a substitute for a doctor.</strong> Our health guides are
+        harm-reduction information, not medical advice. Always consult a qualified
+        medical professional when possible, especially regarding hormone therapy or
+        mental health treatment.
+      </li>
+    </ul>
+
+    <SectionDivider />
+    <h2>How the Collective Is Structured</h2>
+
+    <p>
+      There is no headquarters. There is no president. The collective is
+      <strong>loose, distributed, and built on an encrypted backbone.</strong>
+    </p>
+    <p>
+      We coordinate through encrypted messaging. Our contributors are anonymous or
+      pseudonymous. Our website is static and minimal by design — it loads fast,
+      leaves no trace, and does not depend on third-party services.
+    </p>
+    <p>
+      This structure is intentional. In a context where visibility can be dangerous,
+      decentralization is not just a philosophy — it is a safety measure.
+    </p>
+
+    <hr />
+
+    <p class="text-muted italic text-sm mt-8">
+      Built by queer Iraqis and friends of Iraq.
+    </p>
+  </article>
+</BaseLayout>

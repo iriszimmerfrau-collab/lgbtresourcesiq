@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Card from '@components/Card.astro';
+import { t } from '@i18n/utils';
+import { getCollectionByLang, getSlugFromId } from '@lib/collections';
+
+const lang = 'ar' as const;
+const guides = await getCollectionByLang('guides', lang);
+
+const categoryOrder = ['hrt', 'mental-health', 'safety', 'general'] as const;
+guides.sort((a, b) => {
+  const catA = categoryOrder.indexOf(a.data.category);
+  const catB = categoryOrder.indexOf(b.data.category);
+  if (catA !== catB) return catA - catB;
+  return (a.data.order ?? 0) - (b.data.order ?? 0);
+});
+---
+
+<BaseLayout
+  title={t(lang, 'nav.guides')}
+  description="أدلة عملية حول الصحة والسلامة والهوية للعراقيين الكويريين."
+  lang={lang}
+>
+  <section class="py-8">
+    <h1 class="text-3xl font-bold mb-2">{t(lang, 'nav.guides')}</h1>
+    <p class="text-muted mb-8">أدلة عملية حول الصحة والسلامة والهوية.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {guides.map((guide) => (
+        <Card
+          title={guide.data.title}
+          description={guide.data.description}
+          href={`/ar/guides/${getSlugFromId(guide.id)}`}
+          lang={lang}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

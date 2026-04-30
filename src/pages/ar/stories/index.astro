@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Card from '@components/Card.astro';
+import { t } from '@i18n/utils';
+import { getCollectionByLang, getSlugFromId } from '@lib/collections';
+
+const lang = 'ar' as const;
+const stories = await getCollectionByLang('stories', lang);
+
+stories.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<BaseLayout
+  title={t(lang, 'nav.stories')}
+  description="قصص مجتمعية من العراقيين الكويريين — تُشارك بأسماء مستعارة وبكلماتهم الخاصة."
+  lang={lang}
+>
+  <section class="py-8">
+    <h1 class="text-3xl font-bold mb-2">{t(lang, 'nav.stories')}</h1>
+    <p class="text-muted mb-8">أصوات من المجتمع، تُشارك بأسماء مستعارة وبكلماتهم الخاصة.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {stories.map((story) => (
+        <Card
+          title={story.data.title}
+          description={story.data.description}
+          href={`/ar/stories/${getSlugFromId(story.id)}`}
+          date={story.data.pubDate}
+          lang={lang}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

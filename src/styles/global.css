@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0d1b2e;
+  --color-cream: #f0e6d3;
+  --color-offwhite: #faf7f2;
+  --color-body: #1a1a18;
+  --color-muted: #5a5750;
+  --color-terracotta: #b85c38;
+  --color-olive: #5a6e48;
+  --color-exit-red: #c4382b;
+
+  --font-heading: 'Libre Baskerville', serif;
+  --font-body: 'Source Sans 3 Variable', sans-serif;
+  --font-arabic: 'Noto Naskh Arabic Variable', serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-body);
+  background-color: var(--color-offwhite);
+}
+
+html[dir="rtl"] body {
+  font-family: var(--font-arabic);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-navy);
+}
+
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] h5,
+html[dir="rtl"] h6 {
+  font-family: var(--font-arabic);
+}
+
+a {
+  color: var(--color-terracotta);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.prose {
+  max-width: 680px;
+  line-height: 1.8;
+}
+
+.prose h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-block: 1.5rem 1rem;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-block: 2rem 0.75rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-block: 1.5rem 0.5rem;
+}
+
+.prose p {
+  margin-block: 0.75rem;
+}
+
+.prose ul, .prose ol {
+  margin-block: 0.75rem;
+  padding-inline-start: 1.5rem;
+}
+
+.prose li {
+  margin-block: 0.25rem;
+}
+
+.prose blockquote {
+  border-inline-start: 3px solid var(--color-terracotta);
+  padding-inline-start: 1rem;
+  margin-block: 1rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid color-mix(in srgb, var(--color-muted) 20%, transparent);
+  margin-block: 2rem;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-block: 1rem;
+}
+
+.prose th, .prose td {
+  border: 1px solid color-mix(in srgb, var(--color-muted) 20%, transparent);
+  padding: 0.5rem 0.75rem;
+  text-align: start;
+}
+
+.prose th {
+  background-color: var(--color-navy);
+  color: var(--color-cream);
+  font-weight: 600;
+}

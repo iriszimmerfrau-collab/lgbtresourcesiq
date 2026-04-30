@@ -1,0 +1,70 @@
+---
+// Root language router — redirects to /en/ or /ar/ based on saved preference or browser language.
+// Static fallback shows two large buttons for manual selection.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-ancestors 'none'"
+    />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Iraqi Social Progress Collective</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: system-ui, sans-serif;
+        background: #faf7f2;
+        color: #1a1a18;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 2rem;
+      }
+      h1 { font-size: 1.25rem; margin-bottom: 2rem; text-align: center; color: #0d1b2e; }
+      .lang-links { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+      a {
+        display: block;
+        padding: 1rem 2.5rem;
+        background: #0d1b2e;
+        color: #f0e6d3;
+        text-decoration: none;
+        font-size: 1.125rem;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+      a:hover { background: #1a2d45; }
+    </style>
+    <script is:inline>
+      (function(){
+        try {
+          var saved = localStorage.getItem('ispc-lang');
+          if (saved === 'ar' || saved === 'en') {
+            window.location.replace('/' + saved + '/');
+            return;
+          }
+          var nav = (navigator.language || '').toLowerCase();
+          if (nav.startsWith('ar')) {
+            window.location.replace('/ar/');
+          } else {
+            window.location.replace('/en/');
+          }
+        } catch(e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <h1>Iraqi Social Progress Collective<br/>التجمع العراقي للتقدم الاجتماعي</h1>
+    <div class="lang-links">
+      <a href="/en/">English</a>
+      <a href="/ar/">العربية</a>
+    </div>
+  </body>
+</html>

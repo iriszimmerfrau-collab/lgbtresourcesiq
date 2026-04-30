@@ -1,0 +1,36 @@
+---
+import type { Lang } from '@i18n/languages';
+import { t, localizedPath } from '@i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-navy text-cream/80 mt-auto">
+  <div class="max-w-[1080px] mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+    <div>
+      <p class="font-bold text-cream mb-2">{t(lang, 'site.name')}</p>
+      <p class="leading-relaxed">{t(lang, 'home.about.p1')}</p>
+    </div>
+    <div>
+      <p class="font-bold text-cream mb-2">{lang === 'ar' ? 'روابط سريعة' : 'Quick links'}</p>
+      <ul class="space-y-1 list-none p-0">
+        <li><a href={localizedPath(lang, '/about')} class="text-cream/70 hover:text-white no-underline">{t(lang, 'nav.about')}</a></li>
+        <li><a href={localizedPath(lang, '/safety')} class="text-cream/70 hover:text-white no-underline">{t(lang, 'nav.safety')}</a></li>
+        <li><a href={localizedPath(lang, '/community')} class="text-cream/70 hover:text-white no-underline">{t(lang, 'nav.community')}</a></li>
+        <li><a href={localizedPath(lang, '/guides')} class="text-cream/70 hover:text-white no-underline">{t(lang, 'nav.guides')}</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="font-bold text-cream mb-2">{lang === 'ar' ? 'الخصوصية' : 'Privacy'}</p>
+      <p class="leading-relaxed">{t(lang, 'footer.privacy')}</p>
+    </div>
+  </div>
+  <div class="border-t border-cream/10 text-center text-xs py-4 text-cream/50">
+    &copy; {year} {t(lang, 'footer.rights')}
+  </div>
+</footer>

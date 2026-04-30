@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Card from '@components/Card.astro';
+import { t } from '@i18n/utils';
+import { getCollectionByLang, getSlugFromId } from '@lib/collections';
+
+const lang = 'en' as const;
+const stories = await getCollectionByLang('stories', lang);
+
+stories.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<BaseLayout
+  title={t(lang, 'nav.stories')}
+  description="Community stories from queer Iraqis — shared anonymously and in their own words."
+  lang={lang}
+>
+  <section class="py-8">
+    <h1 class="text-3xl font-bold mb-2">{t(lang, 'nav.stories')}</h1>
+    <p class="text-muted mb-8">Voices from the community, shared anonymously and in their own words.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {stories.map((story) => (
+        <Card
+          title={story.data.title}
+          description={story.data.description}
+          href={`/en/stories/${getSlugFromId(story.id)}`}
+          date={story.data.pubDate}
+          lang={lang}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

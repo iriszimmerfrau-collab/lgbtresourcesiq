@@ -1,0 +1,49 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ArticleLayout from '@layouts/ArticleLayout.astro';
+import GuideNav from '@components/GuideNav.astro';
+import { getSlugFromId, estimateReadingTime } from '@lib/collections';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides', (e: CollectionEntry<'guides'>) => e.data.lang === 'ar' && !e.data.draft);
+  return guides.map((guide) => ({
+    params: { slug: getSlugFromId(guide.id) },
+    props: { guide },
+  }));
+}
+
+interface Props {
+  guide: CollectionEntry<'guides'>;
+}
+
+const { guide } = Astro.props as Props;
+const { Content } = await render(guide);
+const lang = 'ar' as const;
+const slug = getSlugFromId(guide.id);
+const readingTime = estimateReadingTime(guide.body ?? '');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: guide.data.title,
+  description: guide.data.description,
+  datePublished: guide.data.pubDate.toISOString(),
+  ...(guide.data.updatedDate && { dateModified: guide.data.updatedDate.toISOString() }),
+  inLanguage: 'ar',
+};
+---
+
+<ArticleLayout
+  title={guide.data.title}
+  description={guide.data.description}
+  lang={lang}
+  pubDate={guide.data.pubDate}
+  updatedDate={guide.data.updatedDate}
+  readingTime={readingTime}
+  jsonLd={jsonLd}
+>
+  <Content />
+  {guide.data.parentGuide && (
+    <GuideNav lang={lang} parentGuide={guide.data.parentGuide} currentSlug={slug} />
+  )}
+</ArticleLayout>

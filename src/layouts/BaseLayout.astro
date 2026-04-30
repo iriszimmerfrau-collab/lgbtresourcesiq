@@ -1,0 +1,105 @@
+---
+import '@fontsource/libre-baskerville/400.css';
+import '@fontsource/libre-baskerville/700.css';
+import '@fontsource-variable/source-sans-3/index.css';
+import '@fontsource-variable/noto-naskh-arabic/index.css';
+import '@styles/global.css';
+
+import type { Lang } from '@i18n/languages';
+import { isRtl } from '@i18n/languages';
+import QuickExit from '@components/QuickExit.astro';
+import Nav from '@components/Nav.astro';
+import Footer from '@components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  ogType?: string;
+  jsonLd?: Record<string, unknown>;
+  articleWidth?: boolean;
+  showBanner?: boolean;
+  keywords?: string;
+}
+
+const {
+  title,
+  description,
+  lang,
+  ogType = 'website',
+  jsonLd,
+  articleWidth = false,
+  showBanner = false,
+  keywords,
+} = Astro.props;
+
+const dir = isRtl(lang) ? 'rtl' : 'ltr';
+const fullTitle = `${title} | ${lang === 'ar' ? 'التجمع العراقي للتقدم الاجتماعي' : 'Iraqi Social Progress Collective'}`;
+const currentPath = Astro.url.pathname;
+
+const defaultKeywords = lang === 'ar'
+  ? 'مثليين, متحولين جنسياً, هوية جندرية, دعم نفسي, معلومات صحية, العراق, مجتمع الميم, علاج هرموني, كوير'
+  : 'queer Iraq, LGBTQ Iraq, trans Iraq, gay Iraq, HRT Iraq, hormones Iraq, gender identity, mental health, مثليين, متحولين, العراق';
+
+const canonicalUrl = new URL(currentPath, Astro.site).href;
+const otherLang = lang === 'en' ? 'ar' : 'en';
+const alternatePath = currentPath.replace(`/${lang}`, `/${otherLang}`);
+const alternateUrl = new URL(alternatePath, Astro.site).href;
+---
+
+<!doctype html>
+<html lang={lang} dir={dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-ancestors 'none'"
+    />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="index, follow" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords ?? defaultKeywords} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang={lang} href={canonicalUrl} />
+    <link rel="alternate" hreflang={otherLang} href={alternateUrl} />
+    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content={lang === 'ar' ? 'ar_IQ' : 'en_US'} />
+    <meta property="og:locale:alternate" content={lang === 'ar' ? 'en_US' : 'ar_IQ'} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={lang === 'ar' ? 'التجمع العراقي للتقدم الاجتماعي' : 'Iraqi Social Progress Collective'} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      (function(){try{var p=window.location.pathname,l=p.split('/')[1];if(l==='en'||l==='ar')localStorage.setItem('ispc-lang',l);}catch(e){}})();
+    </script>
+  </head>
+  <body class="bg-offwhite text-body min-h-screen flex flex-col">
+    <QuickExit lang={lang} />
+    {showBanner && (
+      <div class="bg-exit-red text-white text-center text-sm py-2 px-4 font-semibold" role="alert">
+        {lang === 'ar'
+          ? 'خصوصيتك مهمة. استخدم VPN. اضغط ESC في أي وقت للخروج فوراً.'
+          : 'Your privacy matters. Use a VPN. Press ESC at any time to exit instantly.'}
+      </div>
+    )}
+    <Nav lang={lang} currentPath={currentPath} />
+    <main class:list={[
+      'flex-1 mx-auto w-full px-4 py-8',
+      articleWidth ? 'max-w-[680px]' : 'max-w-[1080px]',
+    ]}>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

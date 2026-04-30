@@ -1,0 +1,122 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+
+const lang = 'en' as const;
+---
+
+<BaseLayout
+  title="Community"
+  description="Connect with the Iraqi Social Progress Collective via encrypted XMPP messaging. No phone number required, no digital footprint, fully private."
+  lang={lang}
+  articleWidth
+>
+  <section class="prose">
+    <SectionDivider />
+    <h1>Community</h1>
+
+    <p>
+      We use the <strong>XMPP</strong> protocol to connect with our community. If
+      you have not heard of it, do not worry — we will walk you through it step by step.
+    </p>
+
+    <hr />
+    <h2>What is XMPP?</h2>
+
+    <p>XMPP is an open-source messaging protocol with these properties:</p>
+
+    <ul>
+      <li><strong>Encrypted.</strong> Messages are end-to-end encrypted with OMEMO. Only you and the recipient can read them.</li>
+      <li><strong>Decentralized.</strong> No single company owns it, and no single government can shut it down.</li>
+      <li><strong>Federated.</strong> Like email — you create your account on any server, and you can talk to people on other servers.</li>
+      <li><strong>No phone number required.</strong> Unlike WhatsApp or Telegram, XMPP does not need your phone number or your real identity.</li>
+      <li><strong>Open source.</strong> Anyone can audit the code. There is no hidden surveillance.</li>
+    </ul>
+
+    <hr />
+    <h2>Setup steps</h2>
+
+    <h3>1. Install the Conversations app</h3>
+
+    <p>
+      Conversations is the best XMPP app for Android. You can download it for
+      free from the F-Droid store (no Google account needed):
+    </p>
+
+    <p>
+      <a href="https://f-droid.org/en/packages/eu.siacs.conversations/" target="_blank" rel="noopener noreferrer">
+        Download Conversations from F-Droid
+      </a>
+    </p>
+
+    <p>
+      F-Droid is a free, open-source app store. If you do not have it yet,
+      install it first from <a href="https://f-droid.org/" target="_blank" rel="noopener noreferrer">f-droid.org</a>.
+      For iPhone users, the closest alternative is <strong>Monal</strong> (available on the App Store).
+    </p>
+
+    <h3>2. Register a free account</h3>
+
+    <p>
+      When you open the app for the first time, choose "Create new account".
+      You can register on one of these free public servers:
+    </p>
+
+    <ul>
+      <li><strong>conversations.im</strong> — the official Conversations server.</li>
+      <li><strong>jabber.de</strong> — a trusted free German server.</li>
+    </ul>
+
+    <p>
+      Choose a username that does not reveal your identity. Do not use your real
+      name, nickname, or birthdate. Pick something unrelated to you.
+    </p>
+
+    <hr />
+    <h2>Contact us</h2>
+
+    <p>Once you have your account, you can reach us in one of two ways:</p>
+
+    <h3>XMPP</h3>
+    <p>Add the following JID to your contacts:</p>
+    <p><code class="bg-navy/5 px-2 py-1 font-mono text-sm">corpsesickle76@conversations.im</code></p>
+
+    <h3>ProtonMail</h3>
+    <p>If you prefer encrypted email:</p>
+    <p><code class="bg-navy/5 px-2 py-1 font-mono text-sm">iriszimmerfrau@proton.me</code></p>
+
+    <hr />
+    <h2>What to expect when you reach out</h2>
+
+    <ul>
+      <li>We usually respond within 48 hours.</li>
+      <li>We will not ask for your real name or location unless it is necessary to help you.</li>
+      <li>We will not share your information with anyone — ever.</li>
+      <li>You can write in Arabic, English, or Kurdish.</li>
+      <li>If we cannot help directly, we will try to point you to a trusted resource.</li>
+    </ul>
+
+    <hr />
+    <h2>Anonymous contribution</h2>
+
+    <p>
+      Do you have a story or experience you want to share with the community? You
+      can do so completely anonymously.
+    </p>
+
+    <h3>How to share your story</h3>
+
+    <ol>
+      <li>Create a new XMPP account with a pseudonym unrelated to you (follow the steps above).</li>
+      <li>Message us at <code class="bg-navy/5 px-2 py-1 font-mono text-sm">corpsesickle76@conversations.im</code> and let us know you would like to share your story.</li>
+      <li>Write your story however you want — formal or colloquial, long or short.</li>
+      <li>We will review it with you and remove any details that might identify you before publishing.</li>
+      <li>We will never publish anything without your explicit consent.</li>
+    </ol>
+
+    <p>
+      Your voice matters, and your story may help someone else who feels alone.
+      Share it if you want to, in the way that works for you.
+    </p>
+  </section>
+</BaseLayout>

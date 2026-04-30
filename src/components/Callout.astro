@@ -1,0 +1,17 @@
+---
+interface Props {
+  type?: 'warning' | 'info' | 'danger';
+}
+
+const { type = 'warning' } = Astro.props;
+
+const styles = {
+  warning: 'border-terracotta bg-terracotta/5',
+  info: 'border-navy bg-navy/5',
+  danger: 'border-exit-red bg-exit-red/5',
+};
+---
+
+<div class:list={['border-s-4 p-4 my-6 rounded-sm', styles[type]]}>
+  <slot />
+</div>
