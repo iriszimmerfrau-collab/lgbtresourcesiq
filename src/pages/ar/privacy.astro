@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionDivider from '@components/SectionDivider.astro';
+import { localizedPath } from '@i18n/utils';
 
 const lang = 'ar' as const;
 ---
@@ -108,7 +109,7 @@ const lang = 'ar' as const;
     <p class="mb-4 leading-relaxed">
       إذا كانت لديك أسئلة أو تريد أن تطلب ألا تظهر بياناتك في إحصاءاتنا المجمّعة، تواصل
       معنا عبر الطرق المذكورة في
-      <a href="/ar/community" class="text-terracotta underline">صفحة المجتمع</a>.
+      <a href={localizedPath(lang, '/community')} class="text-terracotta underline">صفحة المجتمع</a>.
     </p>
   </article>
 

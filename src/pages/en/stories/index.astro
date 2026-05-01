@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Card from '@components/Card.astro';
-import { t } from '@i18n/utils';
+import { t, localizedPath } from '@i18n/utils';
 import { getCollectionByLang, getSlugFromId } from '@lib/collections';
 
 const lang = 'en' as const;
@@ -23,7 +23,7 @@ stories.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
         <Card
           title={story.data.title}
           description={story.data.description}
-          href={`/en/stories/${getSlugFromId(story.id)}`}
+          href={localizedPath(lang, `/stories/${getSlugFromId(story.id)}`)}
           date={story.data.pubDate}
           lang={lang}
         />

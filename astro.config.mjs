@@ -7,7 +7,8 @@ import tailwindcss from '@tailwindcss/vite';
 // Production deployment domain. Update if/when domain changes.
 // If deploying to a project subpath on GitHub Pages, also set `base: '/repo-name'`.
 export default defineConfig({
-  site: 'https://ispc-iq.org',
+  site: 'https://iriszimmerfrau-collab.github.io',
+  base: '/lgbtresourcesiq',
   i18n: {
     locales: ['en', 'ar'],
     defaultLocale: 'en',
