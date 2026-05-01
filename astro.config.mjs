@@ -5,11 +5,10 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { remarkBasePrefix } from './src/lib/remark-base-prefix.mjs';
 
-const BASE = '/lgbtresourcesiq';
+const BASE = '';
 
 export default defineConfig({
-  site: 'https://iriszimmerfrau-collab.github.io',
-  base: BASE,
+  site: 'https://ispc-iq.org',
   markdown: {
     remarkPlugins: [remarkBasePrefix(BASE)],
   },
