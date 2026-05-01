@@ -1,0 +1,23 @@
+name = "ispc-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-15"
+
+# Replace with your Cloudflare account ID (run: pnpm wrangler whoami)
+account_id = "REPLACE_WITH_YOUR_ACCOUNT_ID"
+
+# These vars are PUBLIC (visible in deployed bundle). Don't put secrets here.
+# GITHUB_TOKEN goes in via: pnpm wrangler secret put GITHUB_TOKEN
+[vars]
+GITHUB_OWNER = "iriszimmerfrau-collab"
+GITHUB_REPO = "ispc-inbox"
+ALLOWED_ORIGIN = "https://ispc-iq.org"
+
+# Route requests for api.ispc-iq.org through this Worker.
+# Requires the api.ispc-iq.org zone to be Active in your Cloudflare account.
+[[routes]]
+pattern = "api.ispc-iq.org/*"
+zone_name = "api.ispc-iq.org"
+
+# Observability (free, no PII): tail logs via `pnpm wrangler tail`
+[observability]
+enabled = true

@@ -1,0 +1,157 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import { t, localizedPath } from '@i18n/utils';
+
+const lang = 'ar' as const;
+---
+
+<BaseLayout
+  title={t(lang, 'stories.submit.title')}
+  description="أرسل قصتك بشكل مجهول إلى التجمع العراقي للتقدم الاجتماعي. نراجعها معك، ننزع التفاصيل التي قد تكشفك، ولا ننشر أبداً دون موافقتك الصريحة."
+  lang={lang}
+  articleWidth
+>
+  <section class="prose">
+    <SectionDivider />
+    <h1>{t(lang, 'stories.submit.title')}</h1>
+    <p>{t(lang, 'stories.submit.intro')}</p>
+
+    <form id="submit-form" class="not-prose mt-6 space-y-5" novalidate>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" class="absolute left-[-9999px]" aria-hidden="true" />
+      <div>
+        <label for="s-title" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.title')}</label>
+        <input
+          id="s-title"
+          name="title"
+          type="text"
+          required
+          minlength="3"
+          maxlength="200"
+          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
+        />
+      </div>
+      <div>
+        <label for="s-story" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.story')}</label>
+        <textarea
+          id="s-story"
+          name="story"
+          rows="14"
+          required
+          minlength="50"
+          maxlength="20000"
+          placeholder={t(lang, 'stories.submit.placeholder.story')}
+          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
+        ></textarea>
+      </div>
+      <div>
+        <label for="s-pseudonym" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.pseudonym')}</label>
+        <input
+          id="s-pseudonym"
+          name="pseudonym"
+          type="text"
+          maxlength="80"
+          placeholder={t(lang, 'stories.submit.placeholder.pseudonym')}
+          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
+        />
+      </div>
+      <div>
+        <label for="s-cw" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.contentWarning')}</label>
+        <input
+          id="s-cw"
+          name="contentWarning"
+          type="text"
+          maxlength="200"
+          placeholder={t(lang, 'stories.submit.placeholder.contentWarning')}
+          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
+        />
+      </div>
+      <div>
+        <label for="s-contact" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.contact')}</label>
+        <input
+          id="s-contact"
+          name="contact"
+          type="text"
+          maxlength="200"
+          placeholder={t(lang, 'stories.submit.placeholder.contact')}
+          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
+        />
+      </div>
+      <button
+        type="submit"
+        id="s-submit"
+        class="px-6 py-3 bg-navy text-cream font-semibold text-sm hover:bg-navy/90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+      >
+        {t(lang, 'stories.submit.submit')}
+      </button>
+      <p id="s-status" role="status" aria-live="polite" class="text-sm" hidden></p>
+    </form>
+
+    <p class="mt-6 text-sm text-muted">{t(lang, 'stories.submit.privacy.note')}</p>
+    <p class="mt-2 text-sm text-muted">
+      تريد أقصى خصوصية؟ <a href={localizedPath(lang, '/community')}>أرسل عبر XMPP</a>.
+    </p>
+  </section>
+
+  <script
+    is:inline
+    define:vars={{
+      endpoint: 'https://api.ispc-iq.org/submissions',
+      lang,
+      msgSending: t(lang, 'stories.submit.sending'),
+      msgSuccess: t(lang, 'stories.submit.success'),
+      msgError: t(lang, 'stories.submit.error'),
+      msgSubmit: t(lang, 'stories.submit.submit'),
+    }}
+  >
+    (function () {
+      var form = document.getElementById('submit-form');
+      var btn = document.getElementById('s-submit');
+      var status = document.getElementById('s-status');
+      if (!form || !btn || !status) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var data = {
+          website: form.elements['website'].value,
+          title: form.elements['title'].value,
+          story: form.elements['story'].value,
+          pseudonym: form.elements['pseudonym'].value,
+          contentWarning: form.elements['contentWarning'].value,
+          contact: form.elements['contact'].value,
+          lang: lang,
+        };
+        if (!data.title || data.title.trim().length < 3) return;
+        if (!data.story || data.story.trim().length < 50) return;
+        btn.disabled = true;
+        btn.textContent = msgSending;
+        status.hidden = false;
+        status.textContent = '';
+        status.className = 'text-sm';
+
+        fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        })
+          .then(function (r) {
+            if (!r.ok) throw new Error('http_' + r.status);
+            return r.json();
+          })
+          .then(function () {
+            status.textContent = msgSuccess;
+            status.className = 'text-sm text-olive font-semibold';
+            form.reset();
+            btn.textContent = msgSubmit;
+            btn.disabled = false;
+          })
+          .catch(function () {
+            status.textContent = msgError;
+            status.className = 'text-sm text-exit-red font-semibold';
+            btn.textContent = msgSubmit;
+            btn.disabled = false;
+          });
+      });
+    })();
+  </script>
+</BaseLayout>
