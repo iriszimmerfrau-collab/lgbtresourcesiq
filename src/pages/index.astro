@@ -42,19 +42,20 @@
       }
       a:hover { background: #1a2d45; }
     </style>
-    <script is:inline>
+    <script is:inline define:vars={{ base: import.meta.env.BASE_URL }}>
       (function(){
         try {
+          var prefix = base.endsWith('/') ? base : base + '/';
           var saved = localStorage.getItem('ispc-lang');
           if (saved === 'ar' || saved === 'en') {
-            window.location.replace('/' + saved + '/');
+            window.location.replace(prefix + saved + '/');
             return;
           }
           var nav = (navigator.language || '').toLowerCase();
           if (nav.startsWith('ar')) {
-            window.location.replace('/ar/');
+            window.location.replace(prefix + 'ar/');
           } else {
-            window.location.replace('/en/');
+            window.location.replace(prefix + 'en/');
           }
         } catch(e) {}
       })();
@@ -63,8 +64,8 @@
   <body>
     <h1>Iraqi Social Progress Collective<br/>التجمع العراقي للتقدم الاجتماعي</h1>
     <div class="lang-links">
-      <a href="/en/">English</a>
-      <a href="/ar/">العربية</a>
+      <a href="en/">English</a>
+      <a href="ar/">العربية</a>
     </div>
   </body>
 </html>
