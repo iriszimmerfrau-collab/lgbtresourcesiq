@@ -27,7 +27,12 @@ const year = new Date().getFullYear();
     </div>
     <div>
       <p class="font-bold text-cream mb-2">{lang === 'ar' ? 'الخصوصية' : 'Privacy'}</p>
-      <p class="leading-relaxed">{t(lang, 'footer.privacy')}</p>
+      <p class="leading-relaxed mb-2">{t(lang, 'footer.privacy')}</p>
+      <p>
+        <a href={localizedPath(lang, '/privacy')} class="text-cream/70 hover:text-white underline">
+          {t(lang, 'footer.privacy.link')}
+        </a>
+      </p>
     </div>
   </div>
   <div class="border-t border-cream/10 text-center text-xs py-4 text-cream/50">

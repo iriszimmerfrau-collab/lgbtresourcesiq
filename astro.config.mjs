@@ -4,10 +4,10 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-// IMPORTANT: Replace `site` with the actual deployment URL before launch.
+// Production deployment domain. Update if/when domain changes.
 // If deploying to a project subpath on GitHub Pages, also set `base: '/repo-name'`.
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://ispc-iq.org',
   i18n: {
     locales: ['en', 'ar'],
     defaultLocale: 'en',

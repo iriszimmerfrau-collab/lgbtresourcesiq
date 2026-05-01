@@ -1,0 +1,147 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+
+const lang = 'ar' as const;
+---
+
+<BaseLayout
+  title="الخصوصية وجمع البيانات"
+  description="ما هي البيانات التي يجمعها هذا الموقع، ولماذا، وكيف ترفض. نجمع المحافظة وطول الزيارة بشكل مجهول فقط بموافقتك. لا عناوين IP، لا ملفات تعريف ارتباط، لا متتبعون من جهات خارجية."
+  lang={lang}
+  articleWidth
+>
+  <article class="prose-content py-8">
+    <SectionDivider />
+    <h1 class="text-3xl md:text-4xl font-bold mb-4">الخصوصية وجمع البيانات</h1>
+    <p class="text-muted text-sm mb-8">آخر تحديث: 2026-04-29</p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">باختصار</h2>
+    <p class="mb-4 leading-relaxed">
+      نحن لا نجمع <strong>أي شيء عنك بشكل افتراضي</strong>. إذا ضغطت "موافقة" على شريط الخصوصية،
+      نجمع معلومتين مجهولتين ومجمّعتين فقط:
+    </p>
+    <ul class="list-disc me-6 mb-4 space-y-2">
+      <li><strong>محافظتك</strong> داخل العراق — تُستخرج مرة واحدة لكل زيارة، ولا تُخزّن أبداً مع عنوان IP الخاص بك.</li>
+      <li>كم استمرت زيارتك بالثواني.</li>
+    </ul>
+    <p class="mb-4 leading-relaxed">
+      هذه هي القائمة كاملة. لا اسم. لا بريد إلكتروني. لا عنوان IP محفوظ. لا ملفات تعريف ارتباط.
+      لا تتبع بين الزيارات. لا إعلانات. لا بكسلات وسائل التواصل الاجتماعي. لا بصمات. لا إعادة
+      تشغيل للجلسات. نحن لا نبيع أو نشارك أو ننقل هذه البيانات لأي جهة كانت.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">لماذا نجمع أي شيء أصلاً</h2>
+    <p class="mb-4 leading-relaxed">
+      نريد أن نعرف هل هذا الموقع يصل للناس داخل العراق، أي محافظات تحتاج توعية أكثر، وهل
+      الزوار يقرأون الأدلة فعلاً أم يغادرون خلال ثوانٍ. لا نقدر نخلي الموقع مفيد بدون أي
+      إشارة. اخترنا أصغر إشارة ممكنة تخبرنا بهذا.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">كيف يعمل هذا (تفاصيل تقنية)</h2>
+    <p class="mb-4 leading-relaxed">
+      التحليلات متوقفة افتراضياً. أول مرة تزور فيها الموقع، يظهر شريط يسألك إذا كنت تسمح
+      بالتحليلات. اختيارك يُحفظ في <code>localStorage</code> في متصفحك تحت المفتاح
+      <code>ispc-analytics</code>. إذا رفضت، لن يُحمَّل أي سكريبت تحليلات أبداً.
+    </p>
+    <p class="mb-4 leading-relaxed">
+      إذا سمحت، نُحمّل <a href="https://plausible.io/data-policy" class="text-terracotta underline">Plausible Analytics</a>،
+      وهي خدمة مفتوحة المصدر مستضافة في الاتحاد الأوروبي:
+    </p>
+    <ul class="list-disc me-6 mb-4 space-y-2">
+      <li><strong>لا</strong> تخزّن عناوين IP. عنوانك يُستخدم فقط في الذاكرة لاستخراج البلد/المنطقة، ثم يُتلف فوراً.</li>
+      <li><strong>لا</strong> تستخدم ملفات تعريف ارتباط أو أي معرّف دائم.</li>
+      <li>لا يمكنها ربط الزيارات عبر الأيام. لا توجد طريقة للتعرف عليك عند العودة.</li>
+      <li>مستضافة في الاتحاد الأوروبي، تحت ولاية GDPR القضائية.</li>
+    </ul>
+    <p class="mb-4 leading-relaxed">
+      نُرسل أيضاً حدث واحد عند انتهاء زيارتك، يحتوي على المدة بالثواني. هذا الحدث أيضاً
+      لا يحتوي على أي معرّف.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">ما الذي لا نفعله</h2>
+    <ul class="list-disc me-6 mb-4 space-y-2">
+      <li>لا نسجّل عناوين IP، أبداً، في أي مكان.</li>
+      <li>لا نستخدم Google Analytics أو Facebook أو TikTok أو أي متتبع إعلاني.</li>
+      <li>لا نستخدم ملفات تعريف ارتباط من أي نوع.</li>
+      <li>لا نضمّن YouTube أو Twitter أو Instagram أو أي محتوى من جهات خارجية يمكن أن يسرّب بيانات.</li>
+      <li>لا نطلب حساب أو بريد إلكتروني لاستخدام هذا الموقع.</li>
+      <li>لا نشارك البيانات مع أي حكومة أو حزب أو منظمة غير حكومية أو شركة.</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">كيف ترفض (أو تعود وتقبل)</h2>
+    <p class="mb-4 leading-relaxed">
+      اضغط الزر أدناه لتغيير اختيارك في أي وقت. التغيير يصير نافذاً فوراً ويؤثر فقط على
+      هذا المتصفح في هذا الجهاز.
+    </p>
+    <div id="ispc-analytics-status-block" class="my-6 p-4 border border-navy/20 bg-cream/40">
+      <p id="ispc-analytics-status" class="font-semibold mb-3">—</p>
+      <button
+        type="button"
+        id="ispc-analytics-toggle"
+        class="px-4 py-2 bg-navy text-cream font-semibold text-sm cursor-pointer hover:bg-navy/90"
+      >
+        تغيير
+      </button>
+    </div>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">إذا كانت احتياجاتك الأمنية أعلى</h2>
+    <p class="mb-4 leading-relaxed">
+      إذا كنت في خطر عالٍ وتريد أن لا تخرج أي بيانات من جهازك — حتى مجهولة —
+      <strong>ارفض التحليلات</strong> واستخدم VPN. على مستوى المتصفح، يمكنك أيضاً حظر
+      <code>plausible.io</code> في ملف hosts أو في مانع المحتوى. سيستمر الموقع بالعمل
+      بشكل طبيعي.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">تدفقات بيانات أخرى يستحسن معرفتها</h2>
+    <ul class="list-disc me-6 mb-4 space-y-2">
+      <li><strong>الخروج السريع</strong> يفتح <code>google.com</code> في تبويب جديد ويستبدل هذا
+        الموقع بـ <code>google.com</code> في تبويبك — بشكل مقصود، ليُحذف الموقع من زر الرجوع.
+        Google ترى زيارة في تلك اللحظة.</li>
+      <li><strong>الخطوط</strong> تُقدَّم من هذا الموقع، ليس من Google Fonts أو أي CDN.</li>
+      <li><strong>الاستضافة:</strong> هذا الموقع مستضاف على GitHub Pages. بنية GitHub التحتية
+        ترى بيانات وصفية قياسية لطلبات HTTP (IP، user-agent) مثل أي خادم ويب. ليس لدينا
+        وصول إلى تلك السجلات ولا نحتفظ بها.</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">للتواصل</h2>
+    <p class="mb-4 leading-relaxed">
+      إذا كانت لديك أسئلة أو تريد أن تطلب ألا تظهر بياناتك في إحصاءاتنا المجمّعة، تواصل
+      معنا عبر الطرق المذكورة في
+      <a href="/ar/community" class="text-terracotta underline">صفحة المجتمع</a>.
+    </p>
+  </article>
+
+  <script is:inline>
+    (function () {
+      try {
+        var KEY = 'ispc-analytics';
+        var status = document.getElementById('ispc-analytics-status');
+        var btn = document.getElementById('ispc-analytics-toggle');
+        if (!status || !btn) return;
+        function render() {
+          var v = null;
+          try { v = localStorage.getItem(KEY); } catch (e) {}
+          if (v === 'true') {
+            status.textContent = 'التحليلات المجهولة: مفعّلة';
+            btn.textContent = 'إيقاف';
+          } else {
+            status.textContent = 'التحليلات المجهولة: متوقفة';
+            btn.textContent = 'تفعيل';
+          }
+        }
+        render();
+        btn.addEventListener('click', function () {
+          var v = null;
+          try { v = localStorage.getItem(KEY); } catch (e) {}
+          var next = v === 'true' ? 'false' : 'true';
+          try { localStorage.setItem(KEY, next); } catch (e) {}
+          render();
+          if (next === 'true') {
+            location.reload();
+          }
+        });
+      } catch (e) {}
+    })();
+  </script>
+</BaseLayout>

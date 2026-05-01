@@ -1,11 +1,6 @@
-astro.config.mjs
+# build output
+dist/
 
-package.json
-
-tsconfig.json
-
-public/
-src/
 # generated types
 .astro/
 

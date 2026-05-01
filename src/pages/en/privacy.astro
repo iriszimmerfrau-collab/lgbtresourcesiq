@@ -1,0 +1,149 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+
+const lang = 'en' as const;
+---
+
+<BaseLayout
+  title="Privacy & data collection"
+  description="What data this site collects, why, and how to opt out. We collect anonymous province and visit length only with your consent. No IP addresses, no cookies, no third-party trackers."
+  lang={lang}
+  articleWidth
+>
+  <article class="prose-content py-8">
+    <SectionDivider />
+    <h1 class="text-3xl md:text-4xl font-bold mb-4">Privacy & data collection</h1>
+    <p class="text-muted text-sm mb-8">Last updated: 2026-04-29</p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">The short version</h2>
+    <p class="mb-4 leading-relaxed">
+      We collect <strong>nothing about you by default</strong>. If you click "Allow" on the
+      privacy banner, we collect two pieces of anonymous, aggregate information:
+    </p>
+    <ul class="list-disc ms-6 mb-4 space-y-2">
+      <li>Your <strong>governorate (province)</strong> inside Iraq — derived once per pageview, never stored alongside your IP.</li>
+      <li>How long your visit lasts, in seconds.</li>
+    </ul>
+    <p class="mb-4 leading-relaxed">
+      That is the entire list. No name. No email. No IP address kept. No cookies. No tracking
+      across visits. No advertising. No social media pixels. No fingerprinting. No session
+      replays. We never sell, share, or transfer this data to anyone.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">Why we collect anything at all</h2>
+    <p class="mb-4 leading-relaxed">
+      We want to know whether this site is reaching people inside Iraq, which governorates
+      need more outreach, and whether visitors are actually reading guides or bouncing in
+      seconds. We cannot make the site useful without some signal. We picked the smallest
+      possible signal that still tells us this.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">How it works (technical detail)</h2>
+    <p class="mb-4 leading-relaxed">
+      Analytics are off by default. The first time you visit, you see a banner asking
+      whether to allow analytics. Your choice is saved in your browser's <code>localStorage</code>
+      under the key <code>ispc-analytics</code>. If you decline, no analytics script ever loads.
+    </p>
+    <p class="mb-4 leading-relaxed">
+      If you allow, we load <a href="https://plausible.io/data-policy" class="text-terracotta underline">Plausible Analytics</a>,
+      an open-source, EU-hosted service that:
+    </p>
+    <ul class="list-disc ms-6 mb-4 space-y-2">
+      <li>Does <strong>not</strong> store IP addresses. Your IP is used only in memory to look up your
+        country/region, then immediately discarded.</li>
+      <li>Does <strong>not</strong> use cookies or any persistent identifier.</li>
+      <li>Cannot link visits across days. There is no way to recognize you returning.</li>
+      <li>Is hosted in the European Union, under GDPR jurisdiction.</li>
+    </ul>
+    <p class="mb-4 leading-relaxed">
+      We separately fire one event when your visit ends, with the duration in seconds. That
+      event also contains no identifier.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">What we don't do</h2>
+    <ul class="list-disc ms-6 mb-4 space-y-2">
+      <li>We do not log IP addresses, ever, anywhere.</li>
+      <li>We do not use Google Analytics, Facebook, TikTok, or any advertising tracker.</li>
+      <li>We do not use cookies of any kind.</li>
+      <li>We do not embed YouTube, Twitter, Instagram, or any third-party content that could leak data.</li>
+      <li>We do not require an account or email to use this site.</li>
+      <li>We do not share data with any government, party, NGO, or company.</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">How to opt out (or opt back in)</h2>
+    <p class="mb-4 leading-relaxed">
+      Click the button below to change your choice at any time. The change takes effect
+      immediately and only affects this browser on this device.
+    </p>
+    <div id="ispc-analytics-status-block" class="my-6 p-4 border border-navy/20 bg-cream/40">
+      <p id="ispc-analytics-status" class="font-semibold mb-3">—</p>
+      <button
+        type="button"
+        id="ispc-analytics-toggle"
+        class="px-4 py-2 bg-navy text-cream font-semibold text-sm cursor-pointer hover:bg-navy/90"
+      >
+        Change
+      </button>
+    </div>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">If you have stronger threat-model needs</h2>
+    <p class="mb-4 leading-relaxed">
+      If you are at high risk and want zero data leaving your device — even anonymously —
+      <strong>decline analytics</strong> and use a VPN. Browser-side, you can also block
+      <code>plausible.io</code> in your hosts file or content blocker. The site will continue
+      to work normally.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">Other data flows worth knowing</h2>
+    <ul class="list-disc ms-6 mb-4 space-y-2">
+      <li><strong>Quick Exit</strong> opens <code>google.com</code> in a new tab and replaces this
+        site with <code>google.com</code> in your tab — by design, so the site is removed from
+        your back button. Google sees a hit at that moment.</li>
+      <li><strong>Fonts</strong> are served from this site, not from Google Fonts or any CDN.</li>
+      <li><strong>Hosting:</strong> this site is hosted on GitHub Pages. GitHub's infrastructure
+        sees standard HTTP request metadata (IP, user-agent) like any web server. We have no
+        access to those logs and do not retain them.</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">Contact</h2>
+    <p class="mb-4 leading-relaxed">
+      If you have questions or want to request that nothing of yours appears in our
+      aggregate stats, contact us via the methods on the
+      <a href="/en/community" class="text-terracotta underline">community page</a>.
+    </p>
+  </article>
+
+  <script is:inline>
+    (function () {
+      try {
+        var KEY = 'ispc-analytics';
+        var status = document.getElementById('ispc-analytics-status');
+        var btn = document.getElementById('ispc-analytics-toggle');
+        if (!status || !btn) return;
+        function render() {
+          var v = null;
+          try { v = localStorage.getItem(KEY); } catch (e) {}
+          if (v === 'true') {
+            status.textContent = 'Anonymous analytics: ON';
+            btn.textContent = 'Turn off';
+          } else {
+            status.textContent = 'Anonymous analytics: OFF';
+            btn.textContent = 'Turn on';
+          }
+        }
+        render();
+        btn.addEventListener('click', function () {
+          var v = null;
+          try { v = localStorage.getItem(KEY); } catch (e) {}
+          var next = v === 'true' ? 'false' : 'true';
+          try { localStorage.setItem(KEY, next); } catch (e) {}
+          render();
+          if (next === 'true') {
+            location.reload();
+          }
+        });
+      } catch (e) {}
+    })();
+  </script>
+</BaseLayout>

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source "../**/*.{astro,html,js,jsx,ts,tsx,vue,md,mdx,svelte}";
+
 @theme {
   --color-navy: #0d1b2e;
   --color-cream: #f0e6d3;

@@ -1,0 +1,110 @@
+---
+import type { Lang } from '@i18n/languages';
+import { t, localizedPath } from '@i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<div
+  id="ispc-privacy-banner"
+  role="dialog"
+  aria-labelledby="ispc-privacy-banner-text"
+  class="hidden fixed bottom-0 inset-x-0 z-[99990] bg-navy text-cream border-t border-cream/20 px-4 py-4 text-sm"
+>
+  <div class="max-w-[1080px] mx-auto flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+    <p id="ispc-privacy-banner-text" class="leading-relaxed flex-1">
+      {t(lang, 'privacy.banner.text')}
+    </p>
+    <div class="flex flex-wrap gap-2 shrink-0">
+      <a
+        href={localizedPath(lang, '/privacy')}
+        class="px-3 py-2 text-cream/80 hover:text-white underline text-sm"
+      >
+        {t(lang, 'privacy.banner.more')}
+      </a>
+      <button
+        type="button"
+        id="ispc-privacy-decline"
+        class="px-4 py-2 bg-transparent border border-cream/40 text-cream hover:bg-cream/10 font-semibold text-sm cursor-pointer"
+      >
+        {t(lang, 'privacy.banner.decline')}
+      </button>
+      <button
+        type="button"
+        id="ispc-privacy-allow"
+        class="px-4 py-2 bg-cream text-navy hover:bg-white font-semibold text-sm cursor-pointer"
+      >
+        {t(lang, 'privacy.banner.allow')}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    try {
+      var KEY = 'ispc-analytics';
+      var DOMAIN = 'ispc-iq.org';
+      var banner = document.getElementById('ispc-privacy-banner');
+      var allow = document.getElementById('ispc-privacy-allow');
+      var decline = document.getElementById('ispc-privacy-decline');
+      var current = null;
+      try { current = localStorage.getItem(KEY); } catch (e) {}
+
+      function loadPlausible() {
+        if (window.__ispcPlausibleLoaded) return;
+        window.__ispcPlausibleLoaded = true;
+        var s = document.createElement('script');
+        s.defer = true;
+        s.setAttribute('data-domain', DOMAIN);
+        s.src = 'https://plausible.io/js/script.js';
+        document.head.appendChild(s);
+
+        var start = Date.now();
+        function reportSession() {
+          var seconds = Math.floor((Date.now() - start) / 1000);
+          if (seconds < 2) return;
+          try {
+            var payload = JSON.stringify({
+              name: 'Session',
+              url: location.href,
+              domain: DOMAIN,
+              props: { duration_seconds: String(seconds) }
+            });
+            if (navigator.sendBeacon) {
+              navigator.sendBeacon('https://plausible.io/api/event', payload);
+            }
+          } catch (e) {}
+        }
+        window.addEventListener('pagehide', reportSession, { once: true });
+      }
+
+      if (current === 'true') {
+        loadPlausible();
+        if (banner) banner.classList.add('hidden');
+      } else if (current === 'false') {
+        if (banner) banner.classList.add('hidden');
+      } else {
+        if (banner) banner.classList.remove('hidden');
+      }
+
+      if (allow) {
+        allow.addEventListener('click', function () {
+          try { localStorage.setItem(KEY, 'true'); } catch (e) {}
+          if (banner) banner.classList.add('hidden');
+          loadPlausible();
+        });
+      }
+      if (decline) {
+        decline.addEventListener('click', function () {
+          try { localStorage.setItem(KEY, 'false'); } catch (e) {}
+          if (banner) banner.classList.add('hidden');
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
