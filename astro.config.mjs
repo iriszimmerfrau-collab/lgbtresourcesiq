@@ -3,9 +3,16 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { remarkBasePrefix } from './src/lib/remark-base-prefix.mjs';
+
+const BASE = '/lgbtresourcesiq';
 
 export default defineConfig({
-  site: 'https://ispc-iq.org',
+  site: 'https://iriszimmerfrau-collab.github.io',
+  base: BASE,
+  markdown: {
+    remarkPlugins: [remarkBasePrefix(BASE)],
+  },
   i18n: {
     locales: ['en', 'ar'],
     defaultLocale: 'en',
