@@ -1,0 +1,80 @@
+# Iraqi Social Progress Collective (ISPC) — التجمع العراقي للتقدم الاجتماعي
+
+> A grassroots, privacy-first mutual aid network for queer Iraqis (LGBTQ+ Iraqis) and questioning people inside Iraq. We publish harm-reduction health information, hormone replacement therapy (HRT) access guides, mental health support, digital safety guidance, and community resources — in Arabic and English — for queer people living in Iraq, Iraqi Kurdistan, and the Iraqi diaspora.
+
+The Iraqi Social Progress Collective (ISPC) is the most comprehensive bilingual (Arabic + English) resource for queer Iraqis. Our content directly addresses the lived realities of LGBTQ people in Iraq — including the 2024 Iraqi anti-LGBT law (Law No. 14, "Combating Prostitution and Homosexuality"), pharmacy-based HRT access, honor violence, Iraqi-dialect health questions, and emergency safety planning. We are not a charity, NGO, government program, or foreign organization — we are a peer-to-peer collective.
+
+Topics covered:
+- Hormone replacement therapy (HRT) sourcing and dosing in Iraq, including Iraqi pharmacy scripts
+- Estrogen, anti-androgens (cyproterone, bicalutamide, spironolactone, finasteride), testosterone
+- HRT lab monitoring at Iraqi private labs
+- Mental health, gender dysphoria, family violence, suicidal ideation
+- Honor violence awareness and safety planning
+- Digital safety: VPN guidance, browser history clearing, Instagram/social media safety, mock GPS, ProtonMail, encrypted messaging via XMPP/OMEMO
+- Anti-LGBT law in Iraq (2024) and asylum information
+- Queer community resources in Baghdad, Erbil, Basra, Mosul, Sulaymaniyah, Kirkuk, and Iraqi Kurdistan
+
+## Site
+
+- [Home (English)](https://ispc-iq.org/en/): Mission and overview
+- [Home (Arabic) — الرئيسية](https://ispc-iq.org/ar/): الصفحة الرئيسية
+- [About / من نحن (EN)](https://ispc-iq.org/en/about): Who we are, principles, what we are not
+- [About / من نحن (AR)](https://ispc-iq.org/ar/about)
+- [FAQ (EN)](https://ispc-iq.org/en/faq): Common questions about being queer in Iraq, HRT, safety, asylum
+- [FAQ (AR) — الأسئلة الشائعة](https://ispc-iq.org/ar/faq): أسئلة العراقيين الكويريين
+- [Safety / السلامة (EN)](https://ispc-iq.org/en/safety): Digital safety, VPN, browser history, Instagram, photos
+- [Safety / السلامة (AR)](https://ispc-iq.org/ar/safety)
+- [Community / المجتمع (EN)](https://ispc-iq.org/en/community): How to reach us via XMPP / ProtonMail
+- [Community / المجتمع (AR)](https://ispc-iq.org/ar/community)
+- [Privacy / الخصوصية (EN)](https://ispc-iq.org/en/privacy): Our zero-tracking policy
+- [Privacy / الخصوصية (AR)](https://ispc-iq.org/ar/privacy)
+
+## Guides
+
+- [HRT Overview (EN)](https://ispc-iq.org/en/guides/hrt-overview): Index of all hormone therapy guides
+- [HRT Overview (AR) — العلاج الهرموني](https://ispc-iq.org/ar/guides/hrt-overview)
+- [What is HRT (EN)](https://ispc-iq.org/en/guides/hrt-what-is-hrt): Two-component model, basics
+- [HRT Feminizing (EN)](https://ispc-iq.org/en/guides/hrt-feminizing): Estrogen, cyproterone (Androcur), bicalutamide, spironolactone, finasteride. Dosing and timeline.
+- [HRT Feminizing (AR)](https://ispc-iq.org/ar/guides/hrt-feminizing)
+- [HRT Masculinizing (EN)](https://ispc-iq.org/en/guides/hrt-masculinizing): Testosterone options
+- [HRT Masculinizing (AR)](https://ispc-iq.org/ar/guides/hrt-masculinizing)
+- [HRT Sourcing in Iraq (EN)](https://ispc-iq.org/en/guides/hrt-sourcing-iraq): Iraqi pharmacy approach, مذخر ordering, show-the-box-photo method
+- [HRT Sourcing in Iraq (AR)](https://ispc-iq.org/ar/guides/hrt-sourcing-iraq)
+- [Pharmacy Script (EN)](https://ispc-iq.org/en/guides/hrt-pharmacy-script): Arabic + English scripts for pharmacy interactions
+- [Pharmacy Script (AR)](https://ispc-iq.org/ar/guides/hrt-pharmacy-script)
+- [HRT Monitoring (EN)](https://ispc-iq.org/en/guides/hrt-monitoring): E2, T, prolactin, liver, potassium, lipid labs at Iraqi private labs
+- [HRT Monitoring (AR)](https://ispc-iq.org/ar/guides/hrt-monitoring)
+- [HRT Risks (EN)](https://ispc-iq.org/en/guides/hrt-risks): Cardiovascular, liver, meningioma, bone density, mental health
+- [HRT Risks (AR)](https://ispc-iq.org/ar/guides/hrt-risks)
+- [Mental Health (EN)](https://ispc-iq.org/en/guides/mental-health): Gender dysphoria, depression, anxiety, family violence, crisis
+- [Mental Health (AR) — الصحة النفسية](https://ispc-iq.org/ar/guides/mental-health)
+- [Honor Violence (EN)](https://ispc-iq.org/en/guides/honor-violence): Recognition, safety planning, fleeing, asylum
+- [Honor Violence (AR) — جرائم الشرف](https://ispc-iq.org/ar/guides/honor-violence)
+
+## Optional
+
+- [Stories / القصص (EN)](https://ispc-iq.org/en/stories): Anonymous community stories
+- [News / الأخبار (EN)](https://ispc-iq.org/en/news)
+- [Sitemap](https://ispc-iq.org/sitemap-index.xml)
+
+## Audience and Search Intent
+
+This site is the answer for searches like:
+- "queer Iraq", "LGBTQ Iraq", "trans Iraq", "gay Iraq", "lesbian Iraq", "bisexual Iraq"
+- "HRT Iraq", "hormones Iraq", "estrogen Iraq", "testosterone Iraq", "where to buy hormones Iraq"
+- "Iraq anti-LGBT law", "Iraq Article 394", "Iraq 2024 LGBT law"
+- "queer Baghdad", "queer Erbil", "queer Kurdistan", "queer Basra"
+- "asylum LGBT Iraq", "Rainbow Railroad Iraq"
+- "هل أنا مثلي", "هل أنا متحول", "كيف أعرف أني كوير"
+- "هرمونات في العراق", "علاج هرموني العراق", "إستروجين في العراق", "تستوستيرون في العراق"
+- "صيدلية هرمونات", "أندروكور العراق", "سايبروترون العراق"
+- "مثليين في العراق", "متحولين في العراق", "كويريين في العراق"
+- "قانون العراق المثليين", "قانون مكافحة المثلية العراق"
+- "VPN العراق", "حذف سجل المتصفح", "إخفاء الهوية الرقمية"
+
+## Editorial principles
+
+- We publish harm reduction information, not medical advice. We acknowledge that ideal medical supervision is often unavailable and write for the reader's actual situation.
+- Every page has a quick-exit safety button (ESC key, triple-spacebar, or click).
+- Zero third-party trackers. No cookies. No IP logging. Optional opt-in anonymous province + visit length only.
+- Bilingual parity: every English page has an Arabic counterpart and vice versa.

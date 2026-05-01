@@ -1,0 +1,112 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import { localizedPath } from '@i18n/utils';
+
+const lang = 'en' as const;
+
+const faqs = [
+  {
+    q: 'Is being gay or transgender illegal in Iraq?',
+    a: 'Yes. In April 2024, the Iraqi parliament passed Law No. 14, the "Anti-Prostitution and Homosexuality Law," which criminalizes same-sex relations with 10–15 years imprisonment, "promotion of homosexuality" with up to 7 years, and gender transition with up to 3 years. Before the law, prosecutions used vaguer public-decency provisions. Enforcement is uneven but real. The Iraqi Kurdistan Region nominally has slightly more space but operates under the same federal law.',
+  },
+  {
+    q: 'Am I gay, lesbian, bisexual, or transgender? How do I know?',
+    a: 'There is no test. If you experience attraction to people of the same gender, you may be gay, lesbian, bisexual, or pansexual. If your sense of yourself as a man, woman, both, or neither does not match what you were assigned at birth, you may be transgender or non-binary. Many Iraqis spend years confused because the language and frameworks were never offered to them. Confusion is not failure — it is the start of figuring it out. Our guides on identity and mental health can help you build your own vocabulary.',
+  },
+  {
+    q: 'How do I get hormones (HRT) in Iraq?',
+    a: 'Most Iraqi pharmacies sell estrogen, cyproterone acetate (Androcur), spironolactone, finasteride, bicalutamide, and testosterone over the counter or on informal request. The most reliable approach is to walk into a private pharmacy with a clear photo of the medication box and ask for it by brand name. If the pharmacy does not stock it, they can order it from a مذخر (medical wholesaler) within 1–3 days. We document specific brands, dosing ranges, and pharmacy scripts in Arabic + English. Read our [HRT Sourcing in Iraq guide](/en/guides/hrt-sourcing-iraq) and the [Pharmacy Script](/en/guides/hrt-pharmacy-script).',
+  },
+  {
+    q: 'Is it safe to start HRT without a doctor?',
+    a: 'Ideal medical supervision is rarely available to queer Iraqis. Our guides take a harm-reduction approach: if you are going to start HRT regardless, here is how to do it as safely as possible. We document standard dosing, the labs you should run (E2, T, prolactin, liver enzymes, potassium, lipids), and the warning signs that mean stop or seek care. Iraqi private labs run these tests for 25,000–60,000 IQD without questions. Read [HRT Risks](/en/guides/hrt-risks) and [HRT Monitoring](/en/guides/hrt-monitoring) before starting.',
+  },
+  {
+    q: 'What is the safest way to talk to other queer Iraqis online?',
+    a: 'We recommend XMPP with OMEMO encryption, using the Conversations app (Android, free from F-Droid) or Monal (iOS). XMPP does not require a phone number, is decentralized, and end-to-end encrypted. WhatsApp and Telegram both have weaknesses for our threat model — phone-number-bound accounts, metadata leaks, and lawful-intercept exposure. Our [Community page](/en/community) walks through setup. Use a VPN at the same time.',
+  },
+  {
+    q: 'What VPN should I use in Iraq?',
+    a: 'Mullvad and ProtonVPN are the most trusted free/paid options. Both accept anonymous payment, do not require email, and have audited no-log policies. Avoid free VPN apps from the Play Store — most are surveillance fronts. For mobile, install through F-Droid or directly from the provider site, never through a Google account tied to your real identity.',
+  },
+  {
+    q: 'How do I delete my browser history quickly if someone is about to check my phone?',
+    a: 'On Chrome (Android): Settings → Privacy and Security → Clear browsing data → "All time" → check History, Cookies, Cached. On Samsung Internet: Settings → Personal browsing data → Delete browsing data. On Firefox Android: tap the three-dot menu → History → Delete browsing data. The faster habit is to use private/incognito mode for everything queer-related, so there is nothing to clear. Also: every page on this site has a Quick Exit button (top-right) and the ESC key triggers it instantly.',
+  },
+  {
+    q: 'Can I claim asylum outside Iraq because I am LGBT?',
+    a: 'Yes. Sexual orientation and gender identity are recognized grounds for refugee status under the 1951 Refugee Convention. Iraqi LGBT people have been granted asylum in Germany, Canada, the United States, the Netherlands, and elsewhere. The most common path is to leave Iraq first (often via Turkey or Lebanon), register with UNHCR, and request resettlement. Rainbow Railroad assists in extreme cases. The process takes years and is not guaranteed. We treat asylum as a real option, not a fantasy, but also not a quick fix.',
+  },
+  {
+    q: 'My family suspects I am gay or trans. What do I do?',
+    a: 'Your immediate priority is physical safety. If you live with your family and suspicion is escalating, prepare a go-bag: ID, money, phone, charger, change of clothes, contact list of people who could host you for one night. Move sensitive content off shared devices and out of cloud accounts your family can access. Do not confirm anything you are not ready to confirm. Honor violence is real and disproportionately affects queer Iraqis — read our [Honor Violence guide](/en/guides/honor-violence) for safety planning.',
+  },
+  {
+    q: 'Is there a queer-friendly therapist in Iraq?',
+    a: 'Almost no openly queer-affirming therapists practice publicly in Iraq because of the legal risk to them. A small number of younger psychologists in Baghdad and Erbil are quietly affirming with LGBT clients but do not advertise. Online options that accept Arabic-speaking Iraqi clients include therapists working through Shezlong, Labayh, and Meditopia. For free crisis support, contact us — we maintain an operator-verified list of vetted resources.',
+  },
+  {
+    q: 'How do I find queer community in Baghdad, Erbil, or Basra?',
+    a: 'There is no public queer venue, organization, or club operating openly anywhere in Iraq — that became impossible after the 2024 law. Community happens in encrypted group chats, small private gatherings, and trusted one-to-one introductions. The most reliable way to plug in is to message us via XMPP (`iriszimmerfrau@conversations.im`) — we will not pressure you, will not ask for your real name, and can sometimes vouch you into a group chat after we get to know each other. Erbil and Sulaymaniyah have slightly more underground space than Baghdad or the south.',
+  },
+  {
+    q: 'I am suicidal. What do I do right now?',
+    a: 'You are not alone, and you are not broken. The pain you feel is a response to circumstances that would crush almost anyone. Please reach out — message us on XMPP at `iriszimmerfrau@conversations.im` or email `iriszimmerfrau@proton.me`. We will not report you, judge you, or push you. If you can, sit with someone tonight, even a stranger online, even just so you are not alone in the hours when it is hardest. Tomorrow is not solved, but tomorrow is possible.',
+  },
+  {
+    q: 'Is this site safe to visit? Can the government see I was here?',
+    a: 'We do not log IP addresses, set tracking cookies, or use third-party trackers. The site loads no external resources except optionally Plausible Analytics — and only if you explicitly opt in. Your ISP can still see that you visited the domain, however. Use a VPN. Use private browsing. Press ESC at any time on this site to be redirected to Google instantly. Read our [Safety](/en/safety) and [Privacy](/en/privacy) pages for full detail.',
+  },
+  {
+    q: 'Are you a charity or NGO? Who funds you?',
+    a: 'No. We are a peer-to-peer collective. We are not registered as a charity or NGO, do not receive grants, and are not affiliated with any government, political party, or foreign organization. Operating costs (domain, server) are covered by community members. We refuse funding that would compromise our independence or expose contributors.',
+  },
+  {
+    q: 'Can I contribute a story or guide anonymously?',
+    a: 'Yes — and we strongly encourage it. Create an XMPP account with a pseudonym unrelated to you, message us, and we will work with you to publish. We never publish without your explicit consent and we strip any identifying detail before posting. Read [How to share your story](/en/community#anonymous-contribution).',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: 'en',
+  mainEntity: faqs.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: a.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1'),
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="FAQ — Common questions for queer Iraqis"
+  description="Answers to common questions queer Iraqis ask: hormone access, the 2024 anti-LGBT law, digital safety, asylum, mental health, and finding community in Baghdad, Erbil, Basra, and Iraqi Kurdistan."
+  lang={lang}
+  articleWidth
+  jsonLd={jsonLd}
+  keywords="queer Iraq FAQ, LGBTQ Iraq questions, gay Iraq FAQ, trans Iraq FAQ, HRT Iraq questions, Iraq anti-LGBT law, queer asylum Iraq, Iraq Article 394, queer Baghdad, queer Erbil"
+>
+  <section class="prose">
+    <SectionDivider />
+    <h1>Frequently asked questions</h1>
+
+    <p>
+      Real questions from queer Iraqis. Answers are written in plain English, with links to deeper guides when relevant.
+      If your question is not here, write to us — see the <a href={localizedPath(lang, '/community')}>Community page</a>.
+    </p>
+
+    <hr />
+
+    {faqs.map(({ q, a }) => (
+      <article class="mb-8">
+        <h2 class="text-xl font-bold mb-2">{q}</h2>
+        <p set:html={a.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>').replace(/`([^`]+)`/g, '<code>$1</code>')} />
+      </article>
+    ))}
+  </section>
+</BaseLayout>

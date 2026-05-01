@@ -35,17 +35,60 @@ const {
 } = Astro.props;
 
 const dir = isRtl(lang) ? 'rtl' : 'ltr';
-const fullTitle = `${title} | ${lang === 'ar' ? 'التجمع العراقي للتقدم الاجتماعي' : 'Iraqi Social Progress Collective'}`;
+const siteName = lang === 'ar' ? 'التجمع العراقي للتقدم الاجتماعي' : 'Iraqi Social Progress Collective';
+const fullTitle = `${title} | ${siteName}`;
 const currentPath = Astro.url.pathname;
 
 const defaultKeywords = lang === 'ar'
-  ? 'مثليين, متحولين جنسياً, هوية جندرية, دعم نفسي, معلومات صحية, العراق, مجتمع الميم, علاج هرموني, كوير'
-  : 'queer Iraq, LGBTQ Iraq, trans Iraq, gay Iraq, HRT Iraq, hormones Iraq, gender identity, mental health, مثليين, متحولين, العراق';
+  ? 'مثليين, مثلية, متحولين جنسياً, متحولات جنسياً, مزدوج الجنس, كوير, ميم عين, هوية جندرية, هوية جنسية, دعم نفسي, الصحة النفسية, اكتئاب, قلق, العراق, بغداد, البصرة, الموصل, أربيل, السليمانية, كردستان, كردستان العراق, علاج هرموني, هرمونات, إستروجين, تستوستيرون, سايبروترون, أندروكور, بيكالوتاميد, مذخر العراق, صيدلية هرمونات, جرائم الشرف, العنف الأسري, لجوء, VPN, خصوصية, حذف السجل, هل أنا مثلي, هل أنا متحول, كيف أعرف أني كوير, تقبّل الذات'
+  : 'queer Iraq, LGBTQ Iraq, LGBT Iraq, gay Iraq, lesbian Iraq, trans Iraq, transgender Iraq, bisexual Iraq, queer Baghdad, queer Erbil, queer Basra, queer Mosul, queer Kurdistan, LGBT Kurdistan, Iraqi Kurdistan LGBT, HRT Iraq, hormones Iraq, estrogen Iraq, testosterone Iraq, cyproterone Iraq, Androcur Iraq, bicalutamide Iraq, spironolactone Iraq, where to buy hormones Iraq, Iraq pharmacy hormones, Iraq anti-LGBT law, Iraq Law 14 2024, Article 394 Iraq, queer asylum Iraq, Rainbow Railroad Iraq, gender identity, mental health Iraq, harm reduction Iraq, مثليين, متحولين, العراق, بغداد, كردستان, هرمونات, علاج هرموني, دعم نفسي, كوير, جرائم الشرف';
 
 const canonicalUrl = new URL(currentPath, Astro.site).href;
 const otherLang = lang === 'en' ? 'ar' : 'en';
 const alternatePath = currentPath.replace(`/${lang}`, `/${otherLang}`);
 const alternateUrl = new URL(alternatePath, Astro.site).href;
+const ogImageUrl = new URL('/favicon.svg', Astro.site).href;
+const siteUrl = new URL('/', Astro.site).href;
+
+const baseOrgGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}#org`,
+      name: siteName,
+      alternateName: lang === 'ar' ? 'Iraqi Social Progress Collective' : 'التجمع العراقي للتقدم الاجتماعي',
+      url: siteUrl,
+      logo: ogImageUrl,
+      description: lang === 'ar'
+        ? 'شبكة تكافلية شعبية للعراقيين الكويريين والمتسائلين داخل العراق. معلومات صحية، علاج هرموني، دعم نفسي، وأمان رقمي.'
+        : 'A grassroots mutual aid network for queer Iraqis and questioning people inside Iraq. Health information, HRT access, mental health support, and digital safety.',
+      areaServed: [
+        { '@type': 'Country', name: 'Iraq' },
+        { '@type': 'AdministrativeArea', name: 'Iraqi Kurdistan' },
+      ],
+      knowsAbout: [
+        'LGBTQ rights in Iraq',
+        'Hormone replacement therapy',
+        'Harm reduction',
+        'Digital safety',
+        'Mental health',
+        'Honor violence prevention',
+        'Asylum information',
+      ],
+      sameAs: [],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}#website`,
+      url: siteUrl,
+      name: siteName,
+      description: description,
+      inLanguage: ['en', 'ar'],
+      publisher: { '@id': `${siteUrl}#org` },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -73,10 +116,16 @@ const alternateUrl = new URL(alternatePath, Astro.site).href;
     <meta property="og:locale" content={lang === 'ar' ? 'ar_IQ' : 'en_US'} />
     <meta property="og:locale:alternate" content={lang === 'ar' ? 'en_US' : 'ar_IQ'} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:site_name" content={lang === 'ar' ? 'التجمع العراقي للتقدم الاجتماعي' : 'Iraqi Social Progress Collective'} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={siteName} />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="geo.region" content="IQ" />
+    <meta name="geo.placename" content="Iraq" />
+    <script type="application/ld+json" set:html={JSON.stringify(baseOrgGraph)} />
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}
