@@ -459,13 +459,17 @@ interface PlausibleQueryResult {
 }
 
 async function plausibleQuery(env: Env, body: PlausibleQueryBody): Promise<PlausibleQueryResult> {
+  const apiKey = (env.PLAUSIBLE_API_KEY || '').trim();
+  const siteId = (env.PLAUSIBLE_SITE_ID || '').trim();
+  if (!apiKey) throw new Error('PLAUSIBLE_API_KEY secret is not set');
+  if (!siteId) throw new Error('PLAUSIBLE_SITE_ID var is not set');
   const res = await fetch('https://plausible.io/api/v2/query', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${env.PLAUSIBLE_API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ site_id: env.PLAUSIBLE_SITE_ID, ...body }),
+    body: JSON.stringify({ site_id: siteId, ...body }),
   });
   if (!res.ok) {
     const text = await res.text();
@@ -772,12 +776,22 @@ export default {
       }
       // Surface deploy state for debugging — confirms env vars reached the bundle.
       if (req.method === 'GET' && url.pathname === '/debug') {
+        const plausibleKey = (env.PLAUSIBLE_API_KEY || '').trim();
+        const rawPlausibleKey = env.PLAUSIBLE_API_KEY || '';
         return json({
           ok: true,
           hasGithubToken: Boolean(env.GITHUB_TOKEN),
           githubOwner: env.GITHUB_OWNER || null,
           githubRepo: env.GITHUB_REPO || null,
+          publishRepo: env.PUBLISH_REPO || null,
+          publishBranch: env.PUBLISH_BRANCH || null,
           allowedOrigin: env.ALLOWED_ORIGIN || null,
+          hasPlausibleKey: Boolean(plausibleKey),
+          plausibleKeyLength: plausibleKey.length,
+          plausibleKeyHasWhitespace: rawPlausibleKey.length !== plausibleKey.length,
+          plausibleKeyPrefix: plausibleKey.slice(0, 4),
+          plausibleKeySuffix: plausibleKey.slice(-4),
+          plausibleSiteId: env.PLAUSIBLE_SITE_ID || null,
         }, 200, allowedOrigin);
       }
 
