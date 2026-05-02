@@ -235,8 +235,20 @@ export default {
         return await handleSubmission(req, env, allowedOrigin);
       }
 
-      // Admin endpoints — Cloudflare Access protects /admin/* at the edge,
-      // BEFORE this Worker runs. Code here trusts that gate.
+      // Defense in depth: refuse admin requests if Cloudflare Access didn't
+      // populate the JWT/email headers. Without this, a misconfigured Access
+      // app would expose the dashboard to anyone.
+      if (url.pathname.startsWith('/admin')) {
+        const accessJwt = req.headers.get('Cf-Access-Jwt-Assertion');
+        const accessEmail = req.headers.get('Cf-Access-Authenticated-User-Email');
+        if (!accessJwt || !accessEmail) {
+          return new Response(
+            'Cloudflare Access is not configured for this path. Configure an Access application for api.ispc-iq.org with path admin/* before this endpoint will respond.',
+            { status: 401, headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
+          );
+        }
+      }
+
       if (req.method === 'GET' && (url.pathname === '/admin' || url.pathname === '/admin/')) {
         return new Response(adminHtml(), {
           headers: {
