@@ -58,25 +58,30 @@ const { lang } = Astro.props;
       function loadPlausible() {
         if (window.__ispcPlausibleLoaded) return;
         window.__ispcPlausibleLoaded = true;
+
+        // Set up the plausible() queue stub before the script loads, so any
+        // calls made before the script downloads are buffered and replayed.
+        window.plausible = window.plausible || function () {
+          (window.plausible.q = window.plausible.q || []).push(arguments);
+        };
+        window.plausible.init = window.plausible.init || function (i) {
+          window.plausible.o = i || {};
+        };
+        window.plausible.init();
+
         var s = document.createElement('script');
-        s.defer = true;
-        s.setAttribute('data-domain', DOMAIN);
-        s.src = 'https://plausible.io/js/script.js';
+        s.async = true;
+        s.src = 'https://plausible.io/js/pa-tLpNmmr1oWCfyssYmbEWL.js';
         document.head.appendChild(s);
 
+        // Session-length custom event on page leave.
         var start = Date.now();
         function reportSession() {
           var seconds = Math.floor((Date.now() - start) / 1000);
           if (seconds < 2) return;
           try {
-            var payload = JSON.stringify({
-              name: 'Session',
-              url: location.href,
-              domain: DOMAIN,
-              props: { duration_seconds: String(seconds) }
-            });
-            if (navigator.sendBeacon) {
-              navigator.sendBeacon('https://plausible.io/api/event', payload);
+            if (typeof window.plausible === 'function') {
+              window.plausible('Session', { props: { duration_seconds: String(seconds) } });
             }
           } catch (e) {}
         }

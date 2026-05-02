@@ -15,6 +15,7 @@ GITHUB_REPO = "ispc-inbox"               # private inbox for issues
 PUBLISH_REPO = "lgbtresourcesiq"         # site repo where approved stories get committed
 PUBLISH_BRANCH = "main"
 ALLOWED_ORIGIN = "https://ispc-iq.org"
+PLAUSIBLE_SITE_ID = "ispc-iq.org"        # site ID registered in Plausible
 
 # Worker Route on the parent zone. This goes through Cloudflare's
 # proxied edge layer, which is where Access policies are evaluated.

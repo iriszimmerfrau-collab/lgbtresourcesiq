@@ -14,12 +14,14 @@
  */
 
 interface Env {
-  GITHUB_TOKEN: string; // secret
+  GITHUB_TOKEN: string;      // secret
   GITHUB_OWNER: string;
-  GITHUB_REPO: string;        // inbox repo (issues)
-  PUBLISH_REPO: string;       // site repo (where approved stories get committed)
-  PUBLISH_BRANCH: string;     // typically "main"
+  GITHUB_REPO: string;       // inbox repo (issues)
+  PUBLISH_REPO: string;      // site repo (where approved stories get committed)
+  PUBLISH_BRANCH: string;    // typically "main"
   ALLOWED_ORIGIN: string;
+  PLAUSIBLE_API_KEY: string; // secret
+  PLAUSIBLE_SITE_ID: string; // e.g. "ispc-iq.org"
 }
 
 const LIMITS = {
@@ -440,6 +442,76 @@ async function deleteContentFile(
 
 // ----- end content management -----
 
+// ----- Plausible Stats API -----
+
+interface PlausibleQueryBody {
+  metrics: string[];
+  date_range: string; // "day" | "7d" | "30d" | "month" | "6mo" | "12mo" | "all" | array
+  dimensions?: string[];
+  filters?: unknown[];
+  pagination?: { limit: number; offset?: number };
+}
+
+interface PlausibleQueryResult {
+  results: { metrics: number[]; dimensions: string[] }[];
+  meta?: Record<string, unknown>;
+  query?: unknown;
+}
+
+async function plausibleQuery(env: Env, body: PlausibleQueryBody): Promise<PlausibleQueryResult> {
+  const res = await fetch('https://plausible.io/api/v2/query', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.PLAUSIBLE_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ site_id: env.PLAUSIBLE_SITE_ID, ...body }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`plausible ${res.status}: ${text.slice(0, 200)}`);
+  }
+  return res.json();
+}
+
+async function getAnalytics(env: Env, period: string) {
+  const dateRange = ['day', '7d', '30d', 'month', '6mo', '12mo', 'all'].includes(period)
+    ? period
+    : '7d';
+  const [aggregate, timeseries, topPages, topCountries, topSources] = await Promise.all([
+    plausibleQuery(env, {
+      metrics: ['visitors', 'pageviews', 'bounce_rate', 'visit_duration'],
+      date_range: dateRange,
+    }),
+    plausibleQuery(env, {
+      metrics: ['visitors', 'pageviews'],
+      date_range: dateRange,
+      dimensions: ['time:day'],
+    }),
+    plausibleQuery(env, {
+      metrics: ['visitors', 'pageviews'],
+      date_range: dateRange,
+      dimensions: ['event:page'],
+      pagination: { limit: 15 },
+    }),
+    plausibleQuery(env, {
+      metrics: ['visitors'],
+      date_range: dateRange,
+      dimensions: ['visit:country'],
+      pagination: { limit: 10 },
+    }),
+    plausibleQuery(env, {
+      metrics: ['visitors'],
+      date_range: dateRange,
+      dimensions: ['visit:source'],
+      pagination: { limit: 10 },
+    }),
+  ]);
+  return { period: dateRange, aggregate, timeseries, topPages, topCountries, topSources };
+}
+
+// ----- end analytics -----
+
 async function publishStory(env: Env, num: number): Promise<{ path: string; lang: string }> {
   const issue = await getIssue(env, num);
   const rawTitle = issue.title.replace(/^Story submission:\s*/i, '').trim() || `Story #${num}`;
@@ -612,6 +684,11 @@ export default {
         const issues = await listIssues(env, 'submission');
         return json({ issues }, 200, allowedOrigin);
       }
+      if (req.method === 'GET' && url.pathname === '/admin/api/analytics') {
+        const period = url.searchParams.get('period') || '7d';
+        const data = await getAnalytics(env, period);
+        return json(data, 200, allowedOrigin);
+      }
       // Content list: GET /admin/api/content/(stories|news)
       const listMatch = ADMIN_CONTENT_LIST_RE.exec(url.pathname);
       if (listMatch) {
@@ -775,6 +852,26 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
 .editor textarea{min-height:380px;line-height:1.5;resize:vertical}
 .editor .editor-actions{display:flex;gap:.5rem;margin-top:1rem}
 .editor .help{font-size:.72rem;color:var(--muted);margin-top:.2rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.85rem;margin-bottom:1.25rem}
+.kpi{background:white;border:1px solid #e5dcc6;padding:1.1rem}
+.kpi .label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+.kpi .value{font-size:1.7rem;color:var(--navy);font-weight:700;font-family:ui-monospace,Menlo,monospace;line-height:1}
+.tables{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+@media (max-width: 720px){.tables{grid-template-columns:1fr}}
+.table-card{background:white;border:1px solid #e5dcc6;padding:.9rem 1rem}
+.table-card h3{margin:0 0 .5rem;font-size:.85rem;color:var(--navy);font-weight:600}
+.stats-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.stats-table tr{border-bottom:1px solid #f0e8d4}
+.stats-table tr:last-child{border-bottom:none}
+.stats-table td{padding:.4rem .25rem;vertical-align:top}
+.stats-table td.label{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stats-table td.num{text-align:right;font-family:ui-monospace,Menlo,monospace;color:var(--muted);width:4rem}
+.period-buttons{display:flex;gap:.25rem;flex-wrap:wrap}
+.btn.period[aria-pressed="true"]{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.spark-card{background:white;border:1px solid #e5dcc6;padding:.9rem 1rem;margin-bottom:.85rem}
+.spark-card h3{margin:0 0 .5rem;font-size:.85rem;color:var(--navy);font-weight:600}
+.spark-card svg{width:100%;height:60px;display:block}
+.spark-card .spark-meta{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:flex;justify-content:space-between}
 </style>
 </head>
 <body>
@@ -791,6 +888,7 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
     <button role="tab" aria-selected="false" data-tab="feedback">Feedback <span class="count" id="count-fb">0</span></button>
     <button role="tab" aria-selected="false" data-tab="stories">Stories <span class="count" id="count-stories">0</span></button>
     <button role="tab" aria-selected="false" data-tab="news">News <span class="count" id="count-news">0</span></button>
+    <button role="tab" aria-selected="false" data-tab="analytics">Analytics</button>
   </div>
 
   <section id="panel-submissions" class="panel" data-active>
@@ -816,6 +914,21 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
     </div>
     <div id="news-list" class="empty">Loading…</div>
     <div id="news-editor"></div>
+  </section>
+
+  <section id="panel-analytics" class="panel">
+    <div class="toolbar">
+      <span class="left">From Plausible. Opt-in only — visitors who declined consent are not counted.</span>
+      <div class="period-buttons">
+        <button class="btn period" data-period="day">Today</button>
+        <button class="btn period" data-period="7d" aria-pressed="true">7 days</button>
+        <button class="btn period" data-period="30d">30 days</button>
+        <button class="btn period" data-period="month">Month</button>
+        <button class="btn period" data-period="6mo">6 months</button>
+        <button class="btn period" data-period="all">All</button>
+      </div>
+    </div>
+    <div id="analytics-content" class="empty">Click Analytics to load.</div>
   </section>
 </main>
 <div id="toast" class="toast" hidden></div>
@@ -985,6 +1098,94 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
 
   $('news-create-btn').addEventListener('click',function(){openEditor('news',null,null)});
 
+  // ---------- Analytics ----------
+  function fmtDuration(seconds){
+    if(!seconds||isNaN(seconds))return '—';
+    var s = Math.round(seconds);
+    if(s<60) return s+'s';
+    var m=Math.floor(s/60), r=s%60;
+    if(m<60) return m+'m '+r+'s';
+    var h=Math.floor(m/60), rm=m%60;
+    return h+'h '+rm+'m';
+  }
+  function fmtPct(x){ if(x==null||isNaN(x))return '—'; return Math.round(x)+'%' }
+  function fmtNum(x){ if(x==null||isNaN(x))return '—'; return new Intl.NumberFormat().format(x) }
+
+  function renderTable(items, valueIdx){
+    if(!items||!items.length) return '<div class="empty" style="padding:1rem">No data.</div>';
+    var rows = items.map(function(r){
+      var label = r.dimensions[0] || '—';
+      return '<tr><td class="label" title="'+esc(label)+'">'+esc(label)+'</td><td class="num">'+fmtNum(r.metrics[valueIdx||0])+'</td></tr>';
+    }).join('');
+    return '<table class="stats-table">'+rows+'</table>';
+  }
+
+  function sparkline(series){
+    if(!series||!series.length) return '';
+    var max = Math.max.apply(null, series.map(function(p){return p.metrics[0]||0}));
+    if(max===0) max=1;
+    var w=800, h=60;
+    var step = w/Math.max(1, series.length-1);
+    var pts = series.map(function(p,i){ var v=p.metrics[0]||0; return i*step+','+(h-(v/max)*h); }).join(' ');
+    var areaPts = '0,'+h+' '+pts+' '+w+','+h;
+    return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none">'
+      +'<polygon points="'+areaPts+'" fill="#b85c38" fill-opacity="0.15"/>'
+      +'<polyline points="'+pts+'" fill="none" stroke="#0d1b2e" stroke-width="2" vector-effect="non-scaling-stroke"/>'
+      +'</svg>';
+  }
+
+  var currentPeriod = '7d';
+  function loadAnalytics(period){
+    currentPeriod = period;
+    document.querySelectorAll('.btn.period').forEach(function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-period')===period ? 'true':'false');
+    });
+    var c = $('analytics-content');
+    c.innerHTML = '<div class="empty">Loading…</div>';
+    fetch('/admin/api/analytics?period='+encodeURIComponent(period),{credentials:'include'})
+      .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})})
+      .then(function(x){
+        if(!x.ok){
+          c.innerHTML = '<div class="err">Failed: '+esc(x.d.message||x.d.error||'unknown')+'</div>';
+          return;
+        }
+        var d = x.d;
+        var aggMetrics = (d.aggregate && d.aggregate.results && d.aggregate.results[0] && d.aggregate.results[0].metrics) || [0,0,0,0];
+        var visitors = aggMetrics[0], pageviews = aggMetrics[1], bounce = aggMetrics[2], duration = aggMetrics[3];
+        var ts = (d.timeseries && d.timeseries.results) || [];
+        var firstDate = ts[0]?ts[0].dimensions[0]:'';
+        var lastDate = ts[ts.length-1]?ts[ts.length-1].dimensions[0]:'';
+
+        c.innerHTML =
+          '<div class="kpis">'
+            +'<div class="kpi"><div class="label">Unique visitors</div><div class="value">'+fmtNum(visitors)+'</div></div>'
+            +'<div class="kpi"><div class="label">Pageviews</div><div class="value">'+fmtNum(pageviews)+'</div></div>'
+            +'<div class="kpi"><div class="label">Bounce rate</div><div class="value">'+fmtPct(bounce)+'</div></div>'
+            +'<div class="kpi"><div class="label">Avg visit duration</div><div class="value">'+esc(fmtDuration(duration))+'</div></div>'
+          +'</div>'
+          +(ts.length
+            ? '<div class="spark-card"><h3>Visitors over time</h3>'+sparkline(ts)+'<div class="spark-meta"><span>'+esc(firstDate)+'</span><span>'+esc(lastDate)+'</span></div></div>'
+            : '')
+          +'<div class="tables">'
+            +'<div class="table-card"><h3>Top pages</h3>'+renderTable((d.topPages&&d.topPages.results)||[], 0)+'</div>'
+            +'<div class="table-card"><h3>Top countries</h3>'+renderTable((d.topCountries&&d.topCountries.results)||[], 0)+'</div>'
+          +'</div>'
+          +'<div class="tables" style="margin-top:.85rem">'
+            +'<div class="table-card"><h3>Top traffic sources</h3>'+renderTable((d.topSources&&d.topSources.results)||[], 0)+'</div>'
+            +'<div class="table-card"><h3>Range</h3><table class="stats-table">'
+              +'<tr><td class="label">Period</td><td class="num">'+esc(d.period||period)+'</td></tr>'
+              +(firstDate?'<tr><td class="label">First day</td><td class="num">'+esc(firstDate)+'</td></tr>':'')
+              +(lastDate?'<tr><td class="label">Last day</td><td class="num">'+esc(lastDate)+'</td></tr>':'')
+            +'</table></div>'
+          +'</div>';
+      })
+      .catch(function(e){c.innerHTML = '<div class="err">Failed: '+esc(e.message||e)+'</div>'});
+  }
+
+  document.querySelectorAll('.btn.period').forEach(function(btn){
+    btn.addEventListener('click',function(){loadAnalytics(btn.getAttribute('data-period'))});
+  });
+
   // ---------- Tab switching ----------
   document.querySelectorAll('.tabs button').forEach(function(btn){
     btn.addEventListener('click',function(){
@@ -995,6 +1196,7 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
       $('panel-'+name).setAttribute('data-active','');
       if(name==='stories') loadContent('stories');
       if(name==='news') loadContent('news');
+      if(name==='analytics') loadAnalytics(currentPeriod);
     });
   });
 
