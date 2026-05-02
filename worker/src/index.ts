@@ -35,9 +35,11 @@ const LIMITS = {
 // file stays free of literal control bytes.
 const CTRL = new RegExp('[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]', 'g');
 
-function corsHeaders(allowedOrigin: string): HeadersInit {
+const FALLBACK_ORIGIN = 'https://ispc-iq.org';
+
+function corsHeaders(allowedOrigin: string | undefined): HeadersInit {
   return {
-    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Origin': allowedOrigin || FALLBACK_ORIGIN,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Max-Age': '86400',
@@ -206,7 +208,10 @@ const ADMIN_MOD_RE = /^\/admin\/api\/issues\/(\d+)\/(close|approve|reject)$/;
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const url = new URL(req.url);
-    const allowedOrigin = env.ALLOWED_ORIGIN;
+    const allowedOrigin = env.ALLOWED_ORIGIN || FALLBACK_ORIGIN;
+
+    // Cheap top-level catch so a thrown error never produces a CF 1101.
+    // Detailed errors are still logged via console.error inside handlers.
 
     // CORS preflight
     if (req.method === 'OPTIONS') {
@@ -270,11 +275,21 @@ export default {
       if (req.method === 'GET' && url.pathname === '/health') {
         return plain('ok');
       }
+      // Surface deploy state for debugging — confirms env vars reached the bundle.
+      if (req.method === 'GET' && url.pathname === '/debug') {
+        return json({
+          ok: true,
+          hasGithubToken: Boolean(env.GITHUB_TOKEN),
+          githubOwner: env.GITHUB_OWNER || null,
+          githubRepo: env.GITHUB_REPO || null,
+          allowedOrigin: env.ALLOWED_ORIGIN || null,
+        }, 200, allowedOrigin);
+      }
 
       return plain('not found', 404);
     } catch (err) {
-      console.error('worker error', err);
-      return json({ error: 'internal_error' }, 500, allowedOrigin);
+      console.error('worker error', err instanceof Error ? err.stack || err.message : String(err));
+      return json({ error: 'internal_error', message: err instanceof Error ? err.message : String(err) }, 500, allowedOrigin);
     }
   },
 };
