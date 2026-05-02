@@ -11,7 +11,9 @@ compatibility_date = "2025-01-15"
 # GITHUB_TOKEN goes in via: pnpm wrangler secret put GITHUB_TOKEN
 [vars]
 GITHUB_OWNER = "iriszimmerfrau-collab"
-GITHUB_REPO = "ispc-inbox"
+GITHUB_REPO = "ispc-inbox"               # private inbox for issues
+PUBLISH_REPO = "lgbtresourcesiq"         # site repo where approved stories get committed
+PUBLISH_BRANCH = "main"
 ALLOWED_ORIGIN = "https://ispc-iq.org"
 
 # Worker Route on the parent zone. This goes through Cloudflare's

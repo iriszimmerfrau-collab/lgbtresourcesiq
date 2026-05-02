@@ -16,7 +16,9 @@
 interface Env {
   GITHUB_TOKEN: string; // secret
   GITHUB_OWNER: string;
-  GITHUB_REPO: string;
+  GITHUB_REPO: string;        // inbox repo (issues)
+  PUBLISH_REPO: string;       // site repo (where approved stories get committed)
+  PUBLISH_BRANCH: string;     // typically "main"
   ALLOWED_ORIGIN: string;
 }
 
@@ -128,6 +130,120 @@ async function patchIssue(
     const text = await res.text();
     throw new Error(`GitHub patchIssue ${res.status}: ${text.slice(0, 200)}`);
   }
+}
+
+async function getIssue(env: Env, num: number): Promise<Issue> {
+  const res = await gh(env, `/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/issues/${num}`);
+  if (!res.ok) throw new Error(`GitHub getIssue ${res.status}`);
+  return res.json();
+}
+
+interface Submission {
+  lang: string;
+  pseudonym: string;
+  contentWarning: string;
+  story: string;
+}
+
+function parseSubmissionBody(body: string): Submission {
+  const lang = body.match(/\*\*Language:\*\*\s*(\S+)/)?.[1] || 'en';
+  const pseudonym = body.match(/\*\*Pseudonym:\*\*\s*(.+?)$/m)?.[1].trim() || 'Anonymous';
+  const contentWarning = body.match(/\*\*Content warning:\*\*\s*(.+?)$/m)?.[1].trim() || 'none';
+  // Story body is everything after the "---" divider line
+  const dividerMatch = body.match(/\n---\n/);
+  const story = dividerMatch
+    ? body.slice((dividerMatch.index ?? 0) + dividerMatch[0].length).trim()
+    : body.trim();
+  return { lang, pseudonym, contentWarning, story };
+}
+
+function yamlString(value: string): string {
+  // Force a quoted YAML scalar; backslash-escape backslashes and double quotes.
+  return `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
+}
+
+function makeDescription(story: string, max = 180): string {
+  // Take first paragraph or first `max` chars, single-line, no markdown.
+  const firstPara = story.split(/\n\n+/)[0].replace(/\s+/g, ' ').trim();
+  if (firstPara.length <= max) return firstPara;
+  return firstPara.slice(0, max).trim() + '…';
+}
+
+function utf8ToBase64(s: string): string {
+  const bytes = new TextEncoder().encode(s);
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+
+interface ContentFile {
+  sha: string;
+  content: string;
+}
+
+async function getRepoFile(env: Env, path: string): Promise<ContentFile | null> {
+  const res = await gh(
+    env,
+    `/repos/${env.GITHUB_OWNER}/${env.PUBLISH_REPO}/contents/${path}?ref=${env.PUBLISH_BRANCH}`,
+  );
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`GitHub getRepoFile ${res.status}`);
+  return res.json();
+}
+
+async function putRepoFile(
+  env: Env,
+  path: string,
+  content: string,
+  message: string,
+  sha?: string,
+): Promise<void> {
+  const res = await gh(env, `/repos/${env.GITHUB_OWNER}/${env.PUBLISH_REPO}/contents/${path}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message,
+      content: utf8ToBase64(content),
+      branch: env.PUBLISH_BRANCH,
+      ...(sha ? { sha } : {}),
+    }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`GitHub putRepoFile ${res.status}: ${text.slice(0, 300)}`);
+  }
+}
+
+async function publishStory(env: Env, num: number): Promise<{ path: string; lang: string }> {
+  const issue = await getIssue(env, num);
+  const rawTitle = issue.title.replace(/^Story submission:\s*/i, '').trim() || `Story #${num}`;
+  const sub = parseSubmissionBody(issue.body || '');
+  const lang = sub.lang === 'ar' ? 'ar' : 'en';
+  const today = new Date().toISOString().slice(0, 10);
+  const isAnonymous = !sub.pseudonym || sub.pseudonym === 'Anonymous';
+
+  const frontmatterLines = [
+    '---',
+    `title: ${yamlString(rawTitle)}`,
+    `description: ${yamlString(makeDescription(sub.story))}`,
+    `lang: ${lang}`,
+    `pubDate: ${today}`,
+    `anonymous: ${isAnonymous ? 'true' : 'false'}`,
+  ];
+  if (!isAnonymous) frontmatterLines.push(`pseudonym: ${yamlString(sub.pseudonym)}`);
+  if (sub.contentWarning && sub.contentWarning !== 'none') {
+    frontmatterLines.push(`contentWarning: ${yamlString(sub.contentWarning)}`);
+  }
+  frontmatterLines.push('---', '');
+
+  const fileContent = frontmatterLines.join('\n') + '\n' + sub.story + '\n';
+  const path = `src/content/stories/${lang}/story-${num}.md`;
+
+  // If a previous publish exists at this path, get its sha so we can update.
+  const existing = await getRepoFile(env, path);
+  await putRepoFile(env, path, fileContent, `Publish approved story #${num}`, existing?.sha);
+
+  return { path, lang };
 }
 
 async function handleFeedback(req: Request, env: Env, origin: string): Promise<Response> {
@@ -274,12 +390,19 @@ export default {
           const action = m[2];
           if (action === 'close') {
             await patchIssue(env, num, { state: 'closed' });
-          } else if (action === 'approve') {
-            await patchIssue(env, num, { state: 'closed', labels: ['submission', 'approved'] });
-          } else if (action === 'reject') {
-            await patchIssue(env, num, { state: 'closed', labels: ['submission', 'rejected'] });
+            return json({ ok: true }, 200, allowedOrigin);
           }
-          return json({ ok: true }, 200, allowedOrigin);
+          if (action === 'reject') {
+            await patchIssue(env, num, { state: 'closed', labels: ['submission', 'rejected'] });
+            return json({ ok: true }, 200, allowedOrigin);
+          }
+          if (action === 'approve') {
+            // 1. Publish the story to the site repo as a markdown file.
+            const result = await publishStory(env, num);
+            // 2. Mark the inbox issue closed + approved only after publish succeeds.
+            await patchIssue(env, num, { state: 'closed', labels: ['submission', 'approved'] });
+            return json({ ok: true, published: result.path, lang: result.lang }, 200, allowedOrigin);
+          }
         }
       }
 
