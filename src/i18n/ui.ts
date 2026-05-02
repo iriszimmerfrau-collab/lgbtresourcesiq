@@ -85,7 +85,10 @@ export const ui = {
     'stories.submit.sending': 'Submitting…',
     'stories.submit.success': 'Received. If you provided contact, we will follow up before publishing.',
     'stories.submit.error': 'Could not submit. Try again, or send via XMPP instead.',
+    'stories.submit.validation.title': 'Title is required (at least 3 characters).',
+    'stories.submit.validation.story': 'Story must be at least 50 characters.',
     'stories.submit.privacy.note': 'No IP logged. No tracking cookie. Your draft sits in a private review queue. We strip identifying detail before publishing and never publish without your consent.',
+    'feedback.validation.message': 'Message is required (at least 3 characters).',
   },
   ar: {
     'site.name': 'التجمع العراقي للتقدم الاجتماعي',
@@ -173,7 +176,10 @@ export const ui = {
     'stories.submit.sending': 'يتم الإرسال…',
     'stories.submit.success': 'تم الاستلام. إن تركت وسيلة تواصل، سنتواصل قبل النشر.',
     'stories.submit.error': 'تعذّر الإرسال. حاول مرة أخرى، أو أرسل عبر XMPP.',
+    'stories.submit.validation.title': 'العنوان مطلوب (3 أحرف على الأقل).',
+    'stories.submit.validation.story': 'يجب أن تكون القصة 50 حرفاً على الأقل.',
     'stories.submit.privacy.note': 'لا تسجيل لـ IP. لا كوكي تتبع. مسوّدتك تنتظر في طابور مراجعة خاص. ننزع أي تفاصيل قد تكشفك قبل النشر، ولن ننشر دون موافقتك.',
+    'feedback.validation.message': 'الرسالة مطلوبة (3 أحرف على الأقل).',
   },
 } as const;
 

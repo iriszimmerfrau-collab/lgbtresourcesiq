@@ -66,6 +66,7 @@ const lang = 'ar' as const;
       msgSuccess: t(lang, 'feedback.success'),
       msgError: t(lang, 'feedback.error'),
       msgSubmit: t(lang, 'feedback.submit'),
+      msgVMessage: t(lang, 'feedback.validation.message'),
     }}
   >
     (function () {
@@ -73,6 +74,12 @@ const lang = 'ar' as const;
       var btn = document.getElementById('fb-submit');
       var status = document.getElementById('fb-status');
       if (!form || !btn || !status) return;
+
+      function showError(msg) {
+        status.hidden = false;
+        status.textContent = msg;
+        status.className = 'text-sm text-exit-red font-semibold';
+      }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -82,12 +89,12 @@ const lang = 'ar' as const;
           message: form.elements['message'].value,
           lang: lang,
         };
-        if (!data.message || data.message.trim().length < 3) return;
+        if (!data.message || data.message.trim().length < 3) { showError(msgVMessage); return; }
         btn.disabled = true;
         btn.textContent = msgSending;
         status.hidden = false;
-        status.textContent = '';
-        status.className = 'text-sm';
+        status.textContent = msgSending;
+        status.className = 'text-sm text-muted';
 
         fetch(endpoint, {
           method: 'POST',

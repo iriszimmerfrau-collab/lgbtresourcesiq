@@ -102,6 +102,8 @@ const lang = 'ar' as const;
       msgSuccess: t(lang, 'stories.submit.success'),
       msgError: t(lang, 'stories.submit.error'),
       msgSubmit: t(lang, 'stories.submit.submit'),
+      msgVTitle: t(lang, 'stories.submit.validation.title'),
+      msgVStory: t(lang, 'stories.submit.validation.story'),
     }}
   >
     (function () {
@@ -109,6 +111,12 @@ const lang = 'ar' as const;
       var btn = document.getElementById('s-submit');
       var status = document.getElementById('s-status');
       if (!form || !btn || !status) return;
+
+      function showError(msg) {
+        status.hidden = false;
+        status.textContent = msg;
+        status.className = 'text-sm text-exit-red font-semibold';
+      }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -121,13 +129,13 @@ const lang = 'ar' as const;
           contact: form.elements['contact'].value,
           lang: lang,
         };
-        if (!data.title || data.title.trim().length < 3) return;
-        if (!data.story || data.story.trim().length < 50) return;
+        if (!data.title || data.title.trim().length < 3) { showError(msgVTitle); return; }
+        if (!data.story || data.story.trim().length < 50) { showError(msgVStory); return; }
         btn.disabled = true;
         btn.textContent = msgSending;
         status.hidden = false;
-        status.textContent = '';
-        status.className = 'text-sm';
+        status.textContent = msgSending;
+        status.className = 'text-sm text-muted';
 
         fetch(endpoint, {
           method: 'POST',
