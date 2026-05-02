@@ -14,12 +14,18 @@ GITHUB_OWNER = "iriszimmerfrau-collab"
 GITHUB_REPO = "ispc-inbox"
 ALLOWED_ORIGIN = "https://ispc-iq.org"
 
-# Custom-domain route. Cloudflare auto-creates the DNS record for
-# api.ispc-iq.org under the ispc-iq.org zone when you `wrangler deploy`.
-# Requires ispc-iq.org to be in your Cloudflare account.
-routes = [
-  { pattern = "api.ispc-iq.org", custom_domain = true }
-]
+# Worker Route on the parent zone. This goes through Cloudflare's
+# proxied edge layer, which is where Access policies are evaluated.
+# (custom_domain mode bypasses Access in some setups, so we avoid it.)
+#
+# Requires:
+#   1. ispc-iq.org zone is in your Cloudflare account (it is)
+#   2. A DNS record for `api.ispc-iq.org` exists in that zone, PROXIED
+#      (orange cloud). The record value can be a placeholder — the
+#      Worker route intercepts before the origin is contacted.
+[[routes]]
+pattern = "api.ispc-iq.org/*"
+zone_name = "ispc-iq.org"
 
 # Observability (free, no PII): tail logs via `pnpm wrangler tail`
 [observability]
