@@ -39,49 +39,61 @@ The system frames inahuf as a fourth column alongside the three existing dialect
 
 Romanization: *Inahuf* — three syllables, *i-na-huf*.
 
-## The five grammatical forms
+## The grammatical forms
 
-Arabic pronouns appear in several grammatical positions: as standalone subjects, as suffixes attached to verbs (object marking), as prepositional objects, as possessives, and as verb prefixes. Inahuf works in all five.
+Arabic pronouns appear in several grammatical positions: as standalone subjects, as suffixes attached to verbs (object marking), as prepositional objects, as possessives, as verb prefixes, and as a gender marker on nouns. Inahuf works in all of these.
+
+The closest English approximations of انهف are *them* (singular they) or the neopronoun set *xi / xem / xyr*. None map perfectly; the safest in writing is to leave انهف untransliterated.
 
 ### 1. Independent subject pronoun — انهف
 
 Used like هو / هي as the subject of a sentence.
 
-> **انهف راح المدرسة** — *Inahuf went to school.*
+> **انهف راح المدرسة** — *They went to school.*
 >
-> **انهف ما يحب البيتزا** — *Inahuf doesn't like pizza.*
+> **انهف ما يحب البيتزا** — *They don't like pizza.*
 
-### 2. Object suffix — ـف
+### 2. Object suffix on verbs — ـهف
 
-Replaces the gendered ـه (*him*) and ـها (*her*).
+Parallels the existing ـه (him) / ـها (her). The full third-person object suffix is **ـهف**, not bare ـف.
 
-> **ساعدف** — *I helped them.* (cf. ساعده "I helped him," ساعدها "I helped her")
+> **ساعدتهف** — *I helped them.* (cf. ساعدته "I helped him," ساعدتها "I helped her")
 >
-> **كلّمف** — *I talked to them.*
+> **كلّمتهف** — *I talked to them.*
 >
-> **شفتف البارح** — *I saw them yesterday.*
+> **شفتهف البارح** — *I saw them yesterday.*
 
-### 3. With prepositions — لف, بف, etc.
+### 3. With prepositions — معهف, لهف, بهف
 
-Replaces gendered preposition+suffix combinations like له / لها (to him / to her), به / بها (in him / in her).
+Same suffix pattern as object marking. The preposition takes ـهف.
 
-> **قلتلف** — *I told them.* (cf. قلت له "I told him," قلت لها "I told her")
+> **ذهبت معهف** — *I went with them.* (cf. معه "with him," معها "with her")
 >
-> **عطيتلف** — *I gave them (something).*
-
-### 4. Possessive suffix — ـفي
-
-Replaces ـه / ـها when used as a possessive on nouns.
-
-> **بيتفي** — *Their house.* (cf. بيته "his house," بيتها "her house")
+> **قلت لهف** — *I told them.*
 >
-> **أهلفي** — *Their family.*
+> **عطيت لهف** — *I gave them (something).*
 >
-> **اسمفي** — *Their name.*
->
-> **هذا الكتاب مالف** — *This book is theirs.* (predicative possession with مال)
+> **بهف** — *in/with them.*
 
-### 5. Verb-prefix conjugation — فـ
+### 4. 2nd-person object — ـكف
+
+When the *speaker* is addressing an inahuf person directly (rather than referring to them in the third person), the second-person object suffix is **ـكف**, parallel to ـكَ (you-masculine) and ـكِ (you-feminine).
+
+> **اني احبكف** — *I love you.* (cf. أحبكَ to a man, أحبكِ to a woman)
+>
+> **شفتكف البارح** — *I saw you yesterday.*
+
+### 5. Noun gender marker — ـف
+
+When a noun normally takes feminine ـة or stays in masculine bare form, the inahuf form takes **ـف**. This shows up most often in terms of address and affection.
+
+> **حبيبف** — *my love / dear one (inahuf form).* (cf. حبيبي to a man, حبيبتي to a woman)
+>
+> **عزيزف** — *my dear (inahuf form).*
+
+This usage is especially important in vocative speech and intimate address — a partner, a beloved, a close friend.
+
+### 6. Verb-prefix conjugation — فـ
 
 Present-tense verbs in Arabic carry a gendered prefix: ي- (*ya-/yi-*) for masculine, ت- (*ta-/ti-*) for feminine. Inahuf substitutes فـ (*fa-/fi-*).
 
@@ -91,27 +103,21 @@ Present-tense verbs in Arabic carry a gendered prefix: ي- (*ya-/yi-*) for mascu
 >
 > **فيجي** — *They come.* (cf. يجي "he comes")
 
-This means a complete inahuf sentence might string several of these forms together:
-
-> **قاللف صديقفي إن الأمور بخير** — *Their friend told them things are fine.*
->
-> Here: قال + لـ + ـف ("told to-them") + صديق + ـفي ("their friend").
-
 ## Worked examples
 
-The original source provides example narrative passages. Here is a sample, with grammatical annotations:
+Putting the forms together in real sentences:
 
-> **في شخص بحياتي اسمفي نور.**
-> *There is a person in my life. Their name is Noor.*
-> (اسم + ـفي = "their name")
-
-> **انهف أحلى إنسان عرفتفي بحياتي.**
-> *Inahuf is the loveliest person I have known.*
-> (انهف as subject; عرف + ـت + ـفي = "I-knew-them")
-
-> **انهف كانف يقرأ كتاب وفجأة رفعف راسفي وابتسمف لي.**
-> *Inahuf was reading a book and suddenly raised their head and smiled at me.*
-> (كان + ـف verb agreement; رفع + ـف verb agreement; راس + ـفي possessive; ابتسم + ـف verb agreement)
+> **اني احبكف** — *I love you.* (2nd-person inahuf address)
+>
+> **ذهبت معهف الى السوق** — *I went with them to the market.* (مع + هف)
+>
+> **حبيبف، شلونكف اليوم؟** — *My love, how are you today?* (vocative + 2nd-person ـكف)
+>
+> **انهف فقول إن الأمور بخير** — *They say things are fine.* (verb prefix فـ)
+>
+> **ساعدتهف بالواجب** — *I helped them with the homework.*
+>
+> **شفتهف بالحديقة وكلمتهف** — *I saw them in the park and talked to them.*
 
 ## Practical etiquette
 
@@ -120,16 +126,17 @@ The original source provides example narrative passages. Here is a sample, with 
 - **It feels strange at first.** That is universal for any new pronoun in any language. Arabic is more grammatically demanding than English, so you have more to remember. Practice in low-stakes ways: write a sentence in your head about a public figure. Use it in inner monologue. Repetition rewires.
 - **You can advocate for it without being preachy.** If a friend asks why their non-binary cousin uses انهف, the answer is: "Because Arabic doesn't have a singular gender-neutral pronoun and the Iraqi queer community made one. It's just like learning how to say a new name."
 
-## Limitations and open questions
+## A note on community usage vs. published examples
 
-The system is young. The source acknowledges some areas it doesn't address:
+The reference site at psi-neopronouns.vercel.app introduced inahuf, but actual usage in the Iraqi queer community has refined some forms. In particular: the **object and prepositional suffix is ـهف**, not bare ـف — it parallels the existing ـه / ـها rather than replacing the entire suffix. The examples on this page reflect community usage, which is what you will actually hear from people who use inahuf.
+
+Some areas still not fully settled:
 
 - **Dual (مثنى)** — Arabic has a special grammatical number for "two of something." How inahuf interacts with the dual is not yet documented.
-- **Adjective agreement** — When you say "she is tall" in Arabic, the adjective conjugates feminine. The community has not yet standardized whether *she-is-tall*-equivalents using inahuf take a feminine, masculine, or new ending. In practice, many speakers default to the masculine form, which is the unmarked form historically.
-- **MSA vs. dialect** — The source is in Iraqi dialect throughout. How to use inahuf in formal Modern Standard Arabic (e.g. for journalism, official writing) is not yet settled.
-- **No tashkeel (vowel marks)** in the source. The romanization "inahuf" implies /ɪnaˈhuːf/ — three syllables, with a long *u*.
+- **Adjective agreement** — When you say "she is tall" in Arabic, the adjective conjugates feminine. The community has not yet fully standardized whether adjectives modifying an inahuf subject take feminine, masculine, or a new inahuf form. In practice, many speakers default to the masculine form (the historically-unmarked form) or use the noun-marker ـف on the adjective itself.
+- **MSA vs. dialect** — The system is rooted in Iraqi colloquial. How to use inahuf in formal Modern Standard Arabic (journalism, official writing) is not yet settled.
 
-These gaps will likely be filled by the community over time. Languages grow through use.
+These gaps will be filled by the community over time. Languages grow through use.
 
 ## Why this matters
 
