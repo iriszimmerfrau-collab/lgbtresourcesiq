@@ -5,19 +5,30 @@ interface Props {
   href: string;
   date?: Date;
   lang?: string;
+  /** Color stripe at the top: terracotta | magenta | lavender | saffron | olive */
+  accent?: 'terracotta' | 'magenta' | 'lavender' | 'saffron' | 'olive';
 }
 
-const { title, description, href, date, lang = 'en' } = Astro.props;
+const { title, description, href, date, lang = 'en', accent = 'magenta' } = Astro.props;
+
+const accentBg: Record<NonNullable<Props['accent']>, string> = {
+  terracotta: 'bg-terracotta',
+  magenta: 'bg-magenta',
+  lavender: 'bg-lavender',
+  saffron: 'bg-saffron',
+  olive: 'bg-olive',
+};
 ---
 
-<a href={href} class="block no-underline group">
-  <div class="bg-white border border-muted/10 rounded p-5 transition-transform duration-200 group-hover:-translate-y-0.5">
-    <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-terracotta transition-colors">{title}</h3>
+<a href={href} class="block no-underline group h-full">
+  <article class={`relative h-full bg-white border-2 border-navy/10 p-5 transition-all duration-200 group-hover:border-navy/30 group-hover:-translate-y-1 group-hover:shadow-[3px_3px_0_0_rgba(13,27,46,0.15)]`}>
+    <span class={`absolute top-0 left-0 right-0 h-1.5 ${accentBg[accent]}`}></span>
+    <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-magenta transition-colors leading-tight">{title}</h3>
     <p class="text-muted text-sm leading-relaxed mb-3">{description}</p>
     {date && (
-      <time class="text-xs text-muted/60" datetime={date.toISOString()}>
+      <time class="text-xs text-muted/60 font-mono uppercase tracking-wider" datetime={date.toISOString()}>
         {date.toLocaleDateString(lang === 'ar' ? 'ar-IQ' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
       </time>
     )}
-  </div>
+  </article>
 </a>

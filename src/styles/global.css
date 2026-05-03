@@ -3,12 +3,20 @@
 @source "../**/*.{astro,html,js,jsx,ts,tsx,vue,md,mdx,svelte}";
 
 @theme {
+  /* Base palette — calm enough to scan as "an article" from across the room */
   --color-navy: #0d1b2e;
   --color-cream: #f0e6d3;
   --color-offwhite: #faf7f2;
   --color-body: #1a1a18;
   --color-muted: #5a5750;
+
+  /* Accent palette — bolder, more present.
+   * Magenta + lavender + saffron pull from queer zine/risograph history
+   * without using literal pride flags. Used as accents only. */
   --color-terracotta: #b85c38;
+  --color-magenta: #d6296b;
+  --color-lavender: #7c5cb5;
+  --color-saffron: #efa838;
   --color-olive: #5a6e48;
   --color-exit-red: #c4382b;
 
@@ -21,10 +29,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Subtle paper grain — barely visible, gives the page warmth without
+ * looking decorative. Triggered only on the body, not on cards. */
 body {
   font-family: var(--font-body);
   color: var(--color-body);
   background-color: var(--color-offwhite);
+  background-image:
+    radial-gradient(at 20% 10%, rgba(214, 41, 107, 0.025) 0, transparent 40%),
+    radial-gradient(at 80% 90%, rgba(124, 92, 181, 0.02) 0, transparent 45%);
+  background-attachment: fixed;
 }
 
 html[dir="rtl"] body {
@@ -34,6 +48,7 @@ html[dir="rtl"] body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--color-navy);
+  letter-spacing: -0.015em;
 }
 
 html[dir="rtl"] h1,
@@ -43,16 +58,34 @@ html[dir="rtl"] h4,
 html[dir="rtl"] h5,
 html[dir="rtl"] h6 {
   font-family: var(--font-arabic);
+  letter-spacing: 0;
 }
 
+/* Italic emphasis is a design feature, not an afterthought */
+em, .italic {
+  font-style: italic;
+  color: var(--color-magenta);
+}
+
+/* Links: solid terracotta with a thicker decoration, accent shifts to
+ * magenta on hover — the small motion of warmth → defiance. */
 a {
   color: var(--color-terracotta);
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 
 a:hover {
-  text-decoration-thickness: 2px;
+  color: var(--color-magenta);
+  text-decoration-thickness: 2.5px;
+}
+
+/* The selection color matters. Queer zines underline the impossible. */
+::selection {
+  background: var(--color-magenta);
+  color: var(--color-cream);
 }
 
 .prose {
@@ -61,21 +94,36 @@ a:hover {
 }
 
 .prose h1 {
-  font-size: 2rem;
+  font-size: clamp(2rem, 4.5vw, 2.85rem);
   font-weight: 700;
-  margin-block: 1.5rem 1rem;
+  line-height: 1.1;
+  margin-block: 1.75rem 1.25rem;
 }
 
 .prose h2 {
-  font-size: 1.5rem;
+  font-size: clamp(1.4rem, 2.5vw, 1.7rem);
   font-weight: 700;
-  margin-block: 2rem 0.75rem;
+  margin-block: 2.25rem 0.85rem;
+  position: relative;
+}
+
+/* H2 gets a small left bar in magenta — a tiny defiant tab */
+.prose h2::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 1.1em;
+  background: var(--color-magenta);
+  margin-inline-end: 0.5rem;
+  vertical-align: -0.15em;
+  transform: skewX(-12deg);
 }
 
 .prose h3 {
   font-size: 1.25rem;
   font-weight: 700;
   margin-block: 1.5rem 0.5rem;
+  color: var(--color-lavender);
 }
 
 .prose p {
@@ -88,25 +136,56 @@ a:hover {
 }
 
 .prose li {
-  margin-block: 0.25rem;
+  margin-block: 0.35rem;
+}
+
+/* List bullets get color */
+.prose ul li::marker {
+  color: var(--color-magenta);
+}
+
+.prose ol li::marker {
+  color: var(--color-lavender);
+  font-weight: 700;
 }
 
 .prose blockquote {
-  border-inline-start: 3px solid var(--color-terracotta);
-  padding-inline-start: 1rem;
-  margin-block: 1rem;
-  color: var(--color-muted);
+  border-inline-start: 4px solid var(--color-magenta);
+  padding-inline-start: 1.25rem;
+  margin-block: 1.25rem;
+  color: var(--color-body);
   font-style: italic;
+  font-size: 1.05rem;
 }
 
+/* Horizontal rule — three offset dots, not a bland line */
 .prose hr {
   border: none;
-  border-top: 1px solid color-mix(in srgb, var(--color-muted) 20%, transparent);
-  margin-block: 2rem;
+  height: 1.25rem;
+  background-image: radial-gradient(
+    circle,
+    var(--color-magenta) 2px,
+    transparent 2.5px
+  );
+  background-size: 14px 14px;
+  background-repeat: repeat-x;
+  background-position: center;
+  margin-block: 2.5rem;
+  opacity: 0.5;
 }
 
 .prose strong {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+/* code spans get a soft lavender wash so they pop */
+.prose code {
+  background: color-mix(in srgb, var(--color-lavender) 15%, transparent);
+  padding: 0.1rem 0.4rem;
+  font-family: ui-monospace, 'Cascadia Code', Menlo, monospace;
+  font-size: 0.9em;
+  border-radius: 2px;
 }
 
 .prose table {
@@ -125,4 +204,48 @@ a:hover {
   background-color: var(--color-navy);
   color: var(--color-cream);
   font-weight: 600;
+}
+
+/* Pull-quote utility for stories and articles */
+.pull-quote {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  line-height: 1.3;
+  color: var(--color-navy);
+  border-inline-start: 5px solid var(--color-magenta);
+  padding: 0.5rem 0 0.5rem 1.25rem;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.pull-quote::before {
+  content: "\201C";
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  color: var(--color-magenta);
+  line-height: 0;
+  position: absolute;
+  top: 0.6em;
+  inset-inline-start: 1.25rem;
+  opacity: 0.18;
+}
+
+html[dir="rtl"] .pull-quote::before {
+  content: "\201D";
+}
+
+/* Manifesto — the boldest text style on the site, used sparingly */
+.manifesto {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--color-navy);
+}
+
+.manifesto em {
+  color: var(--color-magenta);
 }

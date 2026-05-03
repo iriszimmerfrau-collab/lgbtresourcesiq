@@ -21,16 +21,18 @@ const lang = 'en' as const;
   }}
 >
   <!-- Hero -->
-  <section class="py-16 md:py-24">
-    <div class="max-w-2xl">
+  <section class="py-16 md:py-24 relative">
+    <div class="max-w-3xl">
       <SectionDivider />
-      <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">{t(lang, 'home.hero.title')}</h1>
-      <p class="text-lg text-muted leading-relaxed mb-8">{t(lang, 'home.hero.subtitle')}</p>
+      <h1 class="manifesto mb-8">
+        Toward <em>dignity,</em><br/>together.
+      </h1>
+      <p class="text-xl text-muted leading-relaxed mb-10 max-w-2xl">{t(lang, 'home.hero.subtitle')}</p>
       <div class="flex flex-wrap gap-4">
-        <a href={localizedPath(lang, '/guides')} class="inline-block bg-navy text-cream no-underline px-6 py-3 font-semibold text-sm hover:bg-navy/90 transition-colors">
-          {t(lang, 'home.cta.guides')}
+        <a href={localizedPath(lang, '/guides')} class="inline-block bg-navy text-cream no-underline px-7 py-4 font-bold text-base tracking-wide hover:bg-magenta hover:translate-x-1 hover:translate-y-1 transition-all duration-150 shadow-[5px_5px_0_0_var(--color-magenta)] hover:shadow-[0_0_0_0_var(--color-magenta)]">
+          {t(lang, 'home.cta.guides')} →
         </a>
-        <a href={localizedPath(lang, '/community')} class="inline-block border-2 border-navy text-navy no-underline px-6 py-3 font-semibold text-sm hover:bg-navy hover:text-cream transition-colors">
+        <a href={localizedPath(lang, '/community')} class="inline-block border-2 border-navy text-navy no-underline px-7 py-4 font-bold text-base tracking-wide hover:bg-navy hover:text-cream transition-colors">
           {t(lang, 'home.cta.community')}
         </a>
       </div>
@@ -41,16 +43,19 @@ const lang = 'en' as const;
   <section class="py-12">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card
+        accent="magenta"
         title={t(lang, 'home.card.identity.title')}
         description={t(lang, 'home.card.identity.desc')}
         href={localizedPath(lang, '/guides')}
       />
       <Card
+        accent="lavender"
         title={t(lang, 'home.card.health.title')}
         description={t(lang, 'home.card.health.desc')}
         href={localizedPath(lang, '/guides')}
       />
       <Card
+        accent="saffron"
         title={t(lang, 'home.card.safety.title')}
         description={t(lang, 'home.card.safety.desc')}
         href={localizedPath(lang, '/safety')}
