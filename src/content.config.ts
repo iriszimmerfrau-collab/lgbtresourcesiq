@@ -9,9 +9,10 @@ const guides = defineCollection({
     lang: z.enum(['en', 'ar']),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    category: z.enum(['hrt', 'mental-health', 'safety', 'general']),
+    category: z.enum(['hrt', 'mental-health', 'safety', 'general', 'identity']),
     order: z.number().optional(),
     parentGuide: z.string().optional(),
+    keywords: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });
@@ -26,6 +27,7 @@ const stories = defineCollection({
     contentWarning: z.string().optional(),
     anonymous: z.boolean().default(true),
     pseudonym: z.string().optional(),
+    keywords: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });
@@ -39,6 +41,7 @@ const news = defineCollection({
     pubDate: z.coerce.date(),
     source: z.string().optional(),
     sourceUrl: z.string().url().optional(),
+    keywords: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
 import type { Lang } from '@i18n/languages';
 import { t } from '@i18n/utils';
 
@@ -11,9 +12,10 @@ interface Props {
   updatedDate?: Date;
   readingTime?: number;
   jsonLd?: Record<string, unknown>;
+  keywords?: string;
 }
 
-const { title, description, lang, pubDate, updatedDate, readingTime, jsonLd } = Astro.props;
+const { title, description, lang, pubDate, updatedDate, readingTime, jsonLd, keywords } = Astro.props;
 
 function formatDate(date: Date, locale: string): string {
   return date.toLocaleDateString(locale === 'ar' ? 'ar-IQ' : 'en-US', {
@@ -24,10 +26,10 @@ function formatDate(date: Date, locale: string): string {
 }
 ---
 
-<BaseLayout title={title} description={description} lang={lang} ogType="article" jsonLd={jsonLd} articleWidth>
+<BaseLayout title={title} description={description} lang={lang} ogType="article" jsonLd={jsonLd} articleWidth keywords={keywords}>
   <article class="prose">
     <header class="mb-8">
-      <div class="w-12 h-0.5 bg-terracotta mb-6"></div>
+      <SectionDivider />
       <h1>{title}</h1>
       <div class="flex flex-wrap gap-4 text-sm text-muted mt-2">
         {pubDate && (

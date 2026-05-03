@@ -13,6 +13,11 @@ Topics covered:
 - Digital safety: VPN guidance, browser history clearing, Instagram/social media safety, mock GPS, ProtonMail, encrypted messaging via XMPP/OMEMO
 - Anti-LGBT law in Iraq (2024) and asylum information
 - Queer community resources in Baghdad, Erbil, Basra, Mosul, Sulaymaniyah, Kirkuk, and Iraqi Kurdistan
+- Education on sex, gender, sexual orientation, and the sex/gender distinction
+- The sexual spectrum and gender spectrum: pansexual, demisexual, asexual, non-binary, genderfluid, agender, and historical third-gender categories
+- Pronouns including Inahuf (انهف), the Arabic gender-neutral neopronoun created by the Iraqi queer community
+- Inclusive language guidance in English and Arabic
+- LGBTQIA+ history including Abu Nuwas, the mukhannathūn in early Islam, the colonial origins of modern anti-queer law, and the modern Iraqi queer movement
 
 ## Site
 
@@ -50,6 +55,31 @@ Topics covered:
 - [Mental Health (AR) — الصحة النفسية](https://ispc-iq.org/ar/guides/mental-health)
 - [Honor Violence (EN)](https://ispc-iq.org/en/guides/honor-violence): Recognition, safety planning, fleeing, asylum
 - [Honor Violence (AR) — جرائم الشرف](https://ispc-iq.org/ar/guides/honor-violence)
+
+## Identity & Education guides (sex, gender, orientation, pronouns)
+
+- [LGBTQIA+ basics (EN)](https://ispc-iq.org/en/guides/lgbtqia-education): What each letter means; introduction to queer terminology including Arabic
+- [LGBTQIA+ basics (AR)](https://ispc-iq.org/ar/guides/lgbtqia-education)
+- [Sex vs. gender (EN)](https://ispc-iq.org/en/guides/sex-vs-gender): The foundational distinction between biological sex and gender identity
+- [Sex vs. gender (AR)](https://ispc-iq.org/ar/guides/sex-vs-gender)
+- [Biological sex (EN)](https://ispc-iq.org/en/guides/sex-biological): Chromosomes, hormones, gonads, intersex variation, what "sex" really means
+- [Biological sex (AR)](https://ispc-iq.org/ar/guides/sex-biological)
+- [Gender (EN)](https://ispc-iq.org/en/guides/gender): Gender identity, expression, role; how people know their gender
+- [Gender (AR)](https://ispc-iq.org/ar/guides/gender)
+- [Sexual orientation (EN)](https://ispc-iq.org/en/guides/sexual-orientation): Gay, lesbian, bi, pansexual, asexual; who you are attracted to
+- [Sexual orientation (AR)](https://ispc-iq.org/ar/guides/sexual-orientation)
+- [The sexual spectrum (EN)](https://ispc-iq.org/en/guides/sexual-spectrum): Beyond gay/straight/bi — pansexual, demisexual, asexual, fluidity
+- [The sexual spectrum (AR)](https://ispc-iq.org/ar/guides/sexual-spectrum)
+- [The gender spectrum (EN)](https://ispc-iq.org/en/guides/gender-spectrum): Non-binary, genderfluid, agender, including mukhannathūn and other historical third-gender categories
+- [The gender spectrum (AR)](https://ispc-iq.org/ar/guides/gender-spectrum)
+- [Pronouns (EN)](https://ispc-iq.org/en/guides/pronouns): What they are, why they matter, how to ask and use
+- [Pronouns (AR)](https://ispc-iq.org/ar/guides/pronouns)
+- [Inahuf — Iraqi Arabic neopronoun (EN)](https://ispc-iq.org/en/guides/arabic-neopronouns): Complete guide to انهف, the gender-neutral pronoun for Arabic created by the Iraqi queer community
+- [Inahuf — Iraqi Arabic neopronoun (AR) — انهف](https://ispc-iq.org/ar/guides/arabic-neopronouns)
+- [Inclusive language (EN)](https://ispc-iq.org/en/guides/inclusive-language): Practical phrasing for English and Arabic; what to say, what to avoid
+- [Inclusive language (AR)](https://ispc-iq.org/ar/guides/inclusive-language)
+- [LGBTQIA+ history (EN)](https://ispc-iq.org/en/guides/lgbtqia-history): Includes Abu Nuwas, mukhannathūn, the colonial flattening, modern Arab queer organizing, Iraqi queer history through Law 14 (2024)
+- [LGBTQIA+ history (AR) — تاريخ مجتمع الميم](https://ispc-iq.org/ar/guides/lgbtqia-history)
 
 ## Optional
 
