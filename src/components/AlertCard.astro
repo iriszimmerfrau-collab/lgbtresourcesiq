@@ -1,0 +1,51 @@
+---
+import { t } from '@i18n/utils';
+import type { Lang } from '@i18n/languages';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  alert: CollectionEntry<'alerts'>;
+  href: string;
+  lang: Lang;
+}
+
+const { alert, href, lang } = Astro.props;
+const { title, description, pubDate, severity, category, source, affected } = alert.data;
+
+const severityClass: Record<string, string> = {
+  critical: 'bg-exit-red text-white border-exit-red',
+  high: 'bg-terracotta text-white border-terracotta',
+  medium: 'bg-saffron text-navy border-saffron',
+  low: 'bg-lavender text-white border-lavender',
+  info: 'bg-navy/15 text-navy border-navy/30',
+};
+
+const severityBar: Record<string, string> = {
+  critical: 'bg-exit-red',
+  high: 'bg-terracotta',
+  medium: 'bg-saffron',
+  low: 'bg-lavender',
+  info: 'bg-navy/40',
+};
+---
+
+<a href={href} class="block no-underline group">
+  <article class="relative bg-white border-2 border-navy/10 p-5 transition-all duration-200 group-hover:border-navy/30 group-hover:-translate-y-1 group-hover:shadow-[3px_3px_0_0_rgba(13,27,46,0.15)]">
+    <span class={`absolute top-0 left-0 right-0 h-1.5 ${severityBar[severity]}`}></span>
+    <div class="flex items-center gap-2 flex-wrap mb-2 text-xs">
+      <span class={`inline-block px-2 py-0.5 font-bold tracking-wider uppercase border ${severityClass[severity]}`}>
+        {t(lang, `alerts.severity.${severity}` as any)}
+      </span>
+      <span class="text-muted font-mono">{t(lang, `alerts.category.${category}` as any)}</span>
+      <time class="text-muted/70 font-mono ms-auto" datetime={pubDate.toISOString()}>
+        {pubDate.toLocaleDateString(lang === 'ar' ? 'ar-IQ' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+      </time>
+    </div>
+    <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-magenta transition-colors leading-tight">{title}</h3>
+    <p class="text-muted text-sm leading-relaxed mb-2">{description}</p>
+    <div class="flex flex-wrap gap-3 text-xs text-muted/80">
+      {source && <span><strong>{t(lang, 'alerts.label.source')}:</strong> {source}</span>}
+      {affected && <span><strong>{t(lang, 'alerts.label.affected')}:</strong> {affected}</span>}
+    </div>
+  </article>
+</a>

@@ -46,4 +46,26 @@ const news = defineCollection({
   }),
 });
 
-export const collections = { guides, stories, news };
+const alerts = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/alerts' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    lang: z.enum(['en', 'ar']),
+    pubDate: z.coerce.date(),
+    /** Severity drives styling (red/orange/yellow/blue accents) */
+    severity: z.enum(['critical', 'high', 'medium', 'low', 'info']),
+    /** Topic for filtering and routing */
+    category: z.enum(['legal', 'violence', 'surveillance', 'border', 'community', 'news', 'asylum']),
+    /** Original news source name, e.g. "Reuters" */
+    source: z.string().optional(),
+    /** URL of the original article */
+    sourceUrl: z.string().url().optional(),
+    /** Geographic / demographic scope, e.g. "Baghdad", "Iraqi Kurdistan", "trans women" */
+    affected: z.string().optional(),
+    keywords: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { guides, stories, news, alerts };

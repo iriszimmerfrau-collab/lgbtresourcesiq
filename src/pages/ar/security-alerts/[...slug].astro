@@ -1,0 +1,96 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import { t, localizedPath } from '@i18n/utils';
+import { getSlugFromId, estimateReadingTime } from '@lib/collections';
+
+export async function getStaticPaths() {
+  const alerts = await getCollection('alerts', (e: CollectionEntry<'alerts'>) => e.data.lang === 'ar' && !e.data.draft);
+  return alerts.map((alert) => ({
+    params: { slug: getSlugFromId(alert.id) },
+    props: { alert },
+  }));
+}
+
+interface Props {
+  alert: CollectionEntry<'alerts'>;
+}
+
+const { alert } = Astro.props as Props;
+const { Content } = await render(alert);
+const lang = 'ar' as const;
+const readingTime = estimateReadingTime(alert.body ?? '');
+
+const severityChrome: Record<string, string> = {
+  critical: 'bg-exit-red text-white',
+  high: 'bg-terracotta text-white',
+  medium: 'bg-saffron text-navy',
+  low: 'bg-lavender text-white',
+  info: 'bg-navy/15 text-navy',
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: alert.data.title,
+  description: alert.data.description,
+  datePublished: alert.data.pubDate.toISOString(),
+  inLanguage: 'ar',
+  ...(alert.data.source && {
+    sourceOrganization: { '@type': 'NewsMediaOrganization', name: alert.data.source },
+  }),
+  ...(alert.data.sourceUrl && { isBasedOn: alert.data.sourceUrl }),
+  publisher: {
+    '@type': 'Organization',
+    name: 'التجمع العراقي للتقدم الاجتماعي',
+    url: 'https://ispc-iq.org/',
+  },
+};
+---
+
+<BaseLayout
+  title={alert.data.title}
+  description={alert.data.description}
+  lang={lang}
+  ogType="article"
+  jsonLd={jsonLd}
+  keywords={alert.data.keywords}
+  articleWidth
+>
+  <article class="prose">
+    <header class="mb-8">
+      <SectionDivider />
+      <p class="text-xs mb-3">
+        <a href={localizedPath(lang, '/security-alerts')} class="text-muted no-underline hover:text-magenta">→ {t(lang, 'alerts.title')}</a>
+      </p>
+      <div class="flex items-center gap-2 flex-wrap mb-3 text-xs">
+        <span class={`inline-block px-2.5 py-1 font-bold tracking-wider uppercase ${severityChrome[alert.data.severity]}`}>
+          {t(lang, `alerts.severity.${alert.data.severity}` as any)}
+        </span>
+        <span class="text-muted font-mono uppercase tracking-wider">{t(lang, `alerts.category.${alert.data.category}` as any)}</span>
+      </div>
+      <h1>{alert.data.title}</h1>
+      <div class="flex flex-wrap gap-4 text-sm text-muted mt-3">
+        <time datetime={alert.data.pubDate.toISOString()}>
+          {alert.data.pubDate.toLocaleDateString('ar-IQ', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        <span>{readingTime} {t(lang, 'guides.readTime')}</span>
+        {alert.data.affected && <span>{t(lang, 'alerts.label.affected')}: <strong class="text-body">{alert.data.affected}</strong></span>}
+      </div>
+    </header>
+
+    <Content />
+
+    {alert.data.source && (
+      <footer class="mt-12 pt-6 border-t border-muted/20 text-sm text-muted">
+        <p>
+          <strong>{t(lang, 'alerts.label.source')}:</strong>{' '}
+          {alert.data.sourceUrl
+            ? <a href={alert.data.sourceUrl} target="_blank" rel="noopener noreferrer">{alert.data.source} — {t(lang, 'alerts.label.original')}</a>
+            : alert.data.source}
+        </p>
+      </footer>
+    )}
+  </article>
+</BaseLayout>

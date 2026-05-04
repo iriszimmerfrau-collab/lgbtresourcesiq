@@ -1,7 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Lang } from '@i18n/languages';
 
-export async function getCollectionByLang<T extends 'guides' | 'stories' | 'news'>(
+export async function getCollectionByLang<T extends 'guides' | 'stories' | 'news' | 'alerts'>(
   collection: T,
   lang: Lang,
 ): Promise<CollectionEntry<T>[]> {

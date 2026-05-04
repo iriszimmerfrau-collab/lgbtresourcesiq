@@ -1,0 +1,62 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import AlertCard from '@components/AlertCard.astro';
+import { t, localizedPath } from '@i18n/utils';
+import { getCollectionByLang, getSlugFromId } from '@lib/collections';
+
+const lang = 'en' as const;
+const alerts = await getCollectionByLang('alerts', lang);
+
+alerts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'LGBTQ+ Iraq Security Alerts',
+  description: 'Verified LGBTQ+ news, security alerts, and risk advisories for Iraq.',
+  inLanguage: 'en',
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Iraqi Social Progress Collective',
+    url: 'https://ispc-iq.org/',
+  },
+  hasPart: alerts.slice(0, 20).map((a) => ({
+    '@type': 'NewsArticle',
+    headline: a.data.title,
+    datePublished: a.data.pubDate.toISOString(),
+    description: a.data.description,
+  })),
+};
+---
+
+<BaseLayout
+  title={t(lang, 'alerts.title')}
+  description="Verified LGBTQ+ Iraq news, security alerts, and risk advisories. Aggregated from Reuters, AP, BBC, Human Rights Watch, Outright International, Middle East Eye, and other sources. Reviewed before publication."
+  lang={lang}
+  jsonLd={jsonLd}
+  keywords="LGBTQ Iraq news, Iraq security alerts LGBT, Iraq queer news, Iraq Law 14 2024, Iraq anti-LGBT law, queer Iraq danger, Iraq trans news, queer Iraq violence, militia attacks LGBT Iraq, Iraq airport phone search LGBTQ, Iraq queer asylum, Iraq border LGBT"
+>
+  <section class="py-8">
+    <SectionDivider />
+    <h1 class="text-3xl md:text-4xl font-bold mb-2">{t(lang, 'alerts.title')}</h1>
+    <p class="text-lg text-muted leading-relaxed mb-3 max-w-3xl">{t(lang, 'alerts.subtitle')}</p>
+    <p class="text-sm text-muted/80 mb-8 max-w-3xl">
+      Sources we monitor: Reuters, AP, BBC, Al Jazeera English, Middle East Eye, Human Rights Watch, Amnesty International, Outright International, ILGA, Rainbow Railroad, IraqiNews, Rudaw, Kurdistan24, Pink News, Washington Blade, the Advocate, them., and Google News for "LGBTQ Iraq" and adjacent queries.
+    </p>
+
+    {alerts.length === 0 ? (
+      <p class="text-muted py-12 text-center">{t(lang, 'alerts.empty')}</p>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {alerts.map((alert) => (
+          <AlertCard
+            alert={alert}
+            href={localizedPath(lang, `/security-alerts/${getSlugFromId(alert.id)}`)}
+            lang={lang}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>

@@ -218,11 +218,11 @@ async function putRepoFile(
 
 // ----- Generic content (stories / news) read/write/delete -----
 
-type ContentType = 'stories' | 'news';
+type ContentType = 'stories' | 'news' | 'alerts';
 type ContentLang = 'en' | 'ar';
 
 function isContentType(s: string): s is ContentType {
-  return s === 'stories' || s === 'news';
+  return s === 'stories' || s === 'news' || s === 'alerts';
 }
 function isContentLang(s: string): s is ContentLang {
   return s === 'en' || s === 'ar';
@@ -516,6 +516,165 @@ async function getAnalytics(env: Env, period: string) {
 
 // ----- end analytics -----
 
+// ----- RSS aggregator (security alerts feeder) -----
+
+/**
+ * Sources we monitor. Google News RSS lets us query mainstream wire services
+ * with arbitrary search strings; HRW and Outright publish dedicated feeds.
+ * Each entry is just a URL the Worker can GET.
+ */
+const FEED_URLS: { name: string; url: string }[] = [
+  { name: 'Google News — LGBTQ Iraq', url: 'https://news.google.com/rss/search?q=%22LGBTQ%22+%22Iraq%22&hl=en-US&gl=US&ceid=US:en' },
+  { name: 'Google News — Iraq gay law', url: 'https://news.google.com/rss/search?q=%22Iraq%22+%22gay+law%22&hl=en-US&gl=US&ceid=US:en' },
+  { name: 'Google News — Iraq transgender', url: 'https://news.google.com/rss/search?q=%22Iraq%22+%22transgender%22&hl=en-US&gl=US&ceid=US:en' },
+  { name: 'Google News — Iraq queer', url: 'https://news.google.com/rss/search?q=%22Iraq%22+%22queer%22&hl=en-US&gl=US&ceid=US:en' },
+  { name: 'Google News — Iraq homosexuality law', url: 'https://news.google.com/rss/search?q=%22Iraq%22+%22homosexuality%22&hl=en-US&gl=US&ceid=US:en' },
+  { name: 'HRW Iraq', url: 'https://www.hrw.org/middle-east/n-africa/iraq/rss.xml' },
+];
+
+interface FeedItem {
+  title: string;
+  link: string;
+  pubDate?: string;
+  description?: string;
+  source?: string;
+}
+
+/** Strip HTML tags and decode the most common HTML entities to plain text. */
+function stripHtml(s: string): string {
+  return s
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** Parse RSS 2.0 / Atom feed XML using regex. Returns up to 30 items. */
+function parseFeed(xml: string, defaultSource: string): FeedItem[] {
+  const items: FeedItem[] = [];
+  // Try RSS <item>...</item>
+  const itemRe = /<item[\s>][\s\S]*?<\/item>/g;
+  const matches = xml.match(itemRe) || [];
+  for (const block of matches.slice(0, 30)) {
+    const titleM = block.match(/<title[^>]*>([\s\S]*?)<\/title>/);
+    const linkM = block.match(/<link[^>]*>([\s\S]*?)<\/link>/);
+    const dateM = block.match(/<pubDate[^>]*>([\s\S]*?)<\/pubDate>/);
+    const descM = block.match(/<description[^>]*>([\s\S]*?)<\/description>/);
+    const srcM = block.match(/<source[^>]*>([\s\S]*?)<\/source>/);
+    if (!titleM || !linkM) continue;
+    items.push({
+      title: stripHtml(titleM[1]).slice(0, 300),
+      link: stripHtml(linkM[1]).slice(0, 500),
+      pubDate: dateM ? stripHtml(dateM[1]) : undefined,
+      description: descM ? stripHtml(descM[1]).slice(0, 500) : undefined,
+      source: srcM ? stripHtml(srcM[1]).slice(0, 80) : defaultSource,
+    });
+  }
+  // Fall back to Atom <entry>...</entry>
+  if (items.length === 0) {
+    const entryRe = /<entry[\s>][\s\S]*?<\/entry>/g;
+    const entries = xml.match(entryRe) || [];
+    for (const block of entries.slice(0, 30)) {
+      const titleM = block.match(/<title[^>]*>([\s\S]*?)<\/title>/);
+      const linkM = block.match(/<link[^>]*\bhref="([^"]+)"/);
+      const dateM = block.match(/<(?:updated|published)[^>]*>([\s\S]*?)<\/(?:updated|published)>/);
+      const summaryM = block.match(/<summary[^>]*>([\s\S]*?)<\/summary>/);
+      if (!titleM || !linkM) continue;
+      items.push({
+        title: stripHtml(titleM[1]).slice(0, 300),
+        link: stripHtml(linkM[1]).slice(0, 500),
+        pubDate: dateM ? stripHtml(dateM[1]) : undefined,
+        description: summaryM ? stripHtml(summaryM[1]).slice(0, 500) : undefined,
+        source: defaultSource,
+      });
+    }
+  }
+  return items;
+}
+
+/** Heuristic relevance filter — drop items that don't look LGBTQ+Iraq related. */
+function isRelevant(item: FeedItem): boolean {
+  const text = `${item.title} ${item.description ?? ''}`.toLowerCase();
+  const hasIraq = /\biraq\b|\biraqi\b/.test(text);
+  const hasQueer = /\b(lgbt|lgbtq|lgbtqia|gay|lesbian|trans|transgender|queer|bisexual|homosexual|sexual orientation|gender identity|same-sex)\b/.test(text);
+  return hasIraq && hasQueer;
+}
+
+async function searchExistingAlertIssues(env: Env, link: string): Promise<boolean> {
+  // GitHub search for an exact URL string in our private inbox repo.
+  const q = encodeURIComponent(`repo:${env.GITHUB_OWNER}/${env.GITHUB_REPO} in:body "${link}"`);
+  const res = await gh(env, `/search/issues?q=${q}&per_page=1`);
+  if (!res.ok) return false;
+  const data = (await res.json()) as { total_count?: number };
+  return (data.total_count ?? 0) > 0;
+}
+
+async function aggregateRssOnce(env: Env): Promise<{ created: number; skipped: number; errors: string[] }> {
+  let created = 0;
+  let skipped = 0;
+  const errors: string[] = [];
+
+  for (const feed of FEED_URLS) {
+    let xml = '';
+    try {
+      const res = await fetch(feed.url, {
+        headers: { 'User-Agent': 'ispc-api-worker (security alerts aggregator)' },
+        cf: { cacheTtl: 0, cacheEverything: false },
+      });
+      if (!res.ok) {
+        errors.push(`${feed.name}: HTTP ${res.status}`);
+        continue;
+      }
+      xml = await res.text();
+    } catch (e) {
+      errors.push(`${feed.name}: fetch failed (${e instanceof Error ? e.message : String(e)})`);
+      continue;
+    }
+
+    const items = parseFeed(xml, feed.name);
+    for (const item of items) {
+      if (!isRelevant(item)) {
+        skipped++;
+        continue;
+      }
+      try {
+        const exists = await searchExistingAlertIssues(env, item.link);
+        if (exists) {
+          skipped++;
+          continue;
+        }
+        const body = [
+          `**Source feed:** ${feed.name}`,
+          `**Original source:** ${item.source ?? feed.name}`,
+          `**URL:** ${item.link}`,
+          `**Published:** ${item.pubDate ?? 'unknown'}`,
+          '',
+          '---',
+          '',
+          item.description ?? '(no description)',
+        ].join('\n');
+        await createIssue(env, {
+          title: `[Alert candidate] ${item.title}`,
+          body,
+          labels: ['alert-pending'],
+        });
+        created++;
+      } catch (e) {
+        errors.push(`${feed.name}/${item.title.slice(0, 60)}: ${e instanceof Error ? e.message : String(e)}`);
+      }
+    }
+  }
+  return { created, skipped, errors };
+}
+
+// ----- end RSS aggregator -----
+
 async function publishStory(env: Env, num: number): Promise<{ path: string; lang: string }> {
   const issue = await getIssue(env, num);
   const rawTitle = issue.title.replace(/^Story submission:\s*/i, '').trim() || `Story #${num}`;
@@ -622,9 +781,9 @@ async function handleSubmission(req: Request, env: Env, origin: string): Promise
 }
 
 const ADMIN_MOD_RE = /^\/admin\/api\/issues\/(\d+)\/(close|approve|reject)$/;
-// Content routes: /admin/api/content/(stories|news)/(en|ar)/(slug)
-const ADMIN_CONTENT_LIST_RE = /^\/admin\/api\/content\/(stories|news)$/;
-const ADMIN_CONTENT_ITEM_RE = /^\/admin\/api\/content\/(stories|news)\/(en|ar)\/([a-z0-9][a-z0-9-]{0,79})$/;
+// Content routes: /admin/api/content/(stories|news|alerts)/(en|ar)/(slug)
+const ADMIN_CONTENT_LIST_RE = /^\/admin\/api\/content\/(stories|news|alerts)$/;
+const ADMIN_CONTENT_ITEM_RE = /^\/admin\/api\/content\/(stories|news|alerts)\/(en|ar)\/([a-z0-9][a-z0-9-]{0,79})$/;
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
@@ -693,7 +852,7 @@ export default {
         const data = await getAnalytics(env, period);
         return json(data, 200, allowedOrigin);
       }
-      // Content list: GET /admin/api/content/(stories|news)
+      // Content list: GET /admin/api/content/(stories|news|alerts)
       const listMatch = ADMIN_CONTENT_LIST_RE.exec(url.pathname);
       if (listMatch) {
         const type = listMatch[1] as ContentType;
@@ -702,9 +861,9 @@ export default {
           return json({ items }, 200, allowedOrigin);
         }
         if (req.method === 'POST') {
-          // Create new news item. Body: { lang, slug, content }
-          if (type !== 'news') {
-            return json({ error: 'create_only_for_news' }, 400, allowedOrigin);
+          // Create new news or alert. Body: { lang, slug, content }
+          if (type !== 'news' && type !== 'alerts') {
+            return json({ error: 'create_only_for_news_or_alerts' }, 400, allowedOrigin);
           }
           const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
           const lang = String(body.lang || '');
@@ -774,6 +933,12 @@ export default {
       if (req.method === 'GET' && url.pathname === '/health') {
         return plain('ok');
       }
+      // Manual trigger of the RSS feeder (admin-only via Access). Useful for
+      // testing without waiting for the cron, or kicking a one-shot fetch.
+      if (req.method === 'POST' && url.pathname === '/admin/api/feeder/run') {
+        const result = await aggregateRssOnce(env);
+        return json(result, 200, allowedOrigin);
+      }
       // Surface deploy state for debugging — confirms env vars reached the bundle.
       if (req.method === 'GET' && url.pathname === '/debug') {
         const plausibleKey = (env.PLAUSIBLE_API_KEY || '').trim();
@@ -800,6 +965,21 @@ export default {
       console.error('worker error', err instanceof Error ? err.stack || err.message : String(err));
       return json({ error: 'internal_error', message: err instanceof Error ? err.message : String(err) }, 500, allowedOrigin);
     }
+  },
+
+  /** Cloudflare cron trigger entry-point. Configured in wrangler.toml. */
+  async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+    ctx.waitUntil(
+      (async () => {
+        try {
+          const result = await aggregateRssOnce(env);
+          console.log(`[cron] feeder created=${result.created} skipped=${result.skipped} errors=${result.errors.length}`);
+          if (result.errors.length) console.error('[cron] feeder errors', result.errors.slice(0, 5));
+        } catch (err) {
+          console.error('[cron] feeder fatal', err instanceof Error ? err.stack : String(err));
+        }
+      })(),
+    );
   },
 };
 
@@ -902,6 +1082,7 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
     <button role="tab" aria-selected="false" data-tab="feedback">Feedback <span class="count" id="count-fb">0</span></button>
     <button role="tab" aria-selected="false" data-tab="stories">Stories <span class="count" id="count-stories">0</span></button>
     <button role="tab" aria-selected="false" data-tab="news">News <span class="count" id="count-news">0</span></button>
+    <button role="tab" aria-selected="false" data-tab="alerts">Alerts <span class="count" id="count-alerts">0</span></button>
     <button role="tab" aria-selected="false" data-tab="analytics">Analytics</button>
   </div>
 
@@ -928,6 +1109,15 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
     </div>
     <div id="news-list" class="empty">Loading…</div>
     <div id="news-editor"></div>
+  </section>
+
+  <section id="panel-alerts" class="panel">
+    <div class="toolbar">
+      <span class="left">Security alerts & LGBTQ+ Iraq news. The RSS aggregator runs every 6 hours and creates pending issues for review.</span>
+      <button class="btn primary" id="alerts-create-btn">+ New alert</button>
+    </div>
+    <div id="alerts-list" class="empty">Loading…</div>
+    <div id="alerts-editor"></div>
   </section>
 
   <section id="panel-analytics" class="panel">
@@ -999,6 +1189,12 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
   }
 
   // ---------- Content (stories / news, file-backed) ----------
+  function panelIdForKind(kind){
+    if(kind==='stories') return 'stories';
+    if(kind==='news') return 'news';
+    if(kind==='alerts') return 'alerts';
+    return kind;
+  }
   function renderContentList(container,items,kind){
     if(!items.length){container.innerHTML='<div class="empty">No '+kind+' published yet.</div>';return}
     container.innerHTML=items.map(function(it){
@@ -1033,27 +1229,30 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
     });
   }
   function loadContent(kind){
+    var panel = panelIdForKind(kind);
     fetch('/admin/api/content/'+kind,{credentials:'include'}).then(function(r){return r.json()})
-      .then(function(d){var items=d.items||[];$('count-'+(kind==='stories'?'stories':'news')).textContent=items.length;renderContentList($((kind==='stories'?'stories':'news')+'-list'),items,kind)})
-      .catch(function(){$((kind==='stories'?'stories':'news')+'-list').innerHTML='<div class="err">Failed to load '+kind+'.</div>'});
+      .then(function(d){var items=d.items||[];$('count-'+panel).textContent=items.length;renderContentList($(panel+'-list'),items,kind)})
+      .catch(function(){$(panel+'-list').innerHTML='<div class="err">Failed to load '+kind+'.</div>'});
   }
 
   function openEditor(kind,lang,slug,template){
-    var listId = (kind==='stories'?'stories':'news')+'-list';
-    var editorId = (kind==='stories'?'stories':'news')+'-editor';
+    var panel = panelIdForKind(kind);
+    var listId = panel+'-list';
+    var editorId = panel+'-editor';
     var editor = $(editorId);
     var list = $(listId);
     list.style.display='none';
     var isCreate = !slug;
     var heading = isCreate ? 'New '+kind+' post' : 'Edit '+kind+'/'+lang+'/'+slug;
+    var pathHint = kind==='news' ? 'news' : (kind==='alerts' ? 'security-alerts' : 'stories');
     editor.innerHTML =
       '<div class="editor">'
       +'<h2>'+esc(heading)+'</h2>'
       +(isCreate
         ? '<div class="field"><label>Language</label><select id="ed-lang"><option value="en">en</option><option value="ar">ar</option></select></div>'
-          +'<div class="field"><label>Slug (lowercase, digits, hyphen — used in URL)</label><input id="ed-slug" type="text" maxlength="80" placeholder="my-post-slug"><div class="help">Only [a-z0-9-]. Will live at /'+esc(kind==='news'?'news':'stories')+'/{slug}.</div></div>'
+          +'<div class="field"><label>Slug (lowercase, digits, hyphen — used in URL)</label><input id="ed-slug" type="text" maxlength="80" placeholder="my-post-slug"><div class="help">Only [a-z0-9-]. Will live at /'+esc(pathHint)+'/{slug}.</div></div>'
         : '')
-      +'<div class="field"><label>Markdown (must include frontmatter)</label><textarea id="ed-content" spellcheck="false"></textarea><div class="help">Frontmatter must include title, description, lang, pubDate. For stories also include anonymous (true/false).</div></div>'
+      +'<div class="field"><label>Markdown (must include frontmatter)</label><textarea id="ed-content" spellcheck="false"></textarea><div class="help">Frontmatter must include title, description, lang, pubDate. Stories also need anonymous; alerts need severity (critical|high|medium|low|info) and category.</div></div>'
       +'<div class="editor-actions">'
         +'<button class="btn primary" id="ed-save">Save</button>'
         +'<button class="btn" id="ed-cancel">Cancel</button>'
@@ -1064,10 +1263,15 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
     function close(){ editor.innerHTML=''; list.style.display=''; }
 
     if(isCreate){
-      var defaultTemplate = template || (kind==='news'
-        ? '---\\ntitle: ""\\ndescription: ""\\nlang: en\\npubDate: '+todayISO()+'\\ndraft: true\\n---\\n\\nWrite the post body here.\\n'
-        : '---\\ntitle: ""\\ndescription: ""\\nlang: en\\npubDate: '+todayISO()+'\\nanonymous: true\\ndraft: true\\n---\\n\\nWrite here.\\n'
-      );
+      var defaultTemplate;
+      if (kind==='news') {
+        defaultTemplate = '---\\ntitle: ""\\ndescription: ""\\nlang: en\\npubDate: '+todayISO()+'\\ndraft: true\\n---\\n\\nWrite the post body here.\\n';
+      } else if (kind==='alerts') {
+        defaultTemplate = '---\\ntitle: ""\\ndescription: ""\\nlang: en\\npubDate: '+todayISO()+'\\nseverity: medium\\ncategory: news\\nsource: ""\\nsourceUrl: ""\\naffected: ""\\ndraft: true\\n---\\n\\nAlert body. Use ## headings.\\n';
+      } else {
+        defaultTemplate = '---\\ntitle: ""\\ndescription: ""\\nlang: en\\npubDate: '+todayISO()+'\\nanonymous: true\\ndraft: true\\n---\\n\\nWrite here.\\n';
+      }
+      defaultTemplate = template || defaultTemplate;
       $('ed-content').value = defaultTemplate.replace(/\\\\n/g,'\\n');
       $('ed-cancel').addEventListener('click',close);
       $('ed-save').addEventListener('click',function(){
@@ -1111,6 +1315,7 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
   }
 
   $('news-create-btn').addEventListener('click',function(){openEditor('news',null,null)});
+  $('alerts-create-btn').addEventListener('click',function(){openEditor('alerts',null,null)});
 
   // ---------- Analytics ----------
   function fmtDuration(seconds){
@@ -1210,6 +1415,7 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
       $('panel-'+name).setAttribute('data-active','');
       if(name==='stories') loadContent('stories');
       if(name==='news') loadContent('news');
+      if(name==='alerts') loadContent('alerts');
       if(name==='analytics') loadAnalytics(currentPeriod);
     });
   });

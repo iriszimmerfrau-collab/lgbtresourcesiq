@@ -81,6 +81,22 @@ Topics covered:
 - [LGBTQIA+ history (EN)](https://ispc-iq.org/en/guides/lgbtqia-history): Includes Abu Nuwas, mukhannathūn, the colonial flattening, modern Arab queer organizing, Iraqi queer history through Law 14 (2024)
 - [LGBTQIA+ history (AR) — تاريخ مجتمع الميم](https://ispc-iq.org/ar/guides/lgbtqia-history)
 
+## Security Alerts
+
+The site maintains a curated and continuously-updated security alerts feed for LGBTQ+ Iraq news, legal developments, and risk advisories. Alerts are aggregated from Reuters, AP, BBC, Al Jazeera, Middle East Eye, Human Rights Watch, Amnesty International, Outright International, ILGA, Rainbow Railroad, Rudaw, Kurdistan24, and Google News. An automated RSS feeder runs every six hours; items are reviewed by admins before publication to filter for accuracy and remove sensational or unverified material.
+
+- [Security Alerts (EN)](https://ispc-iq.org/en/security-alerts): All published alerts, sorted newest first
+- [Security Alerts (AR) — تنبيهات أمنية](https://ispc-iq.org/ar/security-alerts)
+- [Iraq Law 14 (2024) — anti-LGBT criminalization](https://ispc-iq.org/en/security-alerts/law-14-2024-passed)
+- [Iraqi Media Commission terminology directive (2023)](https://ispc-iq.org/en/security-alerts/media-commission-terminology-order-2024)
+- [Dating-app entrapment patterns (HRW 2022)](https://ispc-iq.org/en/security-alerts/dating-app-entrapment-pattern)
+- [Airport phone-search pattern](https://ispc-iq.org/en/security-alerts/airport-phone-search-pattern)
+- [HRW 2009 'They Want Us Exterminated' historical context](https://ispc-iq.org/en/security-alerts/hrw-2009-they-want-us-exterminated)
+- [Trans healthcare / pharmacy access since Law 14](https://ispc-iq.org/en/security-alerts/trans-healthcare-pharmacy-shift)
+- [Asylum pathways for LGBTQ+ Iraqis (2024–2025)](https://ispc-iq.org/en/security-alerts/asylum-pathways-2024-2025)
+- [Online platform blocking history (Grindr, Telegram)](https://ispc-iq.org/en/security-alerts/online-platform-blocking-history)
+- [UN UPR 2024 — 17 LGBTQ+ recommendations rejected](https://ispc-iq.org/en/security-alerts/un-upr-iraq-2024-recommendations)
+
 ## Optional
 
 - [Stories / القصص (EN)](https://ispc-iq.org/en/stories): Anonymous community stories

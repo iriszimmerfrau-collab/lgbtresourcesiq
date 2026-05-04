@@ -30,6 +30,12 @@ PLAUSIBLE_SITE_ID = "ispc-iq.org"        # site ID registered in Plausible
 pattern = "api.ispc-iq.org/*"
 zone_name = "ispc-iq.org"
 
+# RSS feeder runs every 6 hours. Pulls from Google News + HRW, filters
+# for LGBTQ+Iraq relevance, and creates `alert-pending` issues in the
+# inbox repo for admin review (rather than auto-publishing).
+[triggers]
+crons = ["0 */6 * * *"]
+
 # Observability (free, no PII): tail logs via `pnpm wrangler tail`
 [observability]
 enabled = true
