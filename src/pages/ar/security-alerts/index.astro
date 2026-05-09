@@ -48,15 +48,102 @@ const jsonLd = {
     {alerts.length === 0 ? (
       <p class="text-muted py-12 text-center">{t(lang, 'alerts.empty')}</p>
     ) : (
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {alerts.map((alert) => (
-          <AlertCard
-            alert={alert}
-            href={localizedPath(lang, `/security-alerts/${getSlugFromId(alert.id)}`)}
-            lang={lang}
+      <>
+        <div class="mb-6 flex flex-wrap gap-3 items-center">
+          <input
+            id="alerts-search"
+            type="search"
+            placeholder="ابحث بكلمة، مصدر، شدة، فئة…"
+            aria-label="ابحث في التنبيهات"
+            class="flex-1 min-w-[16rem] p-3 border-2 border-navy/20 bg-white text-base focus:border-magenta focus:outline-none"
           />
-        ))}
-      </div>
+          <select
+            id="alerts-severity-filter"
+            aria-label="حسب الشدة"
+            class="p-3 border-2 border-navy/20 bg-white text-sm"
+          >
+            <option value="">كل الشدّات</option>
+            <option value="critical">حرج</option>
+            <option value="high">عالي</option>
+            <option value="medium">متوسط</option>
+            <option value="low">منخفض</option>
+            <option value="info">معلوماتي</option>
+          </select>
+          <select
+            id="alerts-category-filter"
+            aria-label="حسب الفئة"
+            class="p-3 border-2 border-navy/20 bg-white text-sm"
+          >
+            <option value="">كل الفئات</option>
+            <option value="legal">قانوني</option>
+            <option value="violence">عنف</option>
+            <option value="surveillance">مراقبة</option>
+            <option value="border">حدود / سفر</option>
+            <option value="community">مجتمع</option>
+            <option value="news">أخبار</option>
+            <option value="asylum">لجوء</option>
+          </select>
+        </div>
+        <p id="alerts-result-count" class="text-sm text-muted mb-4">{alerts.length} تنبيهات</p>
+        <div id="alerts-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {alerts.map((alert) => (
+            <div
+              class="alerts-item"
+              data-search={`${alert.data.title} ${alert.data.description} ${alert.data.source ?? ''} ${alert.data.affected ?? ''} ${alert.data.keywords ?? ''}`.toLowerCase()}
+              data-severity={alert.data.severity}
+              data-category={alert.data.category}
+            >
+              <AlertCard
+                alert={alert}
+                href={localizedPath(lang, `/security-alerts/${getSlugFromId(alert.id)}`)}
+                lang={lang}
+              />
+            </div>
+          ))}
+        </div>
+        <p id="alerts-empty-search" class="hidden text-muted py-12 text-center">لا تنبيهات تطابق بحثك.</p>
+      </>
     )}
   </section>
+
+  <script is:inline>
+    (function () {
+      var input = document.getElementById('alerts-search');
+      var sevSel = document.getElementById('alerts-severity-filter');
+      var catSel = document.getElementById('alerts-category-filter');
+      var grid = document.getElementById('alerts-grid');
+      var emptyMsg = document.getElementById('alerts-empty-search');
+      var counter = document.getElementById('alerts-result-count');
+      if (!input || !grid) return;
+      var items = grid.querySelectorAll('.alerts-item');
+      var totalCount = items.length;
+
+      function apply() {
+        var q = (input.value || '').trim().toLowerCase();
+        var sev = (sevSel && sevSel.value) || '';
+        var cat = (catSel && catSel.value) || '';
+        var visible = 0;
+        items.forEach(function (el) {
+          var hay = el.getAttribute('data-search') || '';
+          var elSev = el.getAttribute('data-severity') || '';
+          var elCat = el.getAttribute('data-category') || '';
+          var match = (q === '' || hay.indexOf(q) !== -1)
+            && (sev === '' || elSev === sev)
+            && (cat === '' || elCat === cat);
+          el.style.display = match ? '' : 'none';
+          if (match) visible++;
+        });
+        if (counter) {
+          counter.textContent = visible === totalCount
+            ? totalCount + ' تنبيهات'
+            : visible + ' من ' + totalCount + ' تنبيهات';
+        }
+        if (emptyMsg) emptyMsg.classList.toggle('hidden', visible !== 0);
+        grid.classList.toggle('hidden', visible === 0);
+      }
+      input.addEventListener('input', apply);
+      if (sevSel) sevSel.addEventListener('change', apply);
+      if (catSel) catSel.addEventListener('change', apply);
+    })();
+  </script>
 </BaseLayout>

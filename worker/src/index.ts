@@ -673,7 +673,123 @@ async function aggregateRssOnce(env: Env): Promise<{ created: number; skipped: n
   return { created, skipped, errors };
 }
 
-// ----- end RSS aggregator -----
+// ----- Alert candidate review (queue management) -----
+
+interface AlertCandidate {
+  sourceFeed: string;
+  source: string;
+  url: string;
+  publishedRaw: string;
+  description: string;
+}
+
+function parseAlertCandidateBody(body: string): AlertCandidate {
+  const sourceFeed = body.match(/\*\*Source feed:\*\*\s*(.+?)$/m)?.[1].trim() || '';
+  const source = body.match(/\*\*Original source:\*\*\s*(.+?)$/m)?.[1].trim() || sourceFeed || 'Unknown';
+  const url = body.match(/\*\*URL:\*\*\s*(\S+)/)?.[1].trim() || '';
+  const publishedRaw = body.match(/\*\*Published:\*\*\s*(.+?)$/m)?.[1].trim() || '';
+  // Body content is everything after the "---" divider
+  const dividerMatch = body.match(/\n---\n/);
+  const description = dividerMatch
+    ? body.slice((dividerMatch.index ?? 0) + dividerMatch[0].length).trim()
+    : '';
+  return { sourceFeed, source, url, publishedRaw, description };
+}
+
+function slugifyTitle(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 50)
+    .replace(/^-|-$/g, '');
+}
+
+interface ApprovalSpec {
+  severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
+  category: 'legal' | 'violence' | 'surveillance' | 'border' | 'community' | 'news' | 'asylum';
+  lang: ContentLang;
+}
+
+function isApprovalSpec(x: unknown): x is ApprovalSpec {
+  if (!x || typeof x !== 'object') return false;
+  const o = x as Record<string, unknown>;
+  return (
+    ['critical', 'high', 'medium', 'low', 'info'].includes(o.severity as string) &&
+    ['legal', 'violence', 'surveillance', 'border', 'community', 'news', 'asylum'].includes(o.category as string) &&
+    (o.lang === 'en' || o.lang === 'ar')
+  );
+}
+
+async function publishAlertFromCandidate(
+  env: Env,
+  num: number,
+  spec: ApprovalSpec,
+): Promise<{ path: string; slug: string }> {
+  const issue = await getIssue(env, num);
+  const title = issue.title.replace(/^\[Alert candidate\]\s*/i, '').trim() || `Alert ${num}`;
+  const candidate = parseAlertCandidateBody(issue.body || '');
+
+  const today = new Date().toISOString().slice(0, 10);
+  const titleSlug = slugifyTitle(title) || `candidate-${num}`;
+  const slug = `${today}-${titleSlug}`.slice(0, 80);
+  const path = `src/content/alerts/${spec.lang}/${slug}.md`;
+
+  const description = candidate.description
+    ? candidate.description.replace(/\s+/g, ' ').slice(0, 220).trim()
+    : title;
+
+  const fmLines = [
+    '---',
+    `title: ${yamlString(title)}`,
+    `description: ${yamlString(description)}`,
+    `lang: ${spec.lang}`,
+    `pubDate: ${today}`,
+    `severity: ${spec.severity}`,
+    `category: ${spec.category}`,
+  ];
+  if (candidate.source) fmLines.push(`source: ${yamlString(candidate.source)}`);
+  if (candidate.url) fmLines.push(`sourceUrl: ${yamlString(candidate.url)}`);
+  fmLines.push('---', '');
+
+  const bodyLines: string[] = [];
+  if (candidate.description) {
+    bodyLines.push(candidate.description);
+    bodyLines.push('');
+  }
+  if (candidate.url) {
+    bodyLines.push(`Read the original report at [${candidate.source || candidate.url}](${candidate.url}).`);
+    bodyLines.push('');
+  }
+  if (candidate.publishedRaw) {
+    bodyLines.push(`*Original publication date: ${candidate.publishedRaw}.*`);
+  }
+
+  const fileContent = fmLines.join('\n') + '\n' + bodyLines.join('\n') + '\n';
+
+  // Defensive: if a same-slug file already exists, try slug-{num}.md
+  const existing = await getRepoFile(env, path);
+  if (existing) {
+    const altSlug = `${slug}-${num}`.slice(0, 80);
+    const altPath = `src/content/alerts/${spec.lang}/${altSlug}.md`;
+    await putRepoFile(env, altPath, fileContent, `Publish approved alert (candidate #${num})`);
+    return { path: altPath, slug: altSlug };
+  }
+  await putRepoFile(env, path, fileContent, `Publish approved alert (candidate #${num})`);
+  return { path, slug };
+}
+
+async function approveAlertCandidate(env: Env, num: number, spec: ApprovalSpec): Promise<{ path: string }> {
+  const result = await publishAlertFromCandidate(env, num, spec);
+  await patchIssue(env, num, { state: 'closed', labels: ['alert-pending', 'alert-approved'] });
+  return { path: result.path };
+}
+
+// ----- end alert candidate review -----
 
 async function publishStory(env: Env, num: number): Promise<{ path: string; lang: string }> {
   const issue = await getIssue(env, num);
@@ -851,6 +967,64 @@ export default {
         const period = url.searchParams.get('period') || '7d';
         const data = await getAnalytics(env, period);
         return json(data, 200, allowedOrigin);
+      }
+
+      // List alert candidates (RSS feeder output awaiting review)
+      if (req.method === 'GET' && url.pathname === '/admin/api/alert-candidates') {
+        const issues = await listIssues(env, 'alert-pending');
+        const enriched = issues.map((it) => ({
+          number: it.number,
+          title: it.title.replace(/^\[Alert candidate\]\s*/i, ''),
+          html_url: it.html_url,
+          created_at: it.created_at,
+          ...parseAlertCandidateBody(it.body || ''),
+        }));
+        return json({ candidates: enriched }, 200, allowedOrigin);
+      }
+
+      // Single approve: POST /admin/api/alert-candidates/:n/approve
+      // Body: { severity, category, lang }
+      const candidateApproveMatch = /^\/admin\/api\/alert-candidates\/(\d+)\/approve$/.exec(url.pathname);
+      if (req.method === 'POST' && candidateApproveMatch) {
+        const num = parseInt(candidateApproveMatch[1], 10);
+        const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
+        if (!isApprovalSpec(body)) return json({ error: 'invalid_spec' }, 400, allowedOrigin);
+        const result = await approveAlertCandidate(env, num, body);
+        return json({ ok: true, path: result.path }, 200, allowedOrigin);
+      }
+
+      // Reject: POST /admin/api/alert-candidates/:n/reject
+      const candidateRejectMatch = /^\/admin\/api\/alert-candidates\/(\d+)\/reject$/.exec(url.pathname);
+      if (req.method === 'POST' && candidateRejectMatch) {
+        const num = parseInt(candidateRejectMatch[1], 10);
+        await patchIssue(env, num, { state: 'closed', labels: ['alert-pending', 'alert-rejected'] });
+        return json({ ok: true }, 200, allowedOrigin);
+      }
+
+      // Bulk approve: POST /admin/api/alert-candidates/bulk-approve
+      // Body: { items: [{ num, severity, category, lang }] }
+      if (req.method === 'POST' && url.pathname === '/admin/api/alert-candidates/bulk-approve') {
+        const body = (await req.json().catch(() => ({}))) as { items?: Array<Record<string, unknown>> };
+        const items = Array.isArray(body.items) ? body.items : [];
+        const results: { num: number; ok: boolean; path?: string; error?: string }[] = [];
+        for (const item of items) {
+          const num = typeof item.num === 'number' ? item.num : parseInt(String(item.num), 10);
+          if (!Number.isFinite(num)) {
+            results.push({ num: 0, ok: false, error: 'bad_num' });
+            continue;
+          }
+          if (!isApprovalSpec(item)) {
+            results.push({ num, ok: false, error: 'bad_spec' });
+            continue;
+          }
+          try {
+            const r = await approveAlertCandidate(env, num, item);
+            results.push({ num, ok: true, path: r.path });
+          } catch (e) {
+            results.push({ num, ok: false, error: e instanceof Error ? e.message : String(e) });
+          }
+        }
+        return json({ results }, 200, allowedOrigin);
       }
       // Content list: GET /admin/api/content/(stories|news|alerts)
       const listMatch = ADMIN_CONTENT_LIST_RE.exec(url.pathname);
@@ -1066,6 +1240,18 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
 .spark-card h3{margin:0 0 .5rem;font-size:.85rem;color:var(--navy);font-weight:600}
 .spark-card svg{width:100%;height:60px;display:block}
 .spark-card .spark-meta{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:flex;justify-content:space-between}
+.cand-row{display:grid;grid-template-columns:auto 1fr auto;gap:.75rem;align-items:start;padding:.85rem 1rem;background:white;border:1px solid #e5dcc6;margin-bottom:.5rem}
+.cand-row .cand-info{min-width:0}
+.cand-row .cand-title{font-size:.92rem;font-weight:600;color:var(--navy);margin-bottom:.25rem;line-height:1.3}
+.cand-row .cand-meta{font-size:.7rem;color:var(--muted);font-family:ui-monospace,monospace;margin-bottom:.4rem;display:flex;flex-wrap:wrap;gap:.5rem .85rem}
+.cand-row .cand-desc{font-size:.78rem;color:var(--muted);line-height:1.4;max-height:4rem;overflow:hidden}
+.cand-row .cand-controls{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-top:.5rem}
+.cand-row .cand-controls select{font-size:.75rem;padding:.2rem .35rem;border:1px solid #c0b9a8;background:#fdfcf7;font-family:inherit}
+.cand-row .cand-controls .btn{padding:.3rem .65rem;font-size:.72rem}
+.cand-row input[type="checkbox"]{margin-top:.3rem;width:1.1rem;height:1.1rem;accent-color:var(--olive)}
+.cand-row .cand-actions{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end}
+.cand-bulk-bar{position:sticky;top:0;background:var(--cream);padding:.6rem .85rem;border:1px solid #d8cfb9;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center;z-index:5;flex-wrap:wrap;font-size:.8rem}
+.cand-bulk-bar select{font-size:.75rem;padding:.2rem .35rem;border:1px solid #c0b9a8;background:white;font-family:inherit}
 </style>
 </head>
 <body>
@@ -1083,6 +1269,7 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
     <button role="tab" aria-selected="false" data-tab="stories">Stories <span class="count" id="count-stories">0</span></button>
     <button role="tab" aria-selected="false" data-tab="news">News <span class="count" id="count-news">0</span></button>
     <button role="tab" aria-selected="false" data-tab="alerts">Alerts <span class="count" id="count-alerts">0</span></button>
+    <button role="tab" aria-selected="false" data-tab="candidates">Candidates <span class="count" id="count-candidates">0</span></button>
     <button role="tab" aria-selected="false" data-tab="analytics">Analytics</button>
   </div>
 
@@ -1118,6 +1305,18 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
     </div>
     <div id="alerts-list" class="empty">Loading…</div>
     <div id="alerts-editor"></div>
+  </section>
+
+  <section id="panel-candidates" class="panel">
+    <div class="toolbar">
+      <span class="left">RSS feeder output awaiting review. Approve to publish as alerts; reject to dismiss.</span>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn" id="cand-run-feed">Run feeder now</button>
+        <button class="btn olive" id="cand-bulk-approve" disabled>Approve selected (0)</button>
+        <button class="btn" id="cand-refresh">Refresh</button>
+      </div>
+    </div>
+    <div id="candidates-list" class="empty">Loading…</div>
   </section>
 
   <section id="panel-analytics" class="panel">
@@ -1317,6 +1516,339 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
   $('news-create-btn').addEventListener('click',function(){openEditor('news',null,null)});
   $('alerts-create-btn').addEventListener('click',function(){openEditor('alerts',null,null)});
 
+  // ---------- Alert candidates (RSS queue review) ----------
+  var SEVERITIES = ['critical','high','medium','low','info'];
+  var CATEGORIES = ['legal','violence','surveillance','border','community','news','asylum'];
+  var LANGS = ['en','ar'];
+  var candidateState = []; // {num, lang, severity, category, checked, ...}
+
+  function severityHint(text){
+    var t = (text||'').toLowerCase();
+    if (/(killed|murder|attack|assassinat|execut|raid|arrest|tortur|kidnap)/.test(t)) return 'high';
+    if (/(law|amendment|legislat|ban|criminaliz|sentenc)/.test(t)) return 'medium';
+    return 'info';
+  }
+  function categoryHint(text){
+    var t = (text||'').toLowerCase();
+    if (/(law|legal|legisl|court|sentenc|criminal|parliament|amendment)/.test(t)) return 'legal';
+    if (/(killed|murder|attack|violen|assault|tortur|raid|kidnap)/.test(t)) return 'violence';
+    if (/(asylum|refuge|seek\s+asylum|deport)/.test(t)) return 'asylum';
+    if (/(surveill|monitor|spy|hack|spyware|track)/.test(t)) return 'surveillance';
+    if (/(airport|border|checkpoint|travel|deport)/.test(t)) return 'border';
+    return 'news';
+  }
+  function langHint(text){
+    return /[ء-ي]/.test(text||'') ? 'ar' : 'en';
+  }
+
+  function selectOpts(values, current){
+    return values.map(function(v){
+      return '<option value="'+v+'"'+(v===current?' selected':'')+'>'+v+'</option>';
+    }).join('');
+  }
+
+  function updateBulkButton(){
+    var n = candidateState.filter(function(c){return c.checked}).length;
+    var btn = $('cand-bulk-approve');
+    btn.textContent = 'Approve selected ('+n+')';
+    btn.disabled = n === 0;
+  }
+
+  function renderCandidates(items){
+    candidateState = items.map(function(it){
+      var hintedSeverity = severityHint(it.title+' '+it.description);
+      var hintedCategory = categoryHint(it.title+' '+it.description);
+      var hintedLang = langHint(it.title+' '+it.description);
+      return {
+        num: it.number,
+        lang: hintedLang,
+        severity: hintedSeverity,
+        category: hintedCategory,
+        checked: false,
+        title: it.title,
+        description: it.description,
+        source: it.source,
+        url: it.url,
+        publishedRaw: it.publishedRaw,
+        sourceFeed: it.sourceFeed,
+        html_url: it.html_url,
+        created_at: it.created_at,
+      };
+    });
+    var c = $('candidates-list');
+    if (!candidateState.length) {
+      c.innerHTML = '<div class="empty">No candidates pending. Run the feeder to populate.</div>';
+      updateBulkButton();
+      return;
+    }
+    var bulkBar =
+      '<div class="cand-bulk-bar">'
+        +'<input type="checkbox" id="cand-select-all" /> '
+        +'<label for="cand-select-all">Select all</label>'
+        +'<span style="color:var(--muted);margin-inline-start:.5rem">·</span>'
+        +'<span>Set all to:</span>'
+        +'<select id="cand-bulk-severity"><option value="">severity…</option>'+selectOpts(SEVERITIES,'')+'</select>'
+        +'<select id="cand-bulk-category"><option value="">category…</option>'+selectOpts(CATEGORIES,'')+'</select>'
+        +'<select id="cand-bulk-lang"><option value="">lang…</option>'+selectOpts(LANGS,'')+'</select>'
+      +'</div>';
+    var rows = candidateState.map(function(c, i){
+      var date = new Date(c.created_at).toLocaleString();
+      return '<div class="cand-row" data-i="'+i+'">'
+        +'<input type="checkbox" class="cand-check" data-i="'+i+'">'
+        +'<div class="cand-info">'
+          +'<div class="cand-title">'+esc(c.title)+'</div>'
+          +'<div class="cand-meta">'
+            +'<span><strong>#'+c.num+'</strong></span>'
+            +'<span>'+esc(c.source||'')+'</span>'
+            +(c.url?'<a href="'+esc(c.url)+'" target="_blank" rel="noopener noreferrer">Article ↗</a>':'')
+            +'<span style="color:var(--muted)">queued '+esc(date)+'</span>'
+          +'</div>'
+          +'<div class="cand-desc">'+esc(c.description||'')+'</div>'
+          +'<div class="cand-controls">'
+            +'<select class="cand-severity" data-i="'+i+'">'+selectOpts(SEVERITIES,c.severity)+'</select>'
+            +'<select class="cand-category" data-i="'+i+'">'+selectOpts(CATEGORIES,c.category)+'</select>'
+            +'<select class="cand-lang" data-i="'+i+'">'+selectOpts(LANGS,c.lang)+'</select>'
+            +'<button class="btn olive" data-act="approve" data-i="'+i+'">Approve</button>'
+            +'<button class="btn danger" data-act="reject" data-i="'+i+'">Reject</button>'
+            +'<a class="btn" href="'+esc(c.html_url)+'" target="_blank" rel="noopener noreferrer">GitHub</a>'
+          +'</div>'
+        +'</div>'
+      +'</div>';
+    }).join('');
+    c.innerHTML = bulkBar + rows;
+
+    // Wire bulk select
+    $('cand-select-all').addEventListener('change', function(e){
+      var on = e.target.checked;
+      candidateState.forEach(function(s){s.checked=on});
+      document.querySelectorAll('.cand-check').forEach(function(cb){cb.checked=on});
+      updateBulkButton();
+    });
+    document.querySelectorAll('.cand-check').forEach(function(cb){
+      cb.addEventListener('change',function(){
+        var i = parseInt(cb.getAttribute('data-i'),10);
+        candidateState[i].checked = cb.checked;
+        updateBulkButton();
+      });
+    });
+    // Bulk override selects
+    $('cand-bulk-severity').addEventListener('change',function(e){
+      var v = e.target.value; if(!v) return;
+      candidateState.forEach(function(s){s.severity=v});
+      renderCandidatesPreserve();
+    });
+    $('cand-bulk-category').addEventListener('change',function(e){
+      var v = e.target.value; if(!v) return;
+      candidateState.forEach(function(s){s.category=v});
+      renderCandidatesPreserve();
+    });
+    $('cand-bulk-lang').addEventListener('change',function(e){
+      var v = e.target.value; if(!v) return;
+      candidateState.forEach(function(s){s.lang=v});
+      renderCandidatesPreserve();
+    });
+    // Per-row select changes
+    document.querySelectorAll('.cand-severity').forEach(function(s){
+      s.addEventListener('change',function(){candidateState[+s.dataset.i].severity=s.value});
+    });
+    document.querySelectorAll('.cand-category').forEach(function(s){
+      s.addEventListener('change',function(){candidateState[+s.dataset.i].category=s.value});
+    });
+    document.querySelectorAll('.cand-lang').forEach(function(s){
+      s.addEventListener('change',function(){candidateState[+s.dataset.i].lang=s.value});
+    });
+    // Per-row buttons
+    document.querySelectorAll('button[data-act="approve"]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var i = +btn.dataset.i;
+        var s = candidateState[i];
+        if(!confirm('Approve and publish "'+s.title+'" as '+s.severity+'/'+s.category+'/'+s.lang+'?')) return;
+        btn.disabled = true;
+        fetch('/admin/api/alert-candidates/'+s.num+'/approve',{
+          method:'POST',credentials:'include',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({severity:s.severity,category:s.category,lang:s.lang})
+        })
+        .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})})
+        .then(function(x){if(!x.ok)throw new Error(x.d.message||x.d.error||'failed');toast('Approved.');loadCandidates();loadContent('alerts')})
+        .catch(function(e){btn.disabled=false;alert('Failed: '+(e.message||e))});
+      });
+    });
+    document.querySelectorAll('button[data-act="reject"]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var i = +btn.dataset.i;
+        var s = candidateState[i];
+        if(!confirm('Reject "'+s.title+'"?')) return;
+        btn.disabled = true;
+        fetch('/admin/api/alert-candidates/'+s.num+'/reject',{
+          method:'POST',credentials:'include'
+        })
+        .then(function(r){if(!r.ok)throw 0;toast('Rejected.');loadCandidates()})
+        .catch(function(){btn.disabled=false;alert('Failed.')});
+      });
+    });
+    updateBulkButton();
+  }
+
+  function renderCandidatesPreserve(){
+    // Re-render keeping current state by saving and replaying
+    var saved = candidateState.slice();
+    candidateState = [];
+    var c = $('candidates-list');
+    var bulkBar =
+      '<div class="cand-bulk-bar">'
+        +'<input type="checkbox" id="cand-select-all" /> '
+        +'<label for="cand-select-all">Select all</label>'
+        +'<span style="color:var(--muted);margin-inline-start:.5rem">·</span>'
+        +'<span>Set all to:</span>'
+        +'<select id="cand-bulk-severity"><option value="">severity…</option>'+selectOpts(SEVERITIES,'')+'</select>'
+        +'<select id="cand-bulk-category"><option value="">category…</option>'+selectOpts(CATEGORIES,'')+'</select>'
+        +'<select id="cand-bulk-lang"><option value="">lang…</option>'+selectOpts(LANGS,'')+'</select>'
+      +'</div>';
+    candidateState = saved;
+    var rows = candidateState.map(function(c, i){
+      var date = new Date(c.created_at).toLocaleString();
+      return '<div class="cand-row" data-i="'+i+'">'
+        +'<input type="checkbox" class="cand-check" data-i="'+i+'"'+(c.checked?' checked':'')+'>'
+        +'<div class="cand-info">'
+          +'<div class="cand-title">'+esc(c.title)+'</div>'
+          +'<div class="cand-meta">'
+            +'<span><strong>#'+c.num+'</strong></span>'
+            +'<span>'+esc(c.source||'')+'</span>'
+            +(c.url?'<a href="'+esc(c.url)+'" target="_blank" rel="noopener noreferrer">Article ↗</a>':'')
+            +'<span style="color:var(--muted)">queued '+esc(date)+'</span>'
+          +'</div>'
+          +'<div class="cand-desc">'+esc(c.description||'')+'</div>'
+          +'<div class="cand-controls">'
+            +'<select class="cand-severity" data-i="'+i+'">'+selectOpts(SEVERITIES,c.severity)+'</select>'
+            +'<select class="cand-category" data-i="'+i+'">'+selectOpts(CATEGORIES,c.category)+'</select>'
+            +'<select class="cand-lang" data-i="'+i+'">'+selectOpts(LANGS,c.lang)+'</select>'
+            +'<button class="btn olive" data-act="approve" data-i="'+i+'">Approve</button>'
+            +'<button class="btn danger" data-act="reject" data-i="'+i+'">Reject</button>'
+            +'<a class="btn" href="'+esc(c.html_url)+'" target="_blank" rel="noopener noreferrer">GitHub</a>'
+          +'</div>'
+        +'</div>'
+      +'</div>';
+    }).join('');
+    c.innerHTML = bulkBar + rows;
+    // Re-wire (same as renderCandidates)
+    $('cand-select-all').addEventListener('change', function(e){
+      var on = e.target.checked;
+      candidateState.forEach(function(s){s.checked=on});
+      document.querySelectorAll('.cand-check').forEach(function(cb){cb.checked=on});
+      updateBulkButton();
+    });
+    document.querySelectorAll('.cand-check').forEach(function(cb){
+      cb.addEventListener('change',function(){
+        var i = parseInt(cb.getAttribute('data-i'),10);
+        candidateState[i].checked = cb.checked;
+        updateBulkButton();
+      });
+    });
+    $('cand-bulk-severity').addEventListener('change',function(e){
+      var v = e.target.value; if(!v) return;
+      candidateState.forEach(function(s){s.severity=v});
+      renderCandidatesPreserve();
+    });
+    $('cand-bulk-category').addEventListener('change',function(e){
+      var v = e.target.value; if(!v) return;
+      candidateState.forEach(function(s){s.category=v});
+      renderCandidatesPreserve();
+    });
+    $('cand-bulk-lang').addEventListener('change',function(e){
+      var v = e.target.value; if(!v) return;
+      candidateState.forEach(function(s){s.lang=v});
+      renderCandidatesPreserve();
+    });
+    document.querySelectorAll('.cand-severity').forEach(function(s){
+      s.addEventListener('change',function(){candidateState[+s.dataset.i].severity=s.value});
+    });
+    document.querySelectorAll('.cand-category').forEach(function(s){
+      s.addEventListener('change',function(){candidateState[+s.dataset.i].category=s.value});
+    });
+    document.querySelectorAll('.cand-lang').forEach(function(s){
+      s.addEventListener('change',function(){candidateState[+s.dataset.i].lang=s.value});
+    });
+    document.querySelectorAll('button[data-act="approve"]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var i = +btn.dataset.i;
+        var s = candidateState[i];
+        if(!confirm('Approve and publish "'+s.title+'" as '+s.severity+'/'+s.category+'/'+s.lang+'?')) return;
+        btn.disabled = true;
+        fetch('/admin/api/alert-candidates/'+s.num+'/approve',{
+          method:'POST',credentials:'include',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({severity:s.severity,category:s.category,lang:s.lang})
+        })
+        .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})})
+        .then(function(x){if(!x.ok)throw new Error(x.d.message||x.d.error||'failed');toast('Approved.');loadCandidates();loadContent('alerts')})
+        .catch(function(e){btn.disabled=false;alert('Failed: '+(e.message||e))});
+      });
+    });
+    document.querySelectorAll('button[data-act="reject"]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var i = +btn.dataset.i;
+        var s = candidateState[i];
+        if(!confirm('Reject "'+s.title+'"?')) return;
+        btn.disabled = true;
+        fetch('/admin/api/alert-candidates/'+s.num+'/reject',{
+          method:'POST',credentials:'include'
+        })
+        .then(function(r){if(!r.ok)throw 0;toast('Rejected.');loadCandidates()})
+        .catch(function(){btn.disabled=false;alert('Failed.')});
+      });
+    });
+    updateBulkButton();
+  }
+
+  function loadCandidates(){
+    fetch('/admin/api/alert-candidates',{credentials:'include'})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var items = d.candidates || [];
+        $('count-candidates').textContent = items.length;
+        renderCandidates(items);
+      })
+      .catch(function(){$('candidates-list').innerHTML='<div class="err">Failed to load candidates.</div>'});
+  }
+
+  $('cand-bulk-approve').addEventListener('click',function(){
+    var selected = candidateState.filter(function(c){return c.checked});
+    if (!selected.length) return;
+    if (!confirm('Approve and publish '+selected.length+' alert(s)?')) return;
+    var btn = $('cand-bulk-approve');
+    btn.disabled = true;
+    btn.textContent = 'Publishing…';
+    var payload = { items: selected.map(function(s){return {num:s.num, severity:s.severity, category:s.category, lang:s.lang}}) };
+    fetch('/admin/api/alert-candidates/bulk-approve',{
+      method:'POST',credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    })
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var ok = (d.results||[]).filter(function(x){return x.ok}).length;
+        var fail = (d.results||[]).length - ok;
+        toast('Approved '+ok+(fail?' · '+fail+' failed':''));
+        loadCandidates();
+        loadContent('alerts');
+      })
+      .catch(function(){alert('Bulk approve failed.');btn.disabled=false});
+  });
+  $('cand-refresh').addEventListener('click',loadCandidates);
+  $('cand-run-feed').addEventListener('click',function(){
+    var btn = $('cand-run-feed');
+    btn.disabled = true; btn.textContent = 'Running…';
+    fetch('/admin/api/feeder/run',{method:'POST',credentials:'include'})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        toast('Feeder: created '+(d.created||0)+', skipped '+(d.skipped||0)+(d.errors&&d.errors.length?' · '+d.errors.length+' errors':''));
+        btn.disabled = false; btn.textContent = 'Run feeder now';
+        loadCandidates();
+      })
+      .catch(function(){alert('Feeder run failed.');btn.disabled=false;btn.textContent='Run feeder now'});
+  });
+
   // ---------- Analytics ----------
   function fmtDuration(seconds){
     if(!seconds||isNaN(seconds))return '—';
@@ -1416,6 +1948,7 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
       if(name==='stories') loadContent('stories');
       if(name==='news') loadContent('news');
       if(name==='alerts') loadContent('alerts');
+      if(name==='candidates') loadCandidates();
       if(name==='analytics') loadAnalytics(currentPeriod);
     });
   });
@@ -1425,6 +1958,8 @@ main{max-width:1080px;margin:0 auto;padding:1.25rem}
   // Lazy: load stories/news only when tab is clicked, but show counts now
   fetch('/admin/api/content/stories',{credentials:'include'}).then(function(r){return r.json()}).then(function(d){if(d.items)$('count-stories').textContent=d.items.length}).catch(function(){});
   fetch('/admin/api/content/news',{credentials:'include'}).then(function(r){return r.json()}).then(function(d){if(d.items)$('count-news').textContent=d.items.length}).catch(function(){});
+  fetch('/admin/api/content/alerts',{credentials:'include'}).then(function(r){return r.json()}).then(function(d){if(d.items)$('count-alerts').textContent=d.items.length}).catch(function(){});
+  fetch('/admin/api/alert-candidates',{credentials:'include'}).then(function(r){return r.json()}).then(function(d){if(d.candidates)$('count-candidates').textContent=d.candidates.length}).catch(function(){});
 })();
 </script>
 </body>
