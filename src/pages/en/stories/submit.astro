@@ -120,8 +120,15 @@ const lang = 'en' as const;
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        // Honeypot: if a bot filled the hidden field, fake-success and don't POST.
+        if (form.elements['website'].value) {
+          status.hidden = false;
+          status.textContent = msgSuccess;
+          status.className = 'text-sm text-olive font-semibold';
+          form.reset();
+          return;
+        }
         var data = {
-          website: form.elements['website'].value,
           title: form.elements['title'].value,
           story: form.elements['story'].value,
           pseudonym: form.elements['pseudonym'].value,

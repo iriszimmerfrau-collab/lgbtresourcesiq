@@ -1,11 +1,12 @@
 ---
 title: "Past experiences with relationships and choosing isolation"
-description: "Heyy I am A-A"
+description: "A 25-year-old queer Iraqi reflects on two long relationships that ended because of family pressure, and on choosing isolation as a survival strategy."
 lang: en
 pubDate: 2026-05-05
 anonymous: false
-pseudonym: "Moon or A-A"
-contentWarning: "Might be too negative"
+pseudonym: "Moon (A-A)"
+contentWarning: "Family pressure on closeted relationships, isolation, anxiety."
+draft: true
 ---
 
 Heyy I am A-A 

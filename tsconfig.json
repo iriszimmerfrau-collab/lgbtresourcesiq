@@ -10,6 +10,11 @@
       "@i18n/*": ["src/i18n/*"],
       "@lib/*": ["src/lib/*"],
       "@styles/*": ["src/styles/*"]
-    }
+    },
+    // Astro 6 + content-collections currently constrains us to a Zod
+    // version that emits .url()/etc. deprecation noise under TS 6.x.
+    // Suppress until the upstream API moves off the deprecated calls.
+    // TODO: revisit when @astrojs/content updates its zod surface.
+    "ignoreDeprecations": "5.0"
   }
 }

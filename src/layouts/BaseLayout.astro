@@ -45,7 +45,9 @@ const defaultKeywords = lang === 'ar'
 
 const canonicalUrl = new URL(currentPath, Astro.site).href;
 const otherLang = lang === 'en' ? 'ar' : 'en';
-const alternatePath = currentPath.replace(`/${lang}`, `/${otherLang}`);
+// Anchored to the leading lang segment so substrings like "/menu/" or
+// "/center/" inside future slugs don't get mangled.
+const alternatePath = currentPath.replace(/^\/(en|ar)(\/|$)/, `/${otherLang}$2`);
 const alternateUrl = new URL(alternatePath, Astro.site).href;
 const ogImageUrl = new URL('/favicon.svg', Astro.site).href;
 const siteUrl = new URL('/', Astro.site).href;
@@ -98,7 +100,7 @@ const baseOrgGraph = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src https://plausible.io https://api.ispc-iq.org; frame-ancestors 'none'"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src https://plausible.io https://api.ispc-iq.org"
     />
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta name="referrer" content="no-referrer" />

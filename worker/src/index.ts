@@ -91,7 +91,8 @@ async function createIssue(
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`GitHub createIssue ${res.status}: ${text.slice(0, 200)}`);
+    console.error(`GitHub createIssue ${res.status}`, text);
+    throw new Error(`github_request_failed:createIssue:${res.status}`);
   }
   return res.json();
 }
@@ -130,7 +131,8 @@ async function patchIssue(
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`GitHub patchIssue ${res.status}: ${text.slice(0, 200)}`);
+    console.error(`GitHub patchIssue ${res.status}`, text);
+    throw new Error(`github_request_failed:patchIssue:${res.status}`);
   }
 }
 
@@ -212,7 +214,8 @@ async function putRepoFile(
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`GitHub putRepoFile ${res.status}: ${text.slice(0, 300)}`);
+    console.error(`GitHub putRepoFile ${res.status}`, text);
+    throw new Error(`github_request_failed:putRepoFile:${res.status}`);
   }
 }
 
@@ -436,7 +439,8 @@ async function deleteContentFile(
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`deleteContentFile ${res.status}: ${text.slice(0, 200)}`);
+    console.error(`GitHub deleteContentFile ${res.status}`, text);
+    throw new Error(`github_request_failed:deleteContentFile:${res.status}`);
   }
 }
 
@@ -473,7 +477,8 @@ async function plausibleQuery(env: Env, body: PlausibleQueryBody): Promise<Plaus
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`plausible ${res.status}: ${text.slice(0, 200)}`);
+    console.error(`plausible ${res.status}`, text);
+    throw new Error(`plausible_request_failed:${res.status}`);
   }
   return res.json();
 }
@@ -1113,8 +1118,11 @@ export default {
         const result = await aggregateRssOnce(env);
         return json(result, 200, allowedOrigin);
       }
-      // Surface deploy state for debugging — confirms env vars reached the bundle.
-      if (req.method === 'GET' && url.pathname === '/debug') {
+      // Deploy-state inspector — moved under /admin/api/debug so it inherits
+      // the Cloudflare Access JWT gate enforced for all /admin/* routes above.
+      // Returns enough to confirm env vars reached the bundle without leaking
+      // any bytes of the secret values.
+      if (req.method === 'GET' && url.pathname === '/admin/api/debug') {
         const plausibleKey = (env.PLAUSIBLE_API_KEY || '').trim();
         const rawPlausibleKey = env.PLAUSIBLE_API_KEY || '';
         return json({
@@ -1128,16 +1136,17 @@ export default {
           hasPlausibleKey: Boolean(plausibleKey),
           plausibleKeyLength: plausibleKey.length,
           plausibleKeyHasWhitespace: rawPlausibleKey.length !== plausibleKey.length,
-          plausibleKeyPrefix: plausibleKey.slice(0, 4),
-          plausibleKeySuffix: plausibleKey.slice(-4),
           plausibleSiteId: env.PLAUSIBLE_SITE_ID || null,
         }, 200, allowedOrigin);
       }
 
       return plain('not found', 404);
     } catch (err) {
+      // Full error stays in Worker tail logs (wrangler tail) for ops use.
+      // Public response is intentionally generic — never leak GitHub bodies,
+      // Plausible bodies, or repo paths to anonymous callers.
       console.error('worker error', err instanceof Error ? err.stack || err.message : String(err));
-      return json({ error: 'internal_error', message: err instanceof Error ? err.message : String(err) }, 500, allowedOrigin);
+      return json({ error: 'internal_error' }, 500, allowedOrigin);
     }
   },
 
