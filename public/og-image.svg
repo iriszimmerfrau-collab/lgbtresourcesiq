@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <style>
+      .bg { fill: #faf7f2; }
+      .ink { fill: #0d1b2e; font-family: 'Libre Baskerville', 'Times New Roman', Georgia, serif; }
+      .muted { fill: #5a5750; font-family: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif; }
+      .accent { fill: #d6296b; }
+      .lavender { fill: #7c5cb5; }
+      .saffron { fill: #efa838; }
+      .ar { font-family: 'Noto Naskh Arabic', 'Geeza Pro', serif; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" width="1200" height="630"/>
+
+  <!-- Top-left risograph divider (matches site SectionDivider) -->
+  <g transform="translate(96 96) skewX(-12)">
+    <rect class="accent" x="0" y="0" width="60" height="14"/>
+    <rect class="lavender" x="72" y="0" width="30" height="14"/>
+    <rect class="saffron" x="114" y="0" width="14" height="14"/>
+  </g>
+
+  <!-- English title block -->
+  <text class="ink" x="96" y="220" font-size="56" font-weight="700">Iraqi Social Progress</text>
+  <text class="ink" x="96" y="290" font-size="56" font-weight="700">Collective</text>
+
+  <!-- Tagline with magenta emphasis on 'dignity,' (italic serif) -->
+  <text x="96" y="380" font-size="44" font-style="italic">
+    <tspan class="ink" font-family="'Libre Baskerville', 'Times New Roman', Georgia, serif">Toward </tspan><tspan class="accent" font-family="'Libre Baskerville', 'Times New Roman', Georgia, serif">dignity,</tspan><tspan class="ink" font-family="'Libre Baskerville', 'Times New Roman', Georgia, serif"> together.</tspan>
+  </text>
+
+  <!-- Arabic title (right-aligned, mirrors design) -->
+  <text class="ink ar" x="1104" y="490" font-size="38" font-weight="700" text-anchor="end" direction="rtl">التجمع العراقي للتقدم الاجتماعي</text>
+  <text class="muted ar" x="1104" y="540" font-size="28" font-style="italic" text-anchor="end" direction="rtl">نحو الكرامة، معاً.</text>
+
+  <!-- URL footer -->
+  <text class="muted" x="96" y="560" font-size="24" letter-spacing="2">ispc-iq.org</text>
+
+  <!-- Bottom risograph echo -->
+  <g transform="translate(96 580) skewX(-12)">
+    <rect class="accent" x="0" y="0" width="40" height="6"/>
+    <rect class="lavender" x="48" y="0" width="20" height="6"/>
+    <rect class="saffron" x="76" y="0" width="10" height="6"/>
+  </g>
+</svg>

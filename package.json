@@ -12,7 +12,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "lint": "astro check && tsc --noEmit"
+    "lint": "astro check && tsc --noEmit",
+    "og-image": "node scripts/generate-og-image.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.4",

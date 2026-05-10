@@ -1,4 +1,11 @@
 ---
+// Font CSS — @fontsource packages declare each @font-face with its own
+// `unicode-range`, so even though all 16 face declarations land in one
+// bundled CSS chunk, the browser only downloads the woff2 files for
+// character ranges that actually appear on the rendered page. EN-only
+// pages do not download the Arabic woff2 (~92KB); AR-only pages do not
+// download the Latin/Latin-Ext woff2s. So shipping all faces to all
+// pages is fine — the actual bytes are conditional via unicode-range.
 import '@fontsource/libre-baskerville/400.css';
 import '@fontsource/libre-baskerville/700.css';
 import '@fontsource-variable/source-sans-3/index.css';
@@ -49,7 +56,7 @@ const otherLang = lang === 'en' ? 'ar' : 'en';
 // "/center/" inside future slugs don't get mangled.
 const alternatePath = currentPath.replace(/^\/(en|ar)(\/|$)/, `/${otherLang}$2`);
 const alternateUrl = new URL(alternatePath, Astro.site).href;
-const ogImageUrl = new URL('/favicon.svg', Astro.site).href;
+const ogImageUrl = new URL('/og-image.png', Astro.site).href;
 const siteUrl = new URL('/', Astro.site).href;
 
 const baseOrgGraph = {
@@ -121,7 +128,10 @@ const baseOrgGraph = {
     <meta property="og:site_name" content={siteName} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:alt" content={siteName} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
