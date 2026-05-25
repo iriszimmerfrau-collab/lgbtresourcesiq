@@ -5,6 +5,8 @@ lang: en
 pubDate: 2026-04-29
 category: mental-health
 order: 1
+tldr: "Most Iraqi mental-health clinicians are unsafe to disclose queer or trans identity to — some will report to family. Online therapy with vetted overseas clinicians, peer community contact via XMPP, and basic stabilisation (sleep, sunlight, eating, one trusted person who knows everything) are the realistic options. Iraq has no reliable national crisis line; emergency medical number 122 will treat physical harm without asking about gender or orientation."
+keywords: "mental health queer Iraq, gender dysphoria Iraq, depression Iraq LGBTQ, anxiety Iraq queer, suicidal ideation Iraq queer, online therapy Iraq LGBT, queer crisis Iraq, queer Iraqi mental health, trans Iraqi depression, Iraqi LGBTQ therapist"
 relatedGuides:
   - honor-violence
   - gender

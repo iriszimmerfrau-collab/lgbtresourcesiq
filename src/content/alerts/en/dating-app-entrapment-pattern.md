@@ -8,7 +8,8 @@ category: violence
 source: "Human Rights Watch — 'Everyone Wants Me Dead'"
 sourceUrl: "https://www.hrw.org/report/2022/03/23/everyone-wants-me-dead/killings-abductions-torture-and-sexual-violence-lgbt"
 affected: "LGBTQ+ Iraqis using dating/hookup apps, especially in Baghdad and southern provinces"
-keywords: "Grindr Iraq danger, Hornet Iraq, Iraq dating app entrapment, queer dating apps Iraq, militia Grindr Iraq, gay app trap Iraq, دائرة فخ تطبيقات المواعدة"
+tldr: "Armed groups in Iraq — primarily militias tolerated by the state — use Grindr, Hornet, Romeo, and similar apps to identify, lure, and physically attack queer Iraqis. The pattern is consistent: friendly chat, private-location meet-up, multiple attackers waiting. Trans women are disproportionately targeted. The risk increased after Law 14 (2024). If you use these apps, use a clean device behind a VPN with no real-name account, no face photo, and always meet first in a busy public place."
+keywords: "Grindr Iraq danger, Hornet Iraq, Iraq dating app entrapment, queer dating apps Iraq, militia Grindr Iraq, gay app trap Iraq, Iraqi militia Grindr attack, queer Iraqi entrapment, HRW everyone wants me dead, Iraq queer kidnapping dating app, Romeo app Iraq trap"
 ---
 
 In March 2022, Human Rights Watch published a 96-page investigation titled **"Everyone Wants Me Dead": Killings, Abductions, Torture, and Sexual Violence Against LGBT People by Armed Groups in Iraq.** The report documented dozens of cases in which armed groups — primarily militias affiliated with state-tolerated armed factions — used dating apps to identify, contact, and physically attack LGBTQ+ individuals.

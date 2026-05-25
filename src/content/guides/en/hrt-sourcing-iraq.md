@@ -6,6 +6,8 @@ pubDate: 2026-04-29
 category: hrt
 parentGuide: hrt
 order: 5
+tldr: "Most Iraqi private pharmacies stock Estrofem and can order Androcur or Androfarm from a مذخر (wholesaler) within 1–3 days. No prescription is needed in practice. Bring a clear photo of the medication box, ask by brand name (not chemical name), and rotate pharmacies for refills so no single shop sees your full pattern."
+keywords: "where to buy HRT in Iraq, Iraqi pharmacy hormones, Estrofem Iraq, Androcur Iraq, Androfarm Iraq, cyproterone Iraqi pharmacy, مذخر wholesaler hormones, bicalutamide Baghdad, hormones without prescription Iraq, trans pharmacy Iraq, Iraq HRT sourcing"
 relatedGuides:
   - hrt-pharmacy-script
   - hrt-overview

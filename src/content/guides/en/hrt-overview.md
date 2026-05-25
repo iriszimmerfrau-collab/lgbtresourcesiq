@@ -6,6 +6,8 @@ pubDate: 2026-04-29
 category: hrt
 parentGuide: hrt
 order: 1
+tldr: "Hormone replacement therapy is accessible in Iraq through private pharmacies without a prescription for most regimens. Estrofem (estradiol), Androcur or Androfarm (cyproterone acetate), and bicalutamide are commonly stocked or orderable via the مذخر wholesaler system. Read all eight pages of this guide before sourcing — getting dosing and monitoring right matters more than starting fast."
+keywords: "HRT Iraq, hormones Iraq, transgender Iraq, estrogen Iraq, testosterone Iraq, Estrofem Iraq, Androcur Iraq, cyproterone Iraq, bicalutamide Iraq, where to buy hormones Iraq, Iraqi pharmacy hormones, how to start HRT in Iraq, gender dysphoria Iraq, مذخر hormones, Iraqi pharmacy script, harm reduction HRT"
 relatedGuides:
   - hrt-what-is-hrt
   - hrt-feminizing

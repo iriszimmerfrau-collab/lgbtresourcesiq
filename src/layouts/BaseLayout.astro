@@ -186,6 +186,8 @@ const baseOrgGraph = {
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} />
+    <link rel="author" href={new URL('/humans.txt', Astro.site).href} />
+    <link rel="alternate" type="text/plain" title="LLM-friendly site index" href={new URL('/llms.txt', Astro.site).href} />
     <script is:inline>
       (function(){try{var p=window.location.pathname,l=p.split('/')[1];if(l==='en'||l==='ar'||l==='ckb')localStorage.setItem('ispc-lang',l);}catch(e){}})();
     </script>

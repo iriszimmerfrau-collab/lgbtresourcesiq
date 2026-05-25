@@ -5,6 +5,8 @@ lang: en
 pubDate: 2026-04-29
 category: safety
 order: 1
+tldr: "Honor violence against queer Iraqis follows a recognisable pattern — suspicion, confrontation, confinement, decision, execution — and the most dangerous moment is the confinement phase, when you lose your phone, money, and mobility. If you see two or more warning signs in a short period, act before confinement. Iraqi police are not a reliable resource; community-organised exit plans, pre-positioned documents and cash, and asylum via Turkey, Jordan, or a direct flight to Germany are the realistic survival paths."
+keywords: "honor killing queer Iraq, honor violence LGBT Iraq, queer Iraqi family violence, asylum queer Iraq, fleeing Iraq queer, Iraqi family abuse LGBT, queer Iraqi safe house, escape plan queer Iraq, honor crime LGBT Iraq, Iraqi family disownment queer"
 relatedGuides:
   - mental-health
 ---

@@ -8,7 +8,8 @@ category: legal
 source: "Reuters / AP / BBC / Human Rights Watch"
 sourceUrl: "https://www.hrw.org/news/2024/04/28/iraq-anti-lgbt-law-blatant-violation-rights"
 affected: "All LGBTQ+ Iraqis"
-keywords: "Iraq Law 14, anti-LGBT Iraq, Iraq homosexuality criminalized, Iraq queer law 2024, قانون 14 العراق, مكافحة المثلية, Iraqi parliament LGBT"
+tldr: "Iraq's Law No. 14 (2024) criminalizes same-sex relations with 10–15 years' imprisonment, criminalizes \"promoting homosexuality\" with up to 7 years, and criminalizes gender-affirming medical procedures with up to 3 years for patient and doctor. \"Promotion\" is undefined and broad enough to cover social media, journalism, advocacy, or even possession of LGBT symbols. The law is in force now."
+keywords: "Iraq Law 14 2024, Iraq anti-LGBT law, Iraq homosexuality criminalized, Iraq queer law, قانون 14 العراق, مكافحة المثلية, Iraqi parliament LGBT, Iraq 10 years prison gay, Iraq 15 years prison homosexuality, Iraqi anti-gay legislation, Iraq Combating Prostitution and Homosexuality Law"
 ---
 
 On Saturday April 27, 2024, the Iraqi Council of Representatives passed Law No. 14, the **"Law on Combating Prostitution and Homosexuality"** (قانون مكافحة البغاء والمثلية الجنسية). It is the first time Iraq has explicitly criminalized same-sex relations in its modern legal code.

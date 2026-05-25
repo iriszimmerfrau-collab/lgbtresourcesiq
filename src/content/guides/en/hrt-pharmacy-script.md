@@ -6,6 +6,8 @@ pubDate: 2026-04-29
 category: hrt
 parentGuide: hrt
 order: 6
+tldr: "Walk into a private Iraqi pharmacy alone, show a clear photo of the medication box, and say the brand name (e.g. \"Estrofem\", \"Androcur\"). If asked why, use the cover stories below — most pharmacists do not ask once they recognise the box. If out of stock, ask: \"لو سمحت، ممكن تطلبه من المذخر؟\" (\"Please, can you order it from the wholesaler?\")."
+keywords: "Iraqi pharmacy Arabic script HRT, how to ask for hormones in Arabic, Estrofem pharmacy script Iraq, Androcur cover story Iraq, مذخر order hormones, Iraqi pharmacist HRT conversation, harm reduction pharmacy Iraq"
 relatedGuides:
   - hrt-sourcing-iraq
   - hrt-overview

@@ -5,6 +5,8 @@ lang: en
 pubDate: 2026-04-15
 anonymous: true
 contentWarning: "Family conflict, dysphoria, fear of discovery."
+tldr: "First-person account from a trans Iraqi woman in Baghdad of her first 33 days on Estrofem (estradiol). The first two weeks were mostly fear and waiting; visible skin changes began around week three. The hardest truth: nothing about her situation improved — only that there is now a chemical river inside her carrying her toward herself."
+keywords: "first month HRT story, trans Iraqi story, Baghdad trans woman, beginning estrogen Iraq, Estrofem first month, queer Iraqi voices"
 ---
 
 I am writing this on the morning of day 33. I took my first Estrofem pill on March 14. I will not tell you my real name, my city, or anything that could identify me, but I will tell you what this month has felt like, because someone reading this is where I was a month ago, and I remember how badly I needed to hear from a person who had crossed the line.

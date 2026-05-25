@@ -10,8 +10,12 @@ import {
   buildBreadcrumbList,
   buildHowToSchema,
   combineSchemas,
+  withSpeakable,
+  estimateWordCount,
   type JsonLdContext,
+  type ArticleEnrichment,
 } from '@lib/jsonld';
+import { guideEntityHints } from '@lib/entity-overlays';
 import { localizedPath, t } from '@i18n/utils';
 
 export async function getStaticPaths() {
@@ -31,6 +35,7 @@ const { Content } = await render(guide);
 const lang = 'en' as const;
 const slug = getSlugFromId(guide.id);
 const readingTime = estimateReadingTime(guide.body ?? '');
+const wordCount = estimateWordCount(guide.body ?? '');
 
 const siteUrl = new URL('/', Astro.site).href;
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
@@ -42,10 +47,20 @@ const ctx: JsonLdContext = {
 };
 
 const category = guide.data.category;
-
-// Pick the right schema set based on category
 const isMedical = category === 'hrt' || category === 'mental-health';
 const isEducational = category === 'identity' || category === 'general';
+
+// Wikidata entity overlays live in @lib/entity-overlays so en/ar/ckb routes
+// share identical hints — language differs, but the underlying entities are
+// universal. AI answer engines use these to disambiguate which Iraq, which
+// estradiol, which gender dysphoria we mean.
+const entityHints = guideEntityHints(slug);
+const enrich: ArticleEnrichment = {
+  about: entityHints.about,
+  mentions: entityHints.mentions,
+  wordCount,
+  readingTime,
+};
 
 const breadcrumbs = buildBreadcrumbList([
   { name: 'Home', url: new URL(localizedPath(lang, '/'), Astro.site).href },
@@ -55,13 +70,13 @@ const breadcrumbs = buildBreadcrumbList([
 ]);
 
 const primarySchema = isMedical
-  ? buildMedicalWebPageSchema(guide, ctx)
+  ? buildMedicalWebPageSchema(guide, ctx, enrich)
   : isEducational
-  ? buildLearningResourceSchema(guide, ctx)
-  : buildArticleSchema(guide, ctx);
+  ? buildLearningResourceSchema(guide, ctx, enrich)
+  : buildArticleSchema(guide, ctx, enrich);
 
 // Pharmacy script gets an extra HowTo schema with hand-authored steps
-const howToSchema =
+const pharmacyHowTo =
   slug === 'hrt-pharmacy-script'
     ? buildHowToSchema({
         name: 'How to ask an Iraqi pharmacy for hormone medication',
@@ -78,16 +93,38 @@ const howToSchema =
       })
     : null;
 
-const articleFallback =
-  isMedical || isEducational ? buildArticleSchema(guide, ctx) : null;
+// Honor-violence guide's numbered escape plan is textbook HowTo material;
+// surface it as structured data so AI engines extract it verbatim instead of
+// paraphrasing a safety-critical sequence.
+const escapePlanHowTo =
+  slug === 'honor-violence'
+    ? buildHowToSchema({
+        name: 'Emergency escape plan for queer Iraqis facing imminent honor violence',
+        description: 'Ordered safety steps for an Iraqi queer person whose family is about to confine or harm them. Action sequence — do not wait for confirmation.',
+        ctx,
+        totalTime: 'PT1H',
+        steps: [
+          { name: 'Get out of the house', text: 'Leave with your documents and phone if you can. If forced to choose between safety and possessions, choose safety.' },
+          { name: 'Leave the neighborhood', text: 'Take a taxi or bus to a location your family would not know to search. Pay in cash. Do not give the driver your real destination — get out several streets early and walk the rest.' },
+          { name: 'Contact your pre-arranged contact', text: 'Message or call the friend or community member you designated in advance. Tell them you are coming and roughly when.' },
+          { name: 'Disable shared location services and family accounts', text: 'Many Iraqi families share Google or Apple accounts. Sign out. Disable Find My Phone. Revoke any shared device permissions.' },
+          { name: 'Do not return home', text: 'Not "to grab something." Not "to explain." Once your family has decided, returning is what gets people killed.' },
+          { name: 'Reach ISPC for next steps', text: 'Contact the ISPC community channel. We can help with next steps, long-term shelter referrals, and asylum information.' },
+        ],
+      })
+    : null;
 
-const jsonLd = combineSchemas(primarySchema, articleFallback, howToSchema, breadcrumbs);
+const articleFallback = isMedical || isEducational ? buildArticleSchema(guide, ctx, enrich) : null;
 
-// Per-category og:image
+// Speakable wrapper marks the AnswerSummary block + H1 so voice assistants
+// and AI engines that prefer speakable regions land on the front-loaded
+// answer instead of an arbitrary middle paragraph.
+const primaryWithSpeakable = guide.data.tldr ? withSpeakable(primarySchema as Record<string, unknown>) : primarySchema;
+
+const jsonLd = combineSchemas(primaryWithSpeakable, articleFallback, pharmacyHowTo, escapePlanHowTo, breadcrumbs);
+
 const ogImage =
-  category === 'hrt' || category === 'mental-health'
-    ? '/og-hrt.png'
-    : '/og-guide.png';
+  category === 'hrt' || category === 'mental-health' ? '/og-hrt.png' : '/og-guide.png';
 
 const article = {
   publishedTime: guide.data.pubDate.toISOString(),
@@ -96,7 +133,6 @@ const article = {
   tags: guide.data.keywords?.split(',').map((s) => s.trim()).filter(Boolean),
 };
 
-// Resolve relatedGuides into {title, url} pairs by looking up sibling EN guides
 let relatedLinks: Array<{ title: string; url: string }> = [];
 if (guide.data.relatedGuides?.length) {
   const allGuides = await getCollection('guides', (e: CollectionEntry<'guides'>) => e.data.lang === 'en' && !e.data.draft);
@@ -123,6 +159,7 @@ if (guide.data.relatedGuides?.length) {
   ogImage={ogImage}
   article={article}
   relatedLinks={relatedLinks}
+  tldr={guide.data.tldr}
 >
   <Content />
   {guide.data.parentGuide && (

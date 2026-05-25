@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import SectionDivider from '@components/SectionDivider.astro';
+import AnswerSummary from '@components/AnswerSummary.astro';
 import type { Lang } from '@i18n/languages';
 import { t } from '@i18n/utils';
 
@@ -31,6 +32,12 @@ interface Props {
   article?: ArticleMeta;
   /** Optional "See also" links rendered at the bottom of the article. */
   relatedLinks?: RelatedLink[];
+  /**
+   * Optional 1-3 sentence answer paragraph rendered above the slot inside an
+   * AnswerSummary callout. Drives Speakable schema and front-loads AEO
+   * extraction; sourced from collection frontmatter `tldr`.
+   */
+  tldr?: string;
 }
 
 const {
@@ -45,6 +52,7 @@ const {
   ogImage,
   article,
   relatedLinks,
+  tldr,
 } = Astro.props;
 
 function formatDate(date: Date, locale: string): string {
@@ -90,6 +98,7 @@ function formatDate(date: Date, locale: string): string {
         )}
       </div>
     </header>
+    {tldr && <AnswerSummary text={tldr} lang={lang} />}
     <slot />
 
     {relatedLinks && relatedLinks.length > 0 && (

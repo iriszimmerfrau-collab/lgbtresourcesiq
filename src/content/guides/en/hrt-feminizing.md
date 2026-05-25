@@ -6,6 +6,8 @@ pubDate: 2026-04-29
 category: hrt
 parentGuide: hrt
 order: 3
+tldr: "Feminizing HRT in Iraq uses two medications together: an estrogen (Estrofem / estradiol valerate, oral) and an antiandrogen (cyproterone acetate 12.5–25mg, bicalutamide 25–50mg, or spironolactone). Cyproterone above 25mg carries a serious cumulative meningioma risk — keep the dose low and stop the antiandrogen after orchiectomy."
+keywords: "feminizing HRT Iraq, MTF hormones Iraq, Estrofem dosing, estradiol Iraq, cyproterone acetate Iraq, Androcur meningioma, bicalutamide trans women, spironolactone Iraq, antiandrogen dosing, MTF starter regimen Iraq"
 ---
 
 > **This guide is harm-reduction information.** It is not medical advice, and it is not a substitute for care from a qualified clinician. We provide it because most readers do not have access to an informed clinician — the goal is that anyone who is going to do this anyway does it as safely as possible. If you have access to a doctor who will work with you, see them first.

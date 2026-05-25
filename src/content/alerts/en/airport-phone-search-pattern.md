@@ -7,7 +7,8 @@ severity: high
 category: border
 source: "Community reports / Outright International"
 affected: "Travelers leaving Iraq, especially via Baghdad International (BGW) and Erbil International (EBL)"
-keywords: "Iraq airport phone search, Baghdad airport LGBTQ, Erbil airport phone, Iraq border LGBT search, leaving Iraq queer, Iraq exit risk LGBT, تفتيش الهاتف مطار العراق"
+tldr: "Iraqi border officers at Baghdad (BGW) and Erbil (EBL) international airports are actively searching phones for Grindr, Hornet, Romeo, Tinder same-sex matches, LGBT-tagged Telegram channels, and queer social-media accounts. Trans women and visibly gender-nonconforming travellers report the most scrutiny. The cleanest preparation is travelling with a clean phone — no LGBT-tagged apps, no relevant social accounts, no relevant browser history, no sensitive photos."
+keywords: "Iraq airport phone search, Baghdad airport LGBTQ, Erbil airport phone, Iraq border LGBT search, leaving Iraq queer, Iraq exit risk LGBT, BGW phone search Grindr, Iraqi border phone surveillance, queer Iraqi airport detained, Iraqi customs LGBT app"
 ---
 
 Multiple consistent reports from LGBTQ+ Iraqis traveling out of the country via international airports indicate that border officials are conducting more thorough phone searches and asking more pointed questions about applications, browser history, and social media accounts.

@@ -22,6 +22,13 @@ const guides = defineCollection({
      * shows the banner naming the AR canonical.
      */
     translationStatus: z.enum(['native', 'machine-pending-review', 'machine-reviewed']).optional(),
+    /**
+     * Front-loaded answer paragraph rendered at the top of the article inside
+     * an AnswerSummary block. Drives Speakable schema + AI answer-engine
+     * extraction: AEO winners consistently lead with the answer in 1-3 plain
+     * sentences before the article unfolds. Keep under ~280 characters.
+     */
+    tldr: z.string().optional(),
   }),
 });
 
@@ -38,6 +45,13 @@ const stories = defineCollection({
     keywords: z.string().optional(),
     draft: z.boolean().default(false),
     translationStatus: z.enum(['native', 'machine-pending-review', 'machine-reviewed']).optional(),
+    /**
+     * Front-loaded answer paragraph rendered at the top of the article inside
+     * an AnswerSummary block. Drives Speakable schema + AI answer-engine
+     * extraction: AEO winners consistently lead with the answer in 1-3 plain
+     * sentences before the article unfolds. Keep under ~280 characters.
+     */
+    tldr: z.string().optional(),
   }),
 });
 
@@ -53,6 +67,13 @@ const news = defineCollection({
     keywords: z.string().optional(),
     draft: z.boolean().default(false),
     translationStatus: z.enum(['native', 'machine-pending-review', 'machine-reviewed']).optional(),
+    /**
+     * Front-loaded answer paragraph rendered at the top of the article inside
+     * an AnswerSummary block. Drives Speakable schema + AI answer-engine
+     * extraction: AEO winners consistently lead with the answer in 1-3 plain
+     * sentences before the article unfolds. Keep under ~280 characters.
+     */
+    tldr: z.string().optional(),
   }),
 });
 
@@ -76,6 +97,13 @@ const alerts = defineCollection({
     keywords: z.string().optional(),
     draft: z.boolean().default(false),
     translationStatus: z.enum(['native', 'machine-pending-review', 'machine-reviewed']).optional(),
+    /**
+     * Front-loaded answer paragraph rendered at the top of the article inside
+     * an AnswerSummary block. Drives Speakable schema + AI answer-engine
+     * extraction: AEO winners consistently lead with the answer in 1-3 plain
+     * sentences before the article unfolds. Keep under ~280 characters.
+     */
+    tldr: z.string().optional(),
   }),
 });
 
