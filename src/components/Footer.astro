@@ -17,7 +17,7 @@ const year = new Date().getFullYear();
       <p class="leading-relaxed">{t(lang, 'home.about.p1')}</p>
     </div>
     <div>
-      <p class="font-bold text-cream mb-2">{lang === 'ar' ? 'روابط سريعة' : 'Quick links'}</p>
+      <p class="font-bold text-cream mb-2">{lang === 'ar' ? 'روابط سريعة' : lang === 'ckb' ? 'بەستەرە خێراکان' : 'Quick links'}</p>
       <ul class="space-y-1 list-none p-0">
         <li><a href={localizedPath(lang, '/about')} class="text-cream/70 hover:text-white no-underline">{t(lang, 'nav.about')}</a></li>
         <li><a href={localizedPath(lang, '/safety')} class="text-cream/70 hover:text-white no-underline">{t(lang, 'nav.safety')}</a></li>
@@ -29,7 +29,7 @@ const year = new Date().getFullYear();
       </ul>
     </div>
     <div>
-      <p class="font-bold text-cream mb-2">{lang === 'ar' ? 'الخصوصية' : 'Privacy'}</p>
+      <p class="font-bold text-cream mb-2">{lang === 'ar' ? 'الخصوصية' : lang === 'ckb' ? 'تایبەتمەندی' : 'Privacy'}</p>
       <p class="leading-relaxed mb-2">{t(lang, 'footer.privacy')}</p>
       <p>
         <a href={localizedPath(lang, '/privacy')} class="text-cream/70 hover:text-white underline">

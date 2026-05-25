@@ -6,7 +6,7 @@ const guides = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    lang: z.enum(['en', 'ar']),
+    lang: z.enum(['en', 'ar', 'ckb']),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     category: z.enum(['hrt', 'mental-health', 'safety', 'general', 'identity']),
@@ -24,7 +24,7 @@ const stories = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    lang: z.enum(['en', 'ar']),
+    lang: z.enum(['en', 'ar', 'ckb']),
     pubDate: z.coerce.date(),
     contentWarning: z.string().optional(),
     anonymous: z.boolean().default(true),
@@ -39,7 +39,7 @@ const news = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    lang: z.enum(['en', 'ar']),
+    lang: z.enum(['en', 'ar', 'ckb']),
     pubDate: z.coerce.date(),
     source: z.string().optional(),
     sourceUrl: z.string().url().optional(),
@@ -53,7 +53,7 @@ const alerts = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    lang: z.enum(['en', 'ar']),
+    lang: z.enum(['en', 'ar', 'ckb']),
     pubDate: z.coerce.date(),
     /** Severity drives styling (red/orange/yellow/blue accents) */
     severity: z.enum(['critical', 'high', 'medium', 'low', 'info']),

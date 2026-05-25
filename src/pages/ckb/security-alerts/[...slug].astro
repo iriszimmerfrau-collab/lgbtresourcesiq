@@ -1,0 +1,27 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import CkbStub from '@components/CkbStub.astro';
+import { getSlugFromId } from '@lib/collections';
+
+export async function getStaticPaths() {
+  const ckb = await getCollection('alerts', (e: CollectionEntry<'alerts'>) => e.data.lang === 'ckb' && !e.data.draft);
+  const ar = await getCollection('alerts', (e: CollectionEntry<'alerts'>) => e.data.lang === 'ar' && !e.data.draft);
+  const realCkbSlugs = new Set(ckb.map((a) => getSlugFromId(a.id)));
+  return ar
+    .filter((a) => !realCkbSlugs.has(getSlugFromId(a.id)))
+    .map((a) => {
+      const slug = getSlugFromId(a.id);
+      return { params: { slug }, props: { slug, title: a.data.title } };
+    });
+}
+
+interface Props {
+  slug: string;
+  title: string;
+}
+
+const { slug, title } = Astro.props as Props;
+const arHref = `/ar/security-alerts/${slug}`;
+---
+
+<CkbStub title={title} arHref={arHref} pageLabel="هۆشداری ئاسایشی" />

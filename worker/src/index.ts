@@ -222,13 +222,13 @@ async function putRepoFile(
 // ----- Generic content (stories / news) read/write/delete -----
 
 type ContentType = 'stories' | 'news' | 'alerts';
-type ContentLang = 'en' | 'ar';
+type ContentLang = 'en' | 'ar' | 'ckb';
 
 function isContentType(s: string): s is ContentType {
   return s === 'stories' || s === 'news' || s === 'alerts';
 }
 function isContentLang(s: string): s is ContentLang {
-  return s === 'en' || s === 'ar';
+  return s === 'en' || s === 'ar' || s === 'ckb';
 }
 function isSafeSlug(s: string): boolean {
   // Lowercase letters, digits, hyphen. Length 1-80. No path traversal.
@@ -304,7 +304,7 @@ interface ContentSummary {
 }
 
 async function listContent(env: Env, type: ContentType): Promise<ContentSummary[]> {
-  const langs: ContentLang[] = ['en', 'ar'];
+  const langs: ContentLang[] = ['en', 'ar', 'ckb'];
   const results: ContentSummary[] = [];
   for (const lang of langs) {
     const dir = `src/content/${type}/${lang}`;
@@ -395,7 +395,7 @@ function validateMarkdownFrontmatter(md: string): string | null {
   if (closingIdx === -1) return 'frontmatter not closed (need a line with ---)';
   const { fm } = parseFrontmatter(md);
   if (!fm.title || fm.title.length < 1) return 'title is required in frontmatter';
-  if (!fm.lang || (fm.lang !== 'en' && fm.lang !== 'ar')) return 'lang must be en or ar';
+  if (!fm.lang || (fm.lang !== 'en' && fm.lang !== 'ar' && fm.lang !== 'ckb')) return 'lang must be en, ar, or ckb';
   if (!fm.pubDate) return 'pubDate is required';
   return null;
 }

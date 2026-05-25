@@ -1,0 +1,34 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import CkbStub from '@components/CkbStub.astro';
+import { getSlugFromId } from '@lib/collections';
+
+/**
+ * Generates a CKB stub page for every AR guide slug that doesn't have a
+ * native CKB version yet. Each stub canonicalizes to the AR URL and
+ * carries robots noindex so Google does not surface near-duplicate
+ * machine-pending pages until they have real Sorani content.
+ */
+export async function getStaticPaths() {
+  const ckb = await getCollection('guides', (e: CollectionEntry<'guides'>) => e.data.lang === 'ckb' && !e.data.draft);
+  const ar = await getCollection('guides', (e: CollectionEntry<'guides'>) => e.data.lang === 'ar' && !e.data.draft);
+  const realCkbSlugs = new Set(ckb.map((g) => getSlugFromId(g.id)));
+  const stubs = ar
+    .filter((g) => !realCkbSlugs.has(getSlugFromId(g.id)))
+    .map((g) => {
+      const slug = getSlugFromId(g.id);
+      return { params: { slug }, props: { slug, title: g.data.title } };
+    });
+  return stubs;
+}
+
+interface Props {
+  slug: string;
+  title: string;
+}
+
+const { slug, title } = Astro.props as Props;
+const arHref = `/ar/guides/${slug}`;
+---
+
+<CkbStub title={title} arHref={arHref} pageLabel="ڕێنمایی" />

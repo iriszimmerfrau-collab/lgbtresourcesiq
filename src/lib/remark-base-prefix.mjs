@@ -9,7 +9,7 @@ export function remarkBasePrefix(base) {
     if (!prefix) return;
     visit(tree, 'link', (node) => {
       if (typeof node.url !== 'string') return;
-      if (/^\/(en|ar)(\/|$)/.test(node.url)) {
+      if (/^\/(en|ar|ckb)(\/|$)/.test(node.url)) {
         node.url = `${prefix}${node.url}`;
       }
     });

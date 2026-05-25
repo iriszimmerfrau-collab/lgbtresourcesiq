@@ -48,7 +48,10 @@ const {
 } = Astro.props;
 
 function formatDate(date: Date, locale: string): string {
-  return date.toLocaleDateString(locale === 'ar' ? 'ar-IQ' : 'en-US', {
+  const tag = locale === 'ar' ? 'ar-IQ' : locale === 'ckb' ? 'ckb-IQ' : 'en-US';
+  // ckb-IQ may not be supported in all runtimes; Intl falls through to a
+  // reasonable best-match locale automatically.
+  return date.toLocaleDateString(tag, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -92,7 +95,7 @@ function formatDate(date: Date, locale: string): string {
     {relatedLinks && relatedLinks.length > 0 && (
       <footer class="not-prose mt-12 pt-6 border-t-2 border-magenta/20">
         <h2 class="text-xs font-bold uppercase tracking-widest text-muted mb-3">
-          {lang === 'ar' ? 'انظر أيضاً' : 'See also'}
+          {lang === 'ar' ? 'انظر أيضاً' : lang === 'ckb' ? 'هەروەها بڕوانە' : 'See also'}
         </h2>
         <ul class="list-none p-0 m-0 space-y-2">
           {relatedLinks.map((link) => (

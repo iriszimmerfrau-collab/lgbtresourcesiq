@@ -1,6 +1,7 @@
 ---
 import type { Lang } from '@i18n/languages';
-import { t, switchLangPath } from '@i18n/utils';
+import { languages } from '@i18n/languages';
+import { switchLangPath, getOtherLangs } from '@i18n/utils';
 
 interface Props {
   lang: Lang;
@@ -8,15 +9,20 @@ interface Props {
 }
 
 const { lang, currentPath } = Astro.props;
-const otherPath = switchLangPath(currentPath);
-const switchLabel = t(lang, 'lang.switchLabel');
-const switchText = t(lang, 'lang.switch');
+const others = getOtherLangs(lang);
 ---
 
-<a
-  href={otherPath}
-  aria-label={switchLabel}
-  class="text-cream hover:text-white no-underline text-sm font-semibold tracking-wide transition-colors"
->
-  {switchText}
-</a>
+<div class="flex items-center gap-2 text-sm text-cream/80" aria-label="Choose language">
+  {others.map((target, i) => (
+    <>
+      {i > 0 && <span class="text-cream/30" aria-hidden="true">·</span>}
+      <a
+        href={switchLangPath(currentPath, target)}
+        lang={target}
+        class="text-cream hover:text-white no-underline font-semibold tracking-wide transition-colors"
+      >
+        {languages[target]}
+      </a>
+    </>
+  ))}
+</div>

@@ -19,16 +19,31 @@ export function localizedPath(lang: Lang, path: string): string {
   return `${BASE}/${lang}${clean}`;
 }
 
-export function switchLangPath(currentPath: string): string {
+/**
+ * Swap the leading locale segment of a path to the given target language.
+ * Always pass an explicit target now that we have three languages — the
+ * old binary toggle is gone.
+ */
+export function switchLangPath(currentPath: string, targetLang: Lang): string {
   const stripped = currentPath.startsWith(BASE) ? currentPath.slice(BASE.length) : currentPath;
   const segments = stripped.split('/').filter(Boolean);
-  if (segments.length === 0) return BASE || '/';
-  const currentLang = segments[0];
-  const otherLang = currentLang === 'ar' ? 'en' : 'ar';
-  segments[0] = otherLang;
+  if (segments.length === 0) return `${BASE}/${targetLang}/`;
+  segments[0] = targetLang;
   return `${BASE}/${segments.join('/')}`;
 }
 
+/**
+ * The full list of other-than-current languages, in display order.
+ * Used by the language switcher to render two destination links.
+ */
+export function getOtherLangs(lang: Lang): Lang[] {
+  return (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
+}
+
+/**
+ * Deprecated convenience kept for any caller that still expects a single
+ * "other" language. Returns the first non-current language.
+ */
 export function getOtherLang(lang: Lang): Lang {
-  return lang === 'ar' ? 'en' : 'ar';
+  return getOtherLangs(lang)[0];
 }

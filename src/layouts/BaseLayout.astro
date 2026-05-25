@@ -13,7 +13,8 @@ import '@fontsource-variable/noto-naskh-arabic/index.css';
 import '@styles/global.css';
 
 import type { Lang } from '@i18n/languages';
-import { isRtl } from '@i18n/languages';
+import { isRtl, ogLocaleFor, languages } from '@i18n/languages';
+import { t, getOtherLangs } from '@i18n/utils';
 import QuickExit from '@components/QuickExit.astro';
 import Nav from '@components/Nav.astro';
 import Footer from '@components/Footer.astro';
@@ -39,6 +40,10 @@ interface Props {
   ogImage?: string;
   /** Emitted as `article:*` meta tags when present. ArticleLayout populates this. */
   article?: ArticleMeta;
+  /** When true, emit robots=noindex so search engines skip this page (e.g. stub fallbacks). */
+  noindex?: boolean;
+  /** Override the canonical URL — used by CKB stubs to point search engines at the AR original. */
+  canonicalOverride?: string;
 }
 
 const {
@@ -52,23 +57,36 @@ const {
   keywords,
   ogImage,
   article,
+  noindex = false,
+  canonicalOverride,
 } = Astro.props;
 
 const dir = isRtl(lang) ? 'rtl' : 'ltr';
-const siteName = lang === 'ar' ? 'التجمع العراقي للتقدم الاجتماعي' : 'Iraqi Social Progress Collective';
+const siteName = t(lang, 'site.name');
 const fullTitle = `${title} | ${siteName}`;
 const currentPath = Astro.url.pathname;
 
-const defaultKeywords = lang === 'ar'
-  ? 'مثليين, مثلية, متحولين جنسياً, متحولات جنسياً, مزدوج الجنس, كوير, ميم عين, هوية جندرية, هوية جنسية, دعم نفسي, الصحة النفسية, اكتئاب, قلق, العراق, بغداد, البصرة, الموصل, أربيل, السليمانية, كردستان, كردستان العراق, علاج هرموني, هرمونات, إستروجين, تستوستيرون, سايبروترون, أندروكور, بيكالوتاميد, مذخر العراق, صيدلية هرمونات, جرائم الشرف, العنف الأسري, لجوء, VPN, خصوصية, حذف السجل, هل أنا مثلي, هل أنا متحول, كيف أعرف أني كوير, تقبّل الذات'
-  : 'queer Iraq, LGBTQ Iraq, LGBT Iraq, gay Iraq, lesbian Iraq, trans Iraq, transgender Iraq, bisexual Iraq, queer Baghdad, queer Erbil, queer Basra, queer Mosul, queer Kurdistan, LGBT Kurdistan, Iraqi Kurdistan LGBT, HRT Iraq, hormones Iraq, estrogen Iraq, testosterone Iraq, cyproterone Iraq, Androcur Iraq, bicalutamide Iraq, spironolactone Iraq, where to buy hormones Iraq, Iraq pharmacy hormones, Iraq anti-LGBT law, Iraq Law 14 2024, Article 394 Iraq, queer asylum Iraq, Rainbow Railroad Iraq, gender identity, mental health Iraq, harm reduction Iraq, مثليين, متحولين, العراق, بغداد, كردستان, هرمونات, علاج هرموني, دعم نفسي, كوير, جرائم الشرف';
+// Per-language default keyword bundles. Sorani inherits Arabic search terms
+// (Sorani readers in Iraq are typically AR-literate too) plus core Sorani
+// queer terminology so AI/SE queries in Sorani also surface ISPC pages.
+const defaultKeywordsByLang: Record<Lang, string> = {
+  en: 'queer Iraq, LGBTQ Iraq, LGBT Iraq, gay Iraq, lesbian Iraq, trans Iraq, transgender Iraq, bisexual Iraq, queer Baghdad, queer Erbil, queer Basra, queer Mosul, queer Kurdistan, LGBT Kurdistan, Iraqi Kurdistan LGBT, HRT Iraq, hormones Iraq, estrogen Iraq, testosterone Iraq, cyproterone Iraq, Androcur Iraq, bicalutamide Iraq, spironolactone Iraq, where to buy hormones Iraq, Iraq pharmacy hormones, Iraq anti-LGBT law, Iraq Law 14 2024, Article 394 Iraq, queer asylum Iraq, Rainbow Railroad Iraq, gender identity, mental health Iraq, harm reduction Iraq, مثليين, متحولين, العراق, بغداد, كردستان, هرمونات, علاج هرموني, دعم نفسي, كوير, جرائم الشرف',
+  ar: 'مثليين, مثلية, متحولين جنسياً, متحولات جنسياً, مزدوج الجنس, كوير, ميم عين, هوية جندرية, هوية جنسية, دعم نفسي, الصحة النفسية, اكتئاب, قلق, العراق, بغداد, البصرة, الموصل, أربيل, السليمانية, كردستان, كردستان العراق, علاج هرموني, هرمونات, إستروجين, تستوستيرون, سايبروترون, أندروكور, بيكالوتاميد, مذخر العراق, صيدلية هرمونات, جرائم الشرف, العنف الأسري, لجوء, VPN, خصوصية, حذف السجل, هل أنا مثلي, هل أنا متحول, كيف أعرف أني كوير, تقبّل الذات',
+  ckb: 'کوێر, کوێرە عێراقییەکان, ال جی بی تی, هاوڕەگەز, ترانس, چارەسەری هۆرمۆنی, هۆرمۆن لە عێراق, ئەستراژین, تەستۆستیرۆن, سایبرۆترۆن, ئەندرۆکور, ناسنامەی جێندەری, تەندروستیی دەروونی, کوردستان, هەولێر, سلێمانی, دهۆک, یاسای ١٤ عێراق, دژبە مافی کوێرە عێراقییەکان, پەنابەری, تایبەتمەندی, VPN, مثليين, متحولين, العراق, كردستان, هرمونات, علاج هرموني',
+};
+const defaultKeywords = defaultKeywordsByLang[lang];
 
-const canonicalUrl = new URL(currentPath, Astro.site).href;
-const otherLang = lang === 'en' ? 'ar' : 'en';
+const canonicalUrl = canonicalOverride ?? new URL(currentPath, Astro.site).href;
+const otherLangsList = getOtherLangs(lang);
 // Anchored to the leading lang segment so substrings like "/menu/" or
 // "/center/" inside future slugs don't get mangled.
-const alternatePath = currentPath.replace(/^\/(en|ar)(\/|$)/, `/${otherLang}$2`);
-const alternateUrl = new URL(alternatePath, Astro.site).href;
+const alternates = otherLangsList.map((other) => ({
+  lang: other,
+  href: new URL(
+    currentPath.replace(/^\/(en|ar|ckb)(\/|$)/, `/${other}$2`),
+    Astro.site,
+  ).href,
+}));
 const ogImageUrl = new URL(ogImage ?? '/og-image.png', Astro.site).href;
 const siteUrl = new URL('/', Astro.site).href;
 
@@ -79,12 +97,10 @@ const baseOrgGraph = {
       '@type': 'Organization',
       '@id': `${siteUrl}#org`,
       name: siteName,
-      alternateName: lang === 'ar' ? 'Iraqi Social Progress Collective' : 'التجمع العراقي للتقدم الاجتماعي',
+      alternateName: otherLangsList.map((l) => t(l, 'site.name')),
       url: siteUrl,
       logo: ogImageUrl,
-      description: lang === 'ar'
-        ? 'شبكة تكافلية شعبية للعراقيين الكويريين والمتسائلين داخل العراق. معلومات صحية، علاج هرموني، دعم نفسي، وأمان رقمي.'
-        : 'A grassroots mutual aid network for queer Iraqis and questioning people inside Iraq. Health information, HRT access, mental health support, and digital safety.',
+      description: t(lang, 'home.about.p1'),
       areaServed: [
         { '@type': 'Country', name: 'Iraq' },
         { '@type': 'AdministrativeArea', name: 'Iraqi Kurdistan' },
@@ -106,7 +122,7 @@ const baseOrgGraph = {
       url: siteUrl,
       name: siteName,
       description: description,
-      inLanguage: ['en', 'ar'],
+      inLanguage: Object.keys(languages),
       publisher: { '@id': `${siteUrl}#org` },
     },
   ],
@@ -124,19 +140,23 @@ const baseOrgGraph = {
     />
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords ?? defaultKeywords} />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" hreflang={lang} href={canonicalUrl} />
-    <link rel="alternate" hreflang={otherLang} href={alternateUrl} />
+    {alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.lang} href={alt.href} />
+    ))}
     <link rel="alternate" hreflang="x-default" href={new URL(import.meta.env.BASE_URL, Astro.site).href} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
-    <meta property="og:locale" content={lang === 'ar' ? 'ar_IQ' : 'en_US'} />
-    <meta property="og:locale:alternate" content={lang === 'ar' ? 'en_US' : 'ar_IQ'} />
+    <meta property="og:locale" content={ogLocaleFor[lang]} />
+    {otherLangsList.map((l) => (
+      <meta property="og:locale:alternate" content={ogLocaleFor[l]} />
+    ))}
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:image" content={ogImageUrl} />
@@ -167,16 +187,14 @@ const baseOrgGraph = {
     )}
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} />
     <script is:inline>
-      (function(){try{var p=window.location.pathname,l=p.split('/')[1];if(l==='en'||l==='ar')localStorage.setItem('ispc-lang',l);}catch(e){}})();
+      (function(){try{var p=window.location.pathname,l=p.split('/')[1];if(l==='en'||l==='ar'||l==='ckb')localStorage.setItem('ispc-lang',l);}catch(e){}})();
     </script>
   </head>
   <body class="bg-offwhite text-body min-h-screen flex flex-col">
     <QuickExit lang={lang} />
     {showBanner && (
       <div class="bg-exit-red text-white text-center text-sm py-2 px-4 font-semibold" role="alert">
-        {lang === 'ar'
-          ? 'خصوصيتك مهمة. استخدم VPN. اضغط ESC في أي وقت للخروج فوراً.'
-          : 'Your privacy matters. Use a VPN. Press ESC at any time to exit instantly.'}
+        {t(lang, 'safety.banner')}
       </div>
     )}
     <Nav lang={lang} currentPath={currentPath} />

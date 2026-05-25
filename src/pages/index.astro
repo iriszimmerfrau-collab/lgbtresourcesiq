@@ -1,6 +1,7 @@
 ---
-// Root language router — redirects to /en/ or /ar/ based on saved preference or browser language.
-// Static fallback shows two large buttons for manual selection.
+// Root language router — redirects to /en/, /ar/, or /ckb/ based on saved
+// preference or browser Accept-Language. Static fallback below shows three
+// large buttons for manual selection (works without JS).
 ---
 
 <!doctype html>
@@ -47,12 +48,15 @@
         try {
           var prefix = base.endsWith('/') ? base : base + '/';
           var saved = localStorage.getItem('ispc-lang');
-          if (saved === 'ar' || saved === 'en') {
+          if (saved === 'ar' || saved === 'en' || saved === 'ckb') {
             window.location.replace(prefix + saved + '/');
             return;
           }
           var nav = (navigator.language || '').toLowerCase();
-          if (nav.startsWith('ar')) {
+          // Sorani (Central Kurdish) — BCP-47 'ckb' or ISO-639-1 'ku' fallback
+          if (nav.startsWith('ckb') || nav.startsWith('ku')) {
+            window.location.replace(prefix + 'ckb/');
+          } else if (nav.startsWith('ar')) {
             window.location.replace(prefix + 'ar/');
           } else {
             window.location.replace(prefix + 'en/');
@@ -62,10 +66,11 @@
     </script>
   </head>
   <body>
-    <h1>Iraqi Social Progress Collective<br/>التجمع العراقي للتقدم الاجتماعي</h1>
+    <h1>Iraqi Social Progress Collective<br/>التجمع العراقي للتقدم الاجتماعي<br/>کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراق</h1>
     <div class="lang-links">
       <a href="en/">English</a>
       <a href="ar/">العربية</a>
+      <a href="ckb/">کوردی</a>
     </div>
   </body>
 </html>

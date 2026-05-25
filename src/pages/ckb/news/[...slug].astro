@@ -1,0 +1,27 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import CkbStub from '@components/CkbStub.astro';
+import { getSlugFromId } from '@lib/collections';
+
+export async function getStaticPaths() {
+  const ckb = await getCollection('news', (e: CollectionEntry<'news'>) => e.data.lang === 'ckb' && !e.data.draft);
+  const ar = await getCollection('news', (e: CollectionEntry<'news'>) => e.data.lang === 'ar' && !e.data.draft);
+  const realCkbSlugs = new Set(ckb.map((n) => getSlugFromId(n.id)));
+  return ar
+    .filter((n) => !realCkbSlugs.has(getSlugFromId(n.id)))
+    .map((n) => {
+      const slug = getSlugFromId(n.id);
+      return { params: { slug }, props: { slug, title: n.data.title } };
+    });
+}
+
+interface Props {
+  slug: string;
+  title: string;
+}
+
+const { slug, title } = Astro.props as Props;
+const arHref = `/ar/news/${slug}`;
+---
+
+<CkbStub title={title} arHref={arHref} pageLabel="هەواڵ" />

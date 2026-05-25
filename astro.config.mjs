@@ -13,7 +13,7 @@ export default defineConfig({
     remarkPlugins: [remarkBasePrefix(BASE)],
   },
   i18n: {
-    locales: ['en', 'ar'],
+    locales: ['en', 'ar', 'ckb'],
     defaultLocale: 'en',
     routing: {
       prefixDefaultLocale: true,
@@ -25,7 +25,7 @@ export default defineConfig({
     sitemap({
       i18n: {
         defaultLocale: 'en',
-        locales: { en: 'en-US', ar: 'ar-IQ' },
+        locales: { en: 'en-US', ar: 'ar-IQ', ckb: 'ckb-IQ' },
       },
     }),
   ],
