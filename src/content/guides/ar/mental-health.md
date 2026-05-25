@@ -5,6 +5,11 @@ lang: ar
 pubDate: 2026-04-29
 category: mental-health
 order: 1
+relatedGuides:
+  - honor-violence
+  - gender
+  - sexual-orientation
+  - lgbtqia-education
 ---
 
 > **هذه الصفحة هي معرفة مجتمعية، ليست علاجاً نفسياً.** كتبها أناس عاشوها. إذا كنت في أزمة فورية، اقفز إلى [موارد الأزمات](#crisis-resources) في الأسفل.

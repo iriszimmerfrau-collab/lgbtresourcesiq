@@ -72,6 +72,10 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   inLanguage: 'ar',
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['.prose h2', '.prose p'],
+  },
   mainEntity: faqs.map(({ q, a }) => ({
     '@type': 'Question',
     name: q,

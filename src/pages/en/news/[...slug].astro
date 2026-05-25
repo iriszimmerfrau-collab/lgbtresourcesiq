@@ -2,6 +2,8 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import ArticleLayout from '@layouts/ArticleLayout.astro';
 import { estimateReadingTime, getSlugFromId } from '@lib/collections';
+import { buildArticleSchema, buildBreadcrumbList, combineSchemas, type JsonLdContext } from '@lib/jsonld';
+import { localizedPath, t } from '@i18n/utils';
 
 export async function getStaticPaths() {
   const news = await getCollection('news', (e: CollectionEntry<'news'>) => e.data.lang === 'en' && !e.data.draft);
@@ -20,13 +22,23 @@ const { Content } = await render(item);
 const lang = 'en' as const;
 const readingTime = estimateReadingTime(item.body ?? '');
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'NewsArticle',
-  headline: item.data.title,
-  description: item.data.description,
-  datePublished: item.data.pubDate.toISOString(),
-  inLanguage: 'en',
+const siteUrl = new URL('/', Astro.site).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const ctx: JsonLdContext = { lang, pageUrl, siteUrl, siteName: 'Iraqi Social Progress Collective' };
+
+const jsonLd = combineSchemas(
+  buildArticleSchema(item, ctx),
+  buildBreadcrumbList([
+    { name: 'Home', url: new URL(localizedPath(lang, '/'), Astro.site).href },
+    { name: t(lang, 'nav.news'), url: new URL(localizedPath(lang, '/news'), Astro.site).href },
+    { name: item.data.title, url: pageUrl },
+  ]),
+);
+
+const article = {
+  publishedTime: item.data.pubDate.toISOString(),
+  section: 'news',
+  tags: item.data.keywords?.split(',').map((s) => s.trim()).filter(Boolean),
 };
 ---
 
@@ -37,6 +49,9 @@ const jsonLd = {
   pubDate={item.data.pubDate}
   readingTime={readingTime}
   jsonLd={jsonLd}
+  keywords={item.data.keywords}
+  ogImage="/og-guide.png"
+  article={article}
 >
   <Content />
   {item.data.source && (

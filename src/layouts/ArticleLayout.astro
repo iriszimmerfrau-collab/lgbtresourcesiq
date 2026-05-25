@@ -4,6 +4,18 @@ import SectionDivider from '@components/SectionDivider.astro';
 import type { Lang } from '@i18n/languages';
 import { t } from '@i18n/utils';
 
+interface RelatedLink {
+  title: string;
+  url: string;
+}
+
+interface ArticleMeta {
+  publishedTime: string;
+  modifiedTime?: string;
+  section?: string;
+  tags?: string[];
+}
+
 interface Props {
   title: string;
   description: string;
@@ -13,9 +25,27 @@ interface Props {
   readingTime?: number;
   jsonLd?: Record<string, unknown>;
   keywords?: string;
+  /** Optional per-page og:image (e.g. /og-hrt.png). Defaults to BaseLayout default. */
+  ogImage?: string;
+  /** Optional article:* meta payload. */
+  article?: ArticleMeta;
+  /** Optional "See also" links rendered at the bottom of the article. */
+  relatedLinks?: RelatedLink[];
 }
 
-const { title, description, lang, pubDate, updatedDate, readingTime, jsonLd, keywords } = Astro.props;
+const {
+  title,
+  description,
+  lang,
+  pubDate,
+  updatedDate,
+  readingTime,
+  jsonLd,
+  keywords,
+  ogImage,
+  article,
+  relatedLinks,
+} = Astro.props;
 
 function formatDate(date: Date, locale: string): string {
   return date.toLocaleDateString(locale === 'ar' ? 'ar-IQ' : 'en-US', {
@@ -26,7 +56,17 @@ function formatDate(date: Date, locale: string): string {
 }
 ---
 
-<BaseLayout title={title} description={description} lang={lang} ogType="article" jsonLd={jsonLd} articleWidth keywords={keywords}>
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  ogType="article"
+  jsonLd={jsonLd}
+  articleWidth
+  keywords={keywords}
+  ogImage={ogImage}
+  article={article}
+>
   <article class="prose">
     <header class="mb-8">
       <SectionDivider />
@@ -48,5 +88,25 @@ function formatDate(date: Date, locale: string): string {
       </div>
     </header>
     <slot />
+
+    {relatedLinks && relatedLinks.length > 0 && (
+      <footer class="not-prose mt-12 pt-6 border-t-2 border-magenta/20">
+        <h2 class="text-xs font-bold uppercase tracking-widest text-muted mb-3">
+          {lang === 'ar' ? 'انظر أيضاً' : 'See also'}
+        </h2>
+        <ul class="list-none p-0 m-0 space-y-2">
+          {relatedLinks.map((link) => (
+            <li>
+              <a
+                href={link.url}
+                class="text-navy hover:text-magenta font-semibold no-underline border-b border-magenta/30 hover:border-magenta transition-colors"
+              >
+                {link.title} →
+              </a>
+            </li>
+          ))}
+        </ul>
+      </footer>
+    )}
   </article>
 </BaseLayout>

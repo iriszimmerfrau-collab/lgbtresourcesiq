@@ -6,6 +6,10 @@ pubDate: 2026-04-29
 category: hrt
 parentGuide: hrt
 order: 5
+relatedGuides:
+  - hrt-pharmacy-script
+  - hrt-overview
+  - hrt-risks
 ---
 
 > **This guide is harm-reduction information.** It is not medical advice. We provide it because most readers do not have access to an informed clinician — the goal is that anyone who is going to do this anyway does it as safely as possible.

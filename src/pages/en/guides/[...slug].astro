@@ -3,6 +3,16 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import ArticleLayout from '@layouts/ArticleLayout.astro';
 import GuideNav from '@components/GuideNav.astro';
 import { getSlugFromId, estimateReadingTime } from '@lib/collections';
+import {
+  buildArticleSchema,
+  buildMedicalWebPageSchema,
+  buildLearningResourceSchema,
+  buildBreadcrumbList,
+  buildHowToSchema,
+  combineSchemas,
+  type JsonLdContext,
+} from '@lib/jsonld';
+import { localizedPath, t } from '@i18n/utils';
 
 export async function getStaticPaths() {
   const guides = await getCollection('guides', (e: CollectionEntry<'guides'>) => e.data.lang === 'en' && !e.data.draft);
@@ -22,15 +32,83 @@ const lang = 'en' as const;
 const slug = getSlugFromId(guide.id);
 const readingTime = estimateReadingTime(guide.body ?? '');
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: guide.data.title,
-  description: guide.data.description,
-  datePublished: guide.data.pubDate.toISOString(),
-  ...(guide.data.updatedDate && { dateModified: guide.data.updatedDate.toISOString() }),
-  inLanguage: 'en',
+const siteUrl = new URL('/', Astro.site).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const ctx: JsonLdContext = {
+  lang,
+  pageUrl,
+  siteUrl,
+  siteName: 'Iraqi Social Progress Collective',
 };
+
+const category = guide.data.category;
+
+// Pick the right schema set based on category
+const isMedical = category === 'hrt' || category === 'mental-health';
+const isEducational = category === 'identity' || category === 'general';
+
+const breadcrumbs = buildBreadcrumbList([
+  { name: 'Home', url: new URL(localizedPath(lang, '/'), Astro.site).href },
+  { name: t(lang, 'nav.guides'), url: new URL(localizedPath(lang, '/guides'), Astro.site).href },
+  { name: t(lang, `guides.category.${category}` as any), url: new URL(localizedPath(lang, `/guides#${category}`), Astro.site).href },
+  { name: guide.data.title, url: pageUrl },
+]);
+
+const primarySchema = isMedical
+  ? buildMedicalWebPageSchema(guide, ctx)
+  : isEducational
+  ? buildLearningResourceSchema(guide, ctx)
+  : buildArticleSchema(guide, ctx);
+
+// Pharmacy script gets an extra HowTo schema with hand-authored steps
+const howToSchema =
+  slug === 'hrt-pharmacy-script'
+    ? buildHowToSchema({
+        name: 'How to ask an Iraqi pharmacy for hormone medication',
+        description: 'Step-by-step harm-reduction approach for obtaining HRT medications at an Iraqi pharmacy without raising suspicion.',
+        ctx,
+        steps: [
+          { name: 'Take a clear photo of the medication box', text: 'Have a clear, well-lit photo of the medication packaging ready on your phone before you walk into the pharmacy. Photographing the box of someone you trust who already has the medication is the cleanest source.' },
+          { name: 'Walk into a private pharmacy alone', text: 'Choose a private pharmacy (not chain, not in your immediate neighborhood). Go alone. Confidence and brevity are your best cover.' },
+          { name: 'Show the photo and name the medication', text: 'Show the pharmacist the photo on your phone. Say the brand name aloud (e.g. "Estrofem", "Androcur"). Do not explain why.' },
+          { name: 'Have a cover story ready if asked', text: 'If asked what it is for, use the cover stories in our Pharmacy Script guide — most pharmacists do not ask once they recognize the box.' },
+          { name: 'If not in stock, ask for مذخر order', text: 'If the pharmacy does not stock it, ask them to order it from a مذخر (medical wholesaler). Most can deliver in 1–3 days. Pay a deposit if asked.' },
+          { name: 'Rotate pharmacies for refills', text: 'Do not refill at the same pharmacy month after month. Spread purchases across 3–5 establishments so no single pharmacy sees your full pattern.' },
+        ],
+      })
+    : null;
+
+const articleFallback =
+  isMedical || isEducational ? buildArticleSchema(guide, ctx) : null;
+
+const jsonLd = combineSchemas(primarySchema, articleFallback, howToSchema, breadcrumbs);
+
+// Per-category og:image
+const ogImage =
+  category === 'hrt' || category === 'mental-health'
+    ? '/og-hrt.png'
+    : '/og-guide.png';
+
+const article = {
+  publishedTime: guide.data.pubDate.toISOString(),
+  modifiedTime: guide.data.updatedDate?.toISOString(),
+  section: category,
+  tags: guide.data.keywords?.split(',').map((s) => s.trim()).filter(Boolean),
+};
+
+// Resolve relatedGuides into {title, url} pairs by looking up sibling EN guides
+let relatedLinks: Array<{ title: string; url: string }> = [];
+if (guide.data.relatedGuides?.length) {
+  const allGuides = await getCollection('guides', (e: CollectionEntry<'guides'>) => e.data.lang === 'en' && !e.data.draft);
+  const bySlug = new Map(allGuides.map((g) => [getSlugFromId(g.id), g]));
+  relatedLinks = guide.data.relatedGuides
+    .map((relSlug) => bySlug.get(relSlug))
+    .filter((g): g is CollectionEntry<'guides'> => !!g)
+    .map((g) => ({
+      title: g.data.title,
+      url: new URL(localizedPath(lang, `/guides/${getSlugFromId(g.id)}`), Astro.site).href,
+    }));
+}
 ---
 
 <ArticleLayout
@@ -42,6 +120,9 @@ const jsonLd = {
   readingTime={readingTime}
   jsonLd={jsonLd}
   keywords={guide.data.keywords}
+  ogImage={ogImage}
+  article={article}
+  relatedLinks={relatedLinks}
 >
   <Content />
   {guide.data.parentGuide && (

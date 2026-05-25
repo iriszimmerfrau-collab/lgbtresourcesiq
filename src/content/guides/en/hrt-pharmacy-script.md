@@ -6,6 +6,12 @@ pubDate: 2026-04-29
 category: hrt
 parentGuide: hrt
 order: 6
+relatedGuides:
+  - hrt-sourcing-iraq
+  - hrt-overview
+  - hrt-feminizing
+  - hrt-monitoring
+  - hrt-risks
 ---
 
 > **This guide is harm-reduction information.** It is not medical advice. We provide it because most readers do not have access to an informed clinician.

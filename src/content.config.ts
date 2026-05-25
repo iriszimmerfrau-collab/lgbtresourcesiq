@@ -12,6 +12,8 @@ const guides = defineCollection({
     category: z.enum(['hrt', 'mental-health', 'safety', 'general', 'identity']),
     order: z.number().optional(),
     parentGuide: z.string().optional(),
+    /** Sibling guide slugs to surface as "See also" links in the article footer. */
+    relatedGuides: z.array(z.string()).optional(),
     keywords: z.string().optional(),
     draft: z.boolean().default(false),
   }),

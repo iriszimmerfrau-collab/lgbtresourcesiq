@@ -5,6 +5,8 @@ lang: en
 pubDate: 2026-04-29
 category: safety
 order: 1
+relatedGuides:
+  - mental-health
 ---
 
 > **This page is harm-reduction information for people at risk.** It is not legal advice. If you are in immediate danger, the steps under [if violence is imminent](#imminent) come first — you can read the rest later.

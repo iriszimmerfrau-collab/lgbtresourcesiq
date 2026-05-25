@@ -72,6 +72,11 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   inLanguage: 'en',
+  // Speakable lets voice assistants (Google Assistant, Siri) read FAQ aloud.
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['.prose h2', '.prose p'],
+  },
   mainEntity: faqs.map(({ q, a }) => ({
     '@type': 'Question',
     name: q,

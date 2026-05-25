@@ -5,6 +5,11 @@ lang: en
 pubDate: 2026-04-29
 category: mental-health
 order: 1
+relatedGuides:
+  - honor-violence
+  - gender
+  - sexual-orientation
+  - lgbtqia-education
 ---
 
 > **This page is community knowledge, not therapy.** It is written by people who have lived it. If you are in immediate crisis, skip to [crisis resources](#crisis-resources) at the bottom.

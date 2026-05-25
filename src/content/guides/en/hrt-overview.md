@@ -6,6 +6,14 @@ pubDate: 2026-04-29
 category: hrt
 parentGuide: hrt
 order: 1
+relatedGuides:
+  - hrt-what-is-hrt
+  - hrt-feminizing
+  - hrt-masculinizing
+  - hrt-sourcing-iraq
+  - hrt-pharmacy-script
+  - hrt-monitoring
+  - hrt-risks
 ---
 
 This is a multi-part guide to hormone replacement therapy (HRT) for trans Iraqis. It is written by people who have navigated Iraqi pharmacies, found their own labs, and learned hard lessons about what works and what hurts.

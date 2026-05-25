@@ -6,6 +6,14 @@ pubDate: 2026-04-29
 category: hrt
 parentGuide: hrt
 order: 1
+relatedGuides:
+  - hrt-what-is-hrt
+  - hrt-feminizing
+  - hrt-masculinizing
+  - hrt-sourcing-iraq
+  - hrt-pharmacy-script
+  - hrt-monitoring
+  - hrt-risks
 ---
 
 هذا دليل متعدّد الأجزاء للعلاج الهرموني البديل (HRT) للعراقيين العابرين جنسياً. كُتب من أشخاص تعاملوا مع الصيدليات العراقية، ووجدوا مختبراتهم بأنفسهم، وتعلّموا دروساً صعبة عمّا ينفع وما يضرّ.
