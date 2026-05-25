@@ -1,0 +1,69 @@
+---
+/**
+ * Citations — structured source bibliography rendered at the bottom of an
+ * article when frontmatter declares `citations`. Mirrored into the article's
+ * JSON-LD as a `citation` array of CreativeWork refs.
+ *
+ * GEO / AEO purpose: AI engines weigh content that names verifiable sources
+ * more heavily. Adding a visible bibliography that matches the structured
+ * data gives both human readers and crawlers the same provenance trail.
+ */
+import type { Lang } from '@i18n/languages';
+
+interface Citation {
+  title: string;
+  org?: string;
+  url?: string;
+  year?: number;
+}
+
+interface Props {
+  citations: Citation[];
+  lang: Lang;
+}
+
+const { citations, lang } = Astro.props;
+
+const heading =
+  lang === 'ar' ? 'المصادر والمراجع' :
+  lang === 'ckb' ? 'سەرچاوەکان' :
+  'Sources';
+---
+
+<section
+  class="not-prose mt-12 pt-8 border-t-2 border-navy/10"
+  aria-labelledby="citations-heading"
+>
+  <h2
+    id="citations-heading"
+    class="text-xs font-bold uppercase tracking-widest text-muted mb-4"
+  >
+    {heading}
+  </h2>
+  <ol class="list-decimal list-inside space-y-2 text-sm text-body marker:text-magenta marker:font-bold">
+    {citations.map((c) => (
+      <li class="leading-relaxed">
+        {c.url ? (
+          <a
+            href={c.url}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            class="font-semibold underline decoration-magenta/40 hover:decoration-magenta hover:text-magenta"
+          >
+            {c.title}
+          </a>
+        ) : (
+          <span class="font-semibold">{c.title}</span>
+        )}
+        {(c.org || c.year) && (
+          <span class="text-muted">
+            {' '}—
+            {c.org && <span> {c.org}</span>}
+            {c.org && c.year && <span>,</span>}
+            {c.year && <span> {c.year}</span>}
+          </span>
+        )}
+      </li>
+    ))}
+  </ol>
+</section>

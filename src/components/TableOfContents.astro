@@ -1,0 +1,50 @@
+---
+/**
+ * TableOfContents — auto-rendered ToC for long articles. Uses the headings
+ * array Astro's content render() returns, so it stays in sync with the
+ * markdown automatically. Only renders for guides with at least 4 H2s
+ * (below that, scrolling is faster than ToC navigation).
+ *
+ * GEO purpose: AI engines use ToC structures as semantic chunk boundaries
+ * and as "jump-to-answer" anchors when surfacing partial answers. Native
+ * semantic <nav> + <ol> is the cleanest signal.
+ */
+import type { MarkdownHeading } from 'astro';
+import type { Lang } from '@i18n/languages';
+
+interface Props {
+  headings: MarkdownHeading[];
+  lang: Lang;
+}
+
+const { headings, lang } = Astro.props;
+
+// Only the H2s — H3+ would make the ToC noisy on screen.
+const h2s = headings.filter((h) => h.depth === 2);
+
+const label =
+  lang === 'ar' ? 'محتويات هذا الدليل' :
+  lang === 'ckb' ? 'ناوەڕۆکی ئەم ڕێبەرە' :
+  'On this page';
+---
+
+{h2s.length >= 4 && (
+  <nav
+    class="not-prose my-8 p-4 border-s-4 border-navy/30 bg-cream/30"
+    aria-label={label}
+  >
+    <h2 class="text-xs font-bold uppercase tracking-widest text-muted mb-3 mt-0">{label}</h2>
+    <ol class="list-decimal list-inside space-y-1 text-sm marker:text-navy/60">
+      {h2s.map((h) => (
+        <li>
+          <a
+            href={`#${h.slug}`}
+            class="text-navy hover:text-magenta no-underline border-b border-transparent hover:border-magenta"
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

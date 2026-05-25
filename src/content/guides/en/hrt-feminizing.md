@@ -8,6 +8,33 @@ parentGuide: hrt
 order: 3
 tldr: "Feminizing HRT in Iraq uses two medications together: an estrogen (Estrofem / estradiol valerate, oral) and an antiandrogen (cyproterone acetate 12.5–25mg, bicalutamide 25–50mg, or spironolactone). Cyproterone above 25mg carries a serious cumulative meningioma risk — keep the dose low and stop the antiandrogen after orchiectomy."
 keywords: "feminizing HRT Iraq, MTF hormones Iraq, Estrofem dosing, estradiol Iraq, cyproterone acetate Iraq, Androcur meningioma, bicalutamide trans women, spironolactone Iraq, antiandrogen dosing, MTF starter regimen Iraq"
+commonQuestions:
+  - q: "What is a safe starting dose of Estrofem in Iraq?"
+    a: "A common community-tested starter dose is 2 mg of oral Estrofem (estradiol valerate) once daily, escalated to 4 mg daily after 1–3 months if E2 levels remain below 150 pg/mL on follow-up labs. Going higher than 4 mg oral does not produce meaningfully higher serum E2 in most people and increases liver-pass burden — at that point, splitting into twice-daily dosing or switching to sublingual administration is more efficient than escalating the total dose."
+  - q: "Why is cyproterone acetate dangerous and what dose is actually safe?"
+    a: "Cyproterone acetate (Androcur, Androfarm) carries a clearly documented cumulative risk of meningioma — a brain tumour — at total lifetime doses above approximately 10 grams, which corresponds to roughly 25 mg daily for more than a year. The community-standard dose is 12.5 mg daily, which is far below that threshold and clinically sufficient to suppress testosterone in most people. The 50 mg pills should be quartered (a pill cutter is the cleanest tool). Stop CPA after orchiectomy or after committing to long-term GnRH or bicalutamide alternative."
+  - q: "What's the difference between bicalutamide and cyproterone for blocking testosterone?"
+    a: "Bicalutamide is a peripheral androgen-receptor blocker — it does not lower serum testosterone, it blocks testosterone from binding receptors. Cyproterone is a central anti-gonadotropin that suppresses testosterone production itself. Practically: on bicalutamide your T labs stay normal-male but your body responds as if T were low; on cyproterone your T labs drop to female range. Bicalutamide does not carry the meningioma risk; it does carry a small risk of liver enzyme elevation. Routine community pattern is bicalutamide 25–50 mg daily as an alternative when Androcur is unavailable or contraindicated."
+  - q: "When will I see visible changes?"
+    a: "Skin softening and decreased sebum production typically begin in the first 4–6 weeks. Breast tissue development starts in months 3–6 and continues for 2–4 years; final size is heavily genetic. Fat redistribution to hips and thighs is gradual over the first 1–2 years. Body hair thins over 1–3 years but does not disappear without electrolysis or laser. Voice does not change on HRT — voice feminisation requires speech therapy. Existing facial hair is unaffected by HRT."
+  - q: "Do I need to stop HRT before surgery if I have orchiectomy or vaginoplasty?"
+    a: "Yes for the antiandrogen — cyproterone, bicalutamide, and spironolactone should be discontinued 2–4 weeks before any planned surgery to reduce VTE risk. Estrogen is more contested — current WPATH SOC8 guidance moved away from blanket discontinuation, but many surgeons still require holding oral E2 for 2 weeks pre-op. Discuss with the specific surgical team. After orchiectomy, you no longer need an antiandrogen at all and should stop it permanently."
+citations:
+  - title: "Standards of Care for the Health of Transgender and Gender Diverse People, Version 8 — Hormone Therapy chapter"
+    org: "WPATH"
+    url: "https://www.wpath.org/soc8"
+    year: 2022
+  - title: "Endocrine Treatment of Gender-Dysphoric/Gender-Incongruent Persons: An Endocrine Society Clinical Practice Guideline"
+    org: "Endocrine Society"
+    url: "https://academic.oup.com/jcem/article/102/11/3869/4157558"
+    year: 2017
+  - title: "Cyproterone acetate and risk of meningioma: a cohort study"
+    org: "BMJ / Journal of Neurology, Neurosurgery & Psychiatry"
+    url: "https://www.bmj.com/content/372/bmj.n37"
+    year: 2021
+  - title: "Bicalutamide as an androgen blocker with secondary effect of promoting feminization in male-to-female transgender adolescents"
+    org: "Journal of Adolescent Health"
+    year: 2020
 ---
 
 > **This guide is harm-reduction information.** It is not medical advice, and it is not a substitute for care from a qualified clinician. We provide it because most readers do not have access to an informed clinician — the goal is that anyone who is going to do this anyway does it as safely as possible. If you have access to a doctor who will work with you, see them first.

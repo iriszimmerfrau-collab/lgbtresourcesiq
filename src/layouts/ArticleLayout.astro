@@ -2,6 +2,11 @@
 import BaseLayout from './BaseLayout.astro';
 import SectionDivider from '@components/SectionDivider.astro';
 import AnswerSummary from '@components/AnswerSummary.astro';
+import CommonQuestions from '@components/CommonQuestions.astro';
+import Citations from '@components/Citations.astro';
+import EditorialReview from '@components/EditorialReview.astro';
+import TableOfContents from '@components/TableOfContents.astro';
+import type { MarkdownHeading } from 'astro';
 import type { Lang } from '@i18n/languages';
 import { t } from '@i18n/utils';
 
@@ -38,6 +43,26 @@ interface Props {
    * extraction; sourced from collection frontmatter `tldr`.
    */
   tldr?: string;
+  /**
+   * Per-page Q&A pairs rendered as a "Common questions" accordion below the
+   * article body. Paired with a FAQPage JSON-LD schema emitted by the route.
+   */
+  commonQuestions?: Array<{ q: string; a: string }>;
+  /**
+   * Structured source bibliography rendered below the article and mirrored
+   * into the JSON-LD `citation` array.
+   */
+  citations?: Array<{ title: string; org?: string; url?: string; year?: number }>;
+  /**
+   * When provided, renders the EditorialReview collective-credibility block
+   * inside the article. ISO date string drives the visible "last reviewed".
+   */
+  editorialReviewedAt?: string;
+  /**
+   * Markdown heading array from Astro's render() result. When present and the
+   * article has 4+ H2s, ArticleLayout renders an auto-generated ToC.
+   */
+  headings?: MarkdownHeading[];
 }
 
 const {
@@ -53,6 +78,10 @@ const {
   article,
   relatedLinks,
   tldr,
+  commonQuestions,
+  citations,
+  editorialReviewedAt,
+  headings,
 } = Astro.props;
 
 function formatDate(date: Date, locale: string): string {
@@ -99,7 +128,17 @@ function formatDate(date: Date, locale: string): string {
       </div>
     </header>
     {tldr && <AnswerSummary text={tldr} lang={lang} />}
+    {editorialReviewedAt && <EditorialReview reviewedAt={editorialReviewedAt} lang={lang} />}
+    {headings && headings.length > 0 && <TableOfContents headings={headings} lang={lang} />}
     <slot />
+
+    {commonQuestions && commonQuestions.length > 0 && (
+      <CommonQuestions questions={commonQuestions} lang={lang} />
+    )}
+
+    {citations && citations.length > 0 && (
+      <Citations citations={citations} lang={lang} />
+    )}
 
     {relatedLinks && relatedLinks.length > 0 && (
       <footer class="not-prose mt-12 pt-6 border-t-2 border-magenta/20">

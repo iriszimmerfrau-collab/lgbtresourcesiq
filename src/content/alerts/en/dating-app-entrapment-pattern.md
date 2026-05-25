@@ -10,6 +10,29 @@ sourceUrl: "https://www.hrw.org/report/2022/03/23/everyone-wants-me-dead/killing
 affected: "LGBTQ+ Iraqis using dating/hookup apps, especially in Baghdad and southern provinces"
 tldr: "Armed groups in Iraq — primarily militias tolerated by the state — use Grindr, Hornet, Romeo, and similar apps to identify, lure, and physically attack queer Iraqis. The pattern is consistent: friendly chat, private-location meet-up, multiple attackers waiting. Trans women are disproportionately targeted. The risk increased after Law 14 (2024). If you use these apps, use a clean device behind a VPN with no real-name account, no face photo, and always meet first in a busy public place."
 keywords: "Grindr Iraq danger, Hornet Iraq, Iraq dating app entrapment, queer dating apps Iraq, militia Grindr Iraq, gay app trap Iraq, Iraqi militia Grindr attack, queer Iraqi entrapment, HRW everyone wants me dead, Iraq queer kidnapping dating app, Romeo app Iraq trap"
+commonQuestions:
+  - q: "Which dating apps are most dangerous in Iraq?"
+    a: "Grindr and Hornet have the longest documented histories of entrapment attacks against queer Iraqis, with Romeo a close third. Tinder is also implicated when same-sex matches appear. Telegram contact channels labelled as queer meet-ups are likewise risky — many are run as honeypots by either militias or freelance extortionists. The pattern is consistent across apps: attackers create attractive fake profiles, build friendly chat over hours or days, then propose a private-location meet-up where multiple attackers wait."
+  - q: "Is using a VPN enough to be safe on Grindr in Iraq?"
+    a: "A VPN protects your network traffic from your ISP and from passive surveillance, but it does *not* protect you from the person on the other end of the chat. The attacker still sees your profile, your photos, your messages, and your eventual meet-up location. VPN is necessary but not sufficient. The other essential layers are: no real-name account, no face photo, no real-age or real-city detail, meet first in a busy public place, verify the person with a real-time photo holding a piece of paper with the current time written on it."
+  - q: "Have there actually been killings linked to dating-app entrapment in Iraq?"
+    a: "Yes — documented by Human Rights Watch in their 2022 report \"Everyone Wants Me Dead,\" which catalogued dozens of cases including killings, abductions, sexual violence, and torture where the initial contact was a dating app. Trans women have been disproportionately targeted. Most cases are not reported to police because the victim's own legal exposure under the morality clauses (and now Law 14) makes police involvement a second risk on top of the original attack."
+  - q: "How has dating-app entrapment risk changed since Law 14 (2024)?"
+    a: "The legal risk to victims who survive an attack increased — Law 14's 10-15 year sentences for the underlying same-sex contact mean that even if police catch an attacker, the victim faces prosecution for the contact that led to the trap. Attackers know this and act on it: extortion attempts have increased because the threat \"I'll tell the police\" now carries a heavier weight. The community pattern has moved more toward XMPP-based queer-only networks and away from open apps."
+  - q: "What do I do if I'm being extorted after a dating-app encounter?"
+    a: "Do not pay. Paying once almost always triggers ongoing demands. Block the contact across every channel they have, change phone numbers if needed, and reach the ISPC community channel — we have helped community members through this pattern before. If the extortion includes specific identifying information about you (real name, photo with face, location), contact us urgently and consider whether safe-house referral or temporary relocation is needed. See [Honor Violence](/en/guides/honor-violence) for emergency planning."
+citations:
+  - title: "Everyone Wants Me Dead: Killings, Abductions, Torture, and Sexual Violence Against LGBT People in Iraq"
+    org: "Human Rights Watch"
+    url: "https://www.hrw.org/report/2022/03/23/everyone-wants-me-dead/killings-abductions-torture-and-sexual-violence-lgbt"
+    year: 2022
+  - title: "Iraq: 'They Want Us Exterminated'"
+    org: "Human Rights Watch"
+    url: "https://www.hrw.org/report/2009/08/17/they-want-us-exterminated/murder-torture-sexual-orientation-and-gender-iraq"
+    year: 2009
+  - title: "Iraqi Social Progress Collective — dating-app safety field notes"
+    org: "ISPC"
+    year: 2026
 ---
 
 In March 2022, Human Rights Watch published a 96-page investigation titled **"Everyone Wants Me Dead": Killings, Abductions, Torture, and Sexual Violence Against LGBT People by Armed Groups in Iraq.** The report documented dozens of cases in which armed groups — primarily militias affiliated with state-tolerated armed factions — used dating apps to identify, contact, and physically attack LGBTQ+ individuals.

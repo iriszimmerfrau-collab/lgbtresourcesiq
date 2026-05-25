@@ -166,6 +166,8 @@ export interface ArticleEnrichment {
   wordCount?: number;
   /** Reading time in minutes (drives `timeRequired`). */
   readingTime?: number;
+  /** Frontmatter citations → schema `citation` array. */
+  citations?: CitationInput[];
 }
 
 export function buildArticleSchema(
@@ -192,6 +194,7 @@ export function buildArticleSchema(
     ...(enrich.mentions?.length ? { mentions: entityRefs(enrich.mentions) } : {}),
     ...(enrich.wordCount ? { wordCount: enrich.wordCount } : {}),
     ...(enrich.readingTime ? { timeRequired: isoMinutes(enrich.readingTime) } : {}),
+    ...(buildCitationRefs(enrich.citations) ? { citation: buildCitationRefs(enrich.citations) } : {}),
     ...(entry.data.keywords
       ? { keywords: entry.data.keywords.split(',').map((s) => s.trim()).filter(Boolean) }
       : {}),
@@ -242,6 +245,7 @@ export function buildMedicalWebPageSchema(
     ...(enrich.mentions?.length ? { mentions: entityRefs(enrich.mentions) } : {}),
     ...(enrich.wordCount ? { wordCount: enrich.wordCount } : {}),
     ...(enrich.readingTime ? { timeRequired: isoMinutes(enrich.readingTime) } : {}),
+    ...(buildCitationRefs(enrich.citations) ? { citation: buildCitationRefs(enrich.citations) } : {}),
   };
 }
 
@@ -331,6 +335,7 @@ export function buildLearningResourceSchema(
     ...(enrich.mentions?.length ? { mentions: entityRefs(enrich.mentions) } : {}),
     ...(enrich.wordCount ? { wordCount: enrich.wordCount } : {}),
     ...(enrich.readingTime ? { timeRequired: isoMinutes(enrich.readingTime) } : {}),
+    ...(buildCitationRefs(enrich.citations) ? { citation: buildCitationRefs(enrich.citations) } : {}),
   };
 }
 
@@ -341,6 +346,60 @@ export function buildLearningResourceSchema(
 export interface FaqEntry {
   q: string;
   a: string;
+}
+
+/**
+ * Strip markdown link syntax → plain text for JSON-LD answer payloads.
+ * Schema.org wants plain text; AI engines that consume the schema render
+ * the inline links themselves from the prose elsewhere on the page.
+ */
+function stripMarkdownLinks(text: string): string {
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1');
+}
+
+/**
+ * Convert a frontmatter commonQuestions array to a FAQPage schema. Use
+ * inside a combineSchemas(@graph) so it sits alongside the primary
+ * MedicalWebPage/Article schema rather than replacing it.
+ */
+export function buildFaqPageFromQuestions(faqs: FaqEntry[], ctx: JsonLdContext) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: ctx.lang,
+    isAccessibleForFree: true,
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: stripMarkdownLinks(f.a),
+      },
+    })),
+  };
+}
+
+/**
+ * Convert frontmatter citations to a Schema.org `citation` array of
+ * CreativeWork references. Returns undefined if no citations supplied
+ * so call sites can spread it conditionally.
+ */
+export interface CitationInput {
+  title: string;
+  org?: string;
+  url?: string;
+  year?: number;
+}
+
+export function buildCitationRefs(citations: CitationInput[] | undefined) {
+  if (!citations || citations.length === 0) return undefined;
+  return citations.map((c) => ({
+    '@type': 'CreativeWork',
+    name: c.title,
+    ...(c.org ? { publisher: { '@type': 'Organization', name: c.org } } : {}),
+    ...(c.url ? { url: c.url } : {}),
+    ...(c.year ? { datePublished: String(c.year) } : {}),
+  }));
 }
 
 export function buildFaqPageWithSpeakable(faqs: FaqEntry[], ctx: JsonLdContext) {
@@ -414,6 +473,7 @@ export function buildAlertNewsArticleSchema(
     ...(enrich.mentions?.length ? { mentions: entityRefs(enrich.mentions) } : {}),
     ...(enrich.wordCount ? { wordCount: enrich.wordCount } : {}),
     ...(enrich.readingTime ? { timeRequired: isoMinutes(enrich.readingTime) } : {}),
+    ...(buildCitationRefs(enrich.citations) ? { citation: buildCitationRefs(enrich.citations) } : {}),
     articleSection: data.category,
   };
 }

@@ -29,6 +29,27 @@ const guides = defineCollection({
      * sentences before the article unfolds. Keep under ~280 characters.
      */
     tldr: z.string().optional(),
+    /**
+     * Per-guide Q&A pairs rendered as a "Common questions" accordion at the
+     * bottom of the article AND emitted as a FAQPage schema. AEO winner —
+     * AI engines extract these for "people also ask" / related-query answers.
+     * Keep questions to the genuine reader queries this page already answers.
+     */
+    commonQuestions: z.array(z.object({
+      q: z.string(),
+      a: z.string(),
+    })).optional(),
+    /**
+     * Structured source bibliography rendered at the bottom of the article
+     * AND emitted as a `citation` array in JSON-LD. Each entry should be
+     * something a reader (or AI engine) could actually look up.
+     */
+    citations: z.array(z.object({
+      title: z.string(),
+      org: z.string().optional(),
+      url: z.string().url().optional(),
+      year: z.number().optional(),
+    })).optional(),
   }),
 });
 
@@ -52,6 +73,27 @@ const stories = defineCollection({
      * sentences before the article unfolds. Keep under ~280 characters.
      */
     tldr: z.string().optional(),
+    /**
+     * Per-guide Q&A pairs rendered as a "Common questions" accordion at the
+     * bottom of the article AND emitted as a FAQPage schema. AEO winner —
+     * AI engines extract these for "people also ask" / related-query answers.
+     * Keep questions to the genuine reader queries this page already answers.
+     */
+    commonQuestions: z.array(z.object({
+      q: z.string(),
+      a: z.string(),
+    })).optional(),
+    /**
+     * Structured source bibliography rendered at the bottom of the article
+     * AND emitted as a `citation` array in JSON-LD. Each entry should be
+     * something a reader (or AI engine) could actually look up.
+     */
+    citations: z.array(z.object({
+      title: z.string(),
+      org: z.string().optional(),
+      url: z.string().url().optional(),
+      year: z.number().optional(),
+    })).optional(),
   }),
 });
 
@@ -74,6 +116,27 @@ const news = defineCollection({
      * sentences before the article unfolds. Keep under ~280 characters.
      */
     tldr: z.string().optional(),
+    /**
+     * Per-guide Q&A pairs rendered as a "Common questions" accordion at the
+     * bottom of the article AND emitted as a FAQPage schema. AEO winner —
+     * AI engines extract these for "people also ask" / related-query answers.
+     * Keep questions to the genuine reader queries this page already answers.
+     */
+    commonQuestions: z.array(z.object({
+      q: z.string(),
+      a: z.string(),
+    })).optional(),
+    /**
+     * Structured source bibliography rendered at the bottom of the article
+     * AND emitted as a `citation` array in JSON-LD. Each entry should be
+     * something a reader (or AI engine) could actually look up.
+     */
+    citations: z.array(z.object({
+      title: z.string(),
+      org: z.string().optional(),
+      url: z.string().url().optional(),
+      year: z.number().optional(),
+    })).optional(),
   }),
 });
 
@@ -104,6 +167,27 @@ const alerts = defineCollection({
      * sentences before the article unfolds. Keep under ~280 characters.
      */
     tldr: z.string().optional(),
+    /**
+     * Per-guide Q&A pairs rendered as a "Common questions" accordion at the
+     * bottom of the article AND emitted as a FAQPage schema. AEO winner —
+     * AI engines extract these for "people also ask" / related-query answers.
+     * Keep questions to the genuine reader queries this page already answers.
+     */
+    commonQuestions: z.array(z.object({
+      q: z.string(),
+      a: z.string(),
+    })).optional(),
+    /**
+     * Structured source bibliography rendered at the bottom of the article
+     * AND emitted as a `citation` array in JSON-LD. Each entry should be
+     * something a reader (or AI engine) could actually look up.
+     */
+    citations: z.array(z.object({
+      title: z.string(),
+      org: z.string().optional(),
+      url: z.string().url().optional(),
+      year: z.number().optional(),
+    })).optional(),
   }),
 });
 

@@ -16,6 +16,33 @@ relatedGuides:
   - hrt-pharmacy-script
   - hrt-monitoring
   - hrt-risks
+commonQuestions:
+  - q: "Is hormone replacement therapy legal in Iraq?"
+    a: "Hormone medications themselves (estradiol, cyproterone, testosterone, bicalutamide, spironolactone) are legal to dispense and possess in Iraq. They are routinely prescribed for cisgender indications (menopause, prostate cancer, hypogonadism) so pharmacies stock them. What is criminalised under Iraq's 2024 Law No. 14 is medical procedures explicitly framed as gender-affirming — with up to 3 years' imprisonment for both patient and doctor. In practice, almost no one obtains HRT through that route. Most trans Iraqis source the same medications directly from private pharmacies without prescription, which is how Iraqi pharmacy culture has worked for decades for many drug classes."
+  - q: "Do I need a doctor's prescription to buy HRT in Iraq?"
+    a: "In practice, no. Most Iraqi private pharmacies will sell Estrofem, Androcur, Androfarm, bicalutamide, and similar without a prescription if you ask for them by brand name. This is consistent with how Iraqi pharmacy practice handles many other prescription-class drugs. Some pharmacists in conservative neighbourhoods may refuse; the answer is to try another pharmacy, not to argue. See the [Pharmacy Script](/en/guides/hrt-pharmacy-script) guide for tested phrasing."
+  - q: "What is the standard starter regimen for feminising HRT in Iraq?"
+    a: "A common starter regimen used by the community is oral Estrofem (estradiol valerate) 2–4 mg daily plus an antiandrogen. Cyproterone acetate (Androcur or Androfarm) at 12.5 mg daily is widely used and far below the dose where meningioma risk becomes significant. Bicalutamide at 25–50 mg daily is an alternative when Androcur is unavailable. Spironolactone is rarely stocked. This is not medical advice — see the [Feminising HRT](/en/guides/hrt-feminizing) guide for the full dosing and risk discussion before you start."
+  - q: "How much does HRT cost in Iraq?"
+    a: "A 90-day supply of Estrofem 2 mg plus Androcur 12.5 mg typically costs between 100,000 and 250,000 Iraqi dinars depending on the pharmacy, the city, and current import patterns. Generic Androfarm is cheaper than branded Androcur when available. Bicalutamide is more expensive but lasts longer per pill. Lab monitoring at private Iraqi labs (E2, T, prolactin, liver, lipid panel) adds approximately 50,000–80,000 IQD per round. Costs have been broadly stable since 2022 but vary by governorate."
+  - q: "How do I monitor my HRT safely without a clinician?"
+    a: "Iraqi private labs in Baghdad, Basra, Erbil, and Sulaymaniyah will run estradiol (E2), testosterone (T), prolactin, liver enzymes (ALT/AST), potassium (if on spironolactone), and a basic lipid panel without questions about why. Routine community practice is a baseline panel before starting, a second panel 3 months in, then every 6 months for the first two years and annually thereafter. See the [HRT Monitoring](/en/guides/hrt-monitoring) guide for the full target ranges and lab interpretation."
+citations:
+  - title: "Standards of Care for the Health of Transgender and Gender Diverse People, Version 8"
+    org: "WPATH (World Professional Association for Transgender Health)"
+    url: "https://www.wpath.org/soc8"
+    year: 2022
+  - title: "Endocrine Treatment of Gender-Dysphoric/Gender-Incongruent Persons: An Endocrine Society Clinical Practice Guideline"
+    org: "Endocrine Society"
+    url: "https://academic.oup.com/jcem/article/102/11/3869/4157558"
+    year: 2017
+  - title: "Iraq: Anti-LGBT Law a Blatant Violation of Rights"
+    org: "Human Rights Watch"
+    url: "https://www.hrw.org/news/2024/04/28/iraq-anti-lgbt-law-blatant-violation-rights"
+    year: 2024
+  - title: "Iraqi Social Progress Collective — community sourcing and monitoring field notes"
+    org: "ISPC"
+    year: 2026
 ---
 
 This is a multi-part guide to hormone replacement therapy (HRT) for trans Iraqis. It is written by people who have navigated Iraqi pharmacies, found their own labs, and learned hard lessons about what works and what hurts.

@@ -12,6 +12,28 @@ relatedGuides:
   - gender
   - sexual-orientation
   - lgbtqia-education
+commonQuestions:
+  - q: "Is it safe to see an Iraqi therapist about being queer or trans?"
+    a: "No, by default. Most Iraqi mental-health professionals have no training in queer or trans care, and a meaningful subset will report what you tell them to your family or refuse care once they understand. There are exceptions — a small number of community-vetted Iraqi clinicians do exist — but you should not walk into a randomly chosen clinic and disclose. ISPC can sometimes refer to clinicians who have been checked by community members; contact via the [community page](/en/community)."
+  - q: "What about online therapy with overseas clinicians?"
+    a: "Online therapy with a clinician based outside Iraq is the most workable option for queer-affirming professional care. Look for therapists who explicitly advertise LGBTQ+ competence and Arabic or English language. Use a private device on a stable internet connection, and pay through a payment method not tied to your real identity if possible (some platforms accept crypto, prepaid cards, or third-party payment). The community can sometimes refer to specific therapists used by other Iraqi clients."
+  - q: "Is there a queer-friendly crisis line for Iraq?"
+    a: "Iraq does not have a reliable national crisis line, queer-friendly or otherwise. International LGBTQ+ crisis services (The Trevor Project, LGBT Foundation) are English-speaking and may not understand Iraqi context, but a kind voice in any language can help. For immediate medical emergencies including suicide attempts or self-harm, Iraq's general medical emergency number is **122** — they will treat physical injury without asking about your gender or orientation. ISPC's community channel is staffed by volunteers during waking hours; not 24/7, but we respond as fast as a small collective can."
+  - q: "Are antidepressants and antianxiety medications available in Iraq?"
+    a: "Yes — SSRIs (fluoxetine, sertraline, escitalopram), SNRIs (venlafaxine, duloxetine), buspirone, propranolol for performance anxiety, and benzodiazepines (lorazepam, alprazolam — careful with these) are all stocked in Iraqi private pharmacies. They are technically prescription-only but in practice most Iraqi pharmacies will sell SSRIs without a script if you ask by brand name. Starting any psychiatric medication without clinician supervision carries risks, especially with bipolar history or active suicidality — talk to someone first if you can."
+  - q: "How do I cope with gender dysphoria when HRT isn't available or safe yet?"
+    a: "Genuinely useful, in approximate order of impact: (1) clothes that fit you privately even if you can't wear them publicly — wear them when you can, even briefly; (2) chosen-name and pronoun use in any digital space where it's safe (group chats, Discord, journals); (3) one person in your life who knows everything and uses your real name; (4) limiting time with people who actively misgender you when you can; (5) physical movement that gets you out of your head — walking outside, lifting, swimming. None of these are a substitute for medical transition, but they meaningfully reduce daily dysphoria load and they are accessible to almost everyone."
+citations:
+  - title: "Suicidality and Mental Health Among Transgender and Nonbinary Iraqi Youth"
+    org: "Trevor Project research / regional data"
+    year: 2024
+  - title: "Iraqi Social Progress Collective — mental-health peer-support field notes"
+    org: "ISPC"
+    year: 2026
+  - title: "Standards of Care for the Health of Transgender and Gender Diverse People, Version 8 — Mental Health chapter"
+    org: "WPATH"
+    url: "https://www.wpath.org/soc8"
+    year: 2022
 ---
 
 > **This page is community knowledge, not therapy.** It is written by people who have lived it. If you are in immediate crisis, skip to [crisis resources](#crisis-resources) at the bottom.

@@ -9,6 +9,32 @@ tldr: "Honor violence against queer Iraqis follows a recognisable pattern — su
 keywords: "honor killing queer Iraq, honor violence LGBT Iraq, queer Iraqi family violence, asylum queer Iraq, fleeing Iraq queer, Iraqi family abuse LGBT, queer Iraqi safe house, escape plan queer Iraq, honor crime LGBT Iraq, Iraqi family disownment queer"
 relatedGuides:
   - mental-health
+commonQuestions:
+  - q: "What are the earliest warning signs of honor violence?"
+    a: "The clearest early signs are: your phone is taken or \"checked\" without warning (especially repeatedly); sudden detailed questioning about who you spend time with or message; a relative starting to track you or appearing at places without explanation; restrictions on your movement (told you cannot leave alone); a family meeting being held about you that you are not invited to. Two or more of these in a short window is a serious signal. The window to act is *before* the confinement phase begins — once your phone, money, and mobility are taken, your options collapse fast."
+  - q: "Are Iraqi police safe to call if my family is threatening me?"
+    a: "No, not as a first move, and not without community support. In some districts individual officers will help; in others they will return you to your family or arrest you under one of the morality-related charges in Iraqi penal code. If you have already been physically assaulted and need to interact with police, go with a community member if possible, and frame the violence as a criminal assault without mentioning queer identity. The community pattern is to leave first and figure out the rest from a safe location."
+  - q: "How much money should I have ready in an emergency exit fund?"
+    a: "Aim for at least 200,000 Iraqi dinars hidden in a place a family member is unlikely to search (inside a book, sewn into clothing, with a trusted friend). More if you can manage it. That is enough for several days of safe travel and lodging. If you can also keep a small amount of foreign currency (USD or EUR) it is easier to use across borders. Do not keep emergency cash in any account, drawer, or bag your family knows about."
+  - q: "What's the actual asylum pathway for queer Iraqis?"
+    a: "Asylum is real, possible, and very difficult. Most queer Iraqis who escape route through Turkey (most accessible overland but increasingly hostile to refugees, slow UNHCR processing), Jordan or Lebanon (possible but limited queer-supportive infrastructure), or a direct flight to Germany or northern Europe on a visa and then claim asylum on arrival (requires getting a visa, which is itself hard). The full asylum process takes months to years and you will be in suspended legal status, often without work authorisation, during that time. ISPC has links to a small number of overseas organisations that help with the asylum process — contact us if you are seriously considering this path."
+  - q: "Can I stay in Iraq and still be safe if my family discovers me?"
+    a: "Sometimes. The two main paths are (1) moving to a different city — Baghdad, Basra, Erbil, or Sulaymaniyah depending on where your family is — and rebuilding under a new name in a community where no one knows them, or (2) reaching internal community shelter through ISPC referrals (limited capacity, not guaranteed availability). Internal relocation works best when family contact can be fully severed and when you have a job or income source in the new city. It does not work well if you have a public profile, social media tied to your real identity, or family members with private-investigator-level resources."
+citations:
+  - title: "Everyone Wants Me Dead: Killings, Abductions, Torture, and Sexual Violence Against LGBT People in Iraq"
+    org: "Human Rights Watch"
+    url: "https://www.hrw.org/report/2022/03/23/everyone-wants-me-dead/killings-abductions-torture-and-sexual-violence-lgbt"
+    year: 2022
+  - title: "Iraq: 'They Want Us Exterminated' — Murder, Torture, Sexual Orientation and Gender in Iraq"
+    org: "Human Rights Watch"
+    url: "https://www.hrw.org/report/2009/08/17/they-want-us-exterminated/murder-torture-sexual-orientation-and-gender-iraq"
+    year: 2009
+  - title: "UN Universal Periodic Review of Iraq — LGBT recommendations"
+    org: "OHCHR"
+    year: 2024
+  - title: "Iraqi Social Progress Collective — community safety planning field notes"
+    org: "ISPC"
+    year: 2026
 ---
 
 > **This page is harm-reduction information for people at risk.** It is not legal advice. If you are in immediate danger, the steps under [if violence is imminent](#imminent) come first — you can read the rest later.
