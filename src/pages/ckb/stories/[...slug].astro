@@ -1,27 +1,117 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ArticleLayout from '@layouts/ArticleLayout.astro';
+import Callout from '@components/Callout.astro';
 import CkbStub from '@components/CkbStub.astro';
-import { getSlugFromId } from '@lib/collections';
+import TranslationBanner from '@components/TranslationBanner.astro';
+import { estimateReadingTime, getSlugFromId } from '@lib/collections';
+import { t, localizedPath } from '@i18n/utils';
+import {
+  buildArticleSchema,
+  buildBreadcrumbList,
+  buildPersonSchema,
+  combineSchemas,
+  type JsonLdContext,
+} from '@lib/jsonld';
 
 export async function getStaticPaths() {
   const ckb = await getCollection('stories', (e: CollectionEntry<'stories'>) => e.data.lang === 'ckb' && !e.data.draft);
   const ar = await getCollection('stories', (e: CollectionEntry<'stories'>) => e.data.lang === 'ar' && !e.data.draft);
   const realCkbSlugs = new Set(ckb.map((s) => getSlugFromId(s.id)));
-  return ar
+
+  const realPaths = ckb.map((story) => ({
+    params: { slug: getSlugFromId(story.id) },
+    props: { kind: 'real' as const, story },
+  }));
+
+  const stubPaths = ar
     .filter((s) => !realCkbSlugs.has(getSlugFromId(s.id)))
     .map((s) => {
       const slug = getSlugFromId(s.id);
-      return { params: { slug }, props: { slug, title: s.data.title } };
+      return {
+        params: { slug },
+        props: { kind: 'stub' as const, slug, title: s.data.title },
+      };
     });
+
+  return [...realPaths, ...stubPaths];
 }
 
-interface Props {
-  slug: string;
-  title: string;
-}
+type Props =
+  | { kind: 'real'; story: CollectionEntry<'stories'> }
+  | { kind: 'stub'; slug: string; title: string };
 
-const { slug, title } = Astro.props as Props;
-const arHref = `/ar/stories/${slug}`;
+const props = Astro.props as Props;
+
+const lang = 'ckb' as const;
+
+let Content: any = null;
+let story: CollectionEntry<'stories'> | null = null;
+let readingTime = 0;
+let byline = '';
+let jsonLd: Record<string, unknown> | null = null;
+let articleMeta: { publishedTime: string; section?: string; tags?: string[] } | undefined;
+let arHref = '';
+let showBanner = false;
+
+if (props.kind === 'real') {
+  story = props.story;
+  ({ Content } = await render(story));
+  readingTime = estimateReadingTime(story.body ?? '');
+  byline = story.data.anonymous
+    ? t(lang, 'stories.anonymous')
+    : (story.data.pseudonym ?? t(lang, 'stories.anonymous'));
+
+  const siteUrl = new URL('/', Astro.site).href;
+  const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+  const ctx: JsonLdContext = { lang, pageUrl, siteUrl, siteName: 'کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراق' };
+
+  const articleSchema = {
+    ...(buildArticleSchema(story as unknown as CollectionEntry<'news'>, ctx) as Record<string, unknown>),
+    author: buildPersonSchema(story, ctx),
+  };
+
+  jsonLd = combineSchemas(
+    articleSchema,
+    buildBreadcrumbList([
+      { name: t(lang, 'nav.home'), url: new URL(localizedPath(lang, '/'), Astro.site).href },
+      { name: t(lang, 'nav.stories'), url: new URL(localizedPath(lang, '/stories'), Astro.site).href },
+      { name: story.data.title, url: pageUrl },
+    ]),
+  );
+
+  articleMeta = {
+    publishedTime: story.data.pubDate.toISOString(),
+    section: 'stories',
+    tags: story.data.keywords?.split(',').map((s) => s.trim()).filter(Boolean),
+  };
+
+  arHref = localizedPath('ar', `/stories/${getSlugFromId(story.id)}`);
+  showBanner = story.data.translationStatus !== 'native';
+}
 ---
 
-<CkbStub title={title} arHref={arHref} pageLabel="چیرۆک" />
+{props.kind === 'stub' ? (
+  <CkbStub title={props.title} arHref={`/ar/stories/${props.slug}`} pageLabel="چیرۆک" />
+) : (
+  <ArticleLayout
+    title={story!.data.title}
+    description={story!.data.description}
+    lang={lang}
+    pubDate={story!.data.pubDate}
+    readingTime={readingTime}
+    jsonLd={jsonLd}
+    keywords={story!.data.keywords}
+    ogImage="/og-story.png"
+    article={articleMeta}
+  >
+    {showBanner && <TranslationBanner lang={lang} arHref={arHref} />}
+    {story!.data.contentWarning && (
+      <Callout type="warning">
+        <strong>{t(lang, 'stories.contentWarning')}:</strong> {story!.data.contentWarning}
+      </Callout>
+    )}
+    <p class="text-sm text-muted italic mb-6">— {byline}</p>
+    <Content />
+  </ArticleLayout>
+)}

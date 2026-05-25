@@ -16,6 +16,12 @@ const guides = defineCollection({
     relatedGuides: z.array(z.string()).optional(),
     keywords: z.string().optional(),
     draft: z.boolean().default(false),
+    /**
+     * Translation provenance. `native` hides the machine-translation
+     * banner on CKB pages; any other value (or unset on a CKB page)
+     * shows the banner naming the AR canonical.
+     */
+    translationStatus: z.enum(['native', 'machine-pending-review', 'machine-reviewed']).optional(),
   }),
 });
 
@@ -31,6 +37,7 @@ const stories = defineCollection({
     pseudonym: z.string().optional(),
     keywords: z.string().optional(),
     draft: z.boolean().default(false),
+    translationStatus: z.enum(['native', 'machine-pending-review', 'machine-reviewed']).optional(),
   }),
 });
 
@@ -45,6 +52,7 @@ const news = defineCollection({
     sourceUrl: z.string().url().optional(),
     keywords: z.string().optional(),
     draft: z.boolean().default(false),
+    translationStatus: z.enum(['native', 'machine-pending-review', 'machine-reviewed']).optional(),
   }),
 });
 
@@ -67,6 +75,7 @@ const alerts = defineCollection({
     affected: z.string().optional(),
     keywords: z.string().optional(),
     draft: z.boolean().default(false),
+    translationStatus: z.enum(['native', 'machine-pending-review', 'machine-reviewed']).optional(),
   }),
 });
 

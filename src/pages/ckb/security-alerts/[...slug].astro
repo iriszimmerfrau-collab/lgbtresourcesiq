@@ -1,27 +1,144 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
 import CkbStub from '@components/CkbStub.astro';
-import { getSlugFromId } from '@lib/collections';
+import TranslationBanner from '@components/TranslationBanner.astro';
+import { t, localizedPath } from '@i18n/utils';
+import { getSlugFromId, estimateReadingTime } from '@lib/collections';
+import { buildAlertNewsArticleSchema, buildBreadcrumbList, combineSchemas, type JsonLdContext } from '@lib/jsonld';
 
 export async function getStaticPaths() {
   const ckb = await getCollection('alerts', (e: CollectionEntry<'alerts'>) => e.data.lang === 'ckb' && !e.data.draft);
   const ar = await getCollection('alerts', (e: CollectionEntry<'alerts'>) => e.data.lang === 'ar' && !e.data.draft);
   const realCkbSlugs = new Set(ckb.map((a) => getSlugFromId(a.id)));
-  return ar
+
+  const realPaths = ckb.map((alert) => ({
+    params: { slug: getSlugFromId(alert.id) },
+    props: { kind: 'real' as const, alert },
+  }));
+
+  const stubPaths = ar
     .filter((a) => !realCkbSlugs.has(getSlugFromId(a.id)))
     .map((a) => {
       const slug = getSlugFromId(a.id);
-      return { params: { slug }, props: { slug, title: a.data.title } };
+      return {
+        params: { slug },
+        props: { kind: 'stub' as const, slug, title: a.data.title },
+      };
     });
+
+  return [...realPaths, ...stubPaths];
 }
 
-interface Props {
-  slug: string;
-  title: string;
-}
+type Props =
+  | { kind: 'real'; alert: CollectionEntry<'alerts'> }
+  | { kind: 'stub'; slug: string; title: string };
 
-const { slug, title } = Astro.props as Props;
-const arHref = `/ar/security-alerts/${slug}`;
+const props = Astro.props as Props;
+const lang = 'ckb' as const;
+
+const severityChrome: Record<string, string> = {
+  critical: 'bg-exit-red text-white',
+  high: 'bg-terracotta text-white',
+  medium: 'bg-saffron text-navy',
+  low: 'bg-lavender text-white',
+  info: 'bg-navy/15 text-navy',
+};
+
+let Content: any = null;
+let alert: CollectionEntry<'alerts'> | null = null;
+let readingTime = 0;
+let jsonLd: Record<string, unknown> | null = null;
+let ogImage = '/og-alert-info.png';
+let articleMeta: { publishedTime: string; section?: string; tags?: string[] } | undefined;
+let arHref = '';
+let showBanner = false;
+
+if (props.kind === 'real') {
+  alert = props.alert;
+  ({ Content } = await render(alert));
+  readingTime = estimateReadingTime(alert.body ?? '');
+
+  const siteUrl = new URL('/', Astro.site).href;
+  const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+  const ctx: JsonLdContext = { lang, pageUrl, siteUrl, siteName: 'کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراق' };
+
+  jsonLd = combineSchemas(
+    buildAlertNewsArticleSchema(alert, ctx),
+    buildBreadcrumbList([
+      { name: t(lang, 'nav.home'), url: new URL(localizedPath(lang, '/'), Astro.site).href },
+      { name: t(lang, 'alerts.title'), url: new URL(localizedPath(lang, '/security-alerts'), Astro.site).href },
+      { name: alert.data.title, url: pageUrl },
+    ]),
+  );
+
+  ogImage =
+    alert.data.severity === 'critical' || alert.data.severity === 'high'
+      ? '/og-alert-critical.png'
+      : '/og-alert-info.png';
+
+  articleMeta = {
+    publishedTime: alert.data.pubDate.toISOString(),
+    section: alert.data.category,
+    tags: alert.data.keywords?.split(',').map((s) => s.trim()).filter(Boolean),
+  };
+
+  arHref = localizedPath('ar', `/security-alerts/${getSlugFromId(alert.id)}`);
+  showBanner = alert.data.translationStatus !== 'native';
+}
 ---
 
-<CkbStub title={title} arHref={arHref} pageLabel="هۆشداری ئاسایشی" />
+{props.kind === 'stub' ? (
+  <CkbStub title={props.title} arHref={`/ar/security-alerts/${props.slug}`} pageLabel="هۆشداری ئاسایشی" />
+) : (
+  <BaseLayout
+    title={alert!.data.title}
+    description={alert!.data.description}
+    lang={lang}
+    ogType="article"
+    jsonLd={jsonLd}
+    keywords={alert!.data.keywords}
+    articleWidth
+    ogImage={ogImage}
+    article={articleMeta}
+  >
+    <article class="prose">
+      <header class="mb-8">
+        <SectionDivider />
+        <p class="text-xs mb-3">
+          <a href={localizedPath(lang, '/security-alerts')} class="text-muted no-underline hover:text-terracotta">→ {t(lang, 'alerts.title')}</a>
+        </p>
+        <div class="flex items-center gap-2 flex-wrap mb-3 text-xs">
+          <span class={`inline-block px-2.5 py-1 font-bold tracking-wider uppercase ${severityChrome[alert!.data.severity]}`}>
+            {t(lang, `alerts.severity.${alert!.data.severity}` as any)}
+          </span>
+          <span class="text-muted font-mono uppercase tracking-wider">{t(lang, `alerts.category.${alert!.data.category}` as any)}</span>
+        </div>
+        <h1>{alert!.data.title}</h1>
+        <div class="flex flex-wrap gap-4 text-sm text-muted mt-3">
+          <time datetime={alert!.data.pubDate.toISOString()}>
+            {alert!.data.pubDate.toLocaleDateString('ckb-IQ', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          <span>{readingTime} {t(lang, 'guides.readTime')}</span>
+          {alert!.data.affected && <span>{t(lang, 'alerts.label.affected')}: <strong class="text-body">{alert!.data.affected}</strong></span>}
+        </div>
+      </header>
+
+      {showBanner && <TranslationBanner lang={lang} arHref={arHref} />}
+
+      <Content />
+
+      {alert!.data.source && (
+        <footer class="mt-12 pt-6 border-t border-muted/20 text-sm text-muted">
+          <p>
+            <strong>{t(lang, 'alerts.label.source')}:</strong>{' '}
+            {alert!.data.sourceUrl
+              ? <a href={alert!.data.sourceUrl} target="_blank" rel="noopener noreferrer">{alert!.data.source} — {t(lang, 'alerts.label.original')}</a>
+              : alert!.data.source}
+          </p>
+        </footer>
+      )}
+    </article>
+  </BaseLayout>
+)}
