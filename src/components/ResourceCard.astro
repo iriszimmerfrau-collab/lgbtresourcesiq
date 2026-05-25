@@ -1,0 +1,55 @@
+---
+/**
+ * External community resource card. Renders a labeled link card with a
+ * platform badge, a title, a 1-line description, and the URL host.
+ *
+ * Used on /community to surface Discord, Reddit, YouTube and similar
+ * third-party spaces alongside per-platform safety wrappers. Anchors
+ * always include rel="noopener noreferrer nofollow" — we list these
+ * but we do not vouch for their content moderation.
+ */
+type Platform = 'Discord' | 'Reddit' | 'YouTube';
+
+interface Props {
+  platform: Platform;
+  url: string;
+  title: string;
+  description: string;
+}
+
+const { platform, url, title, description } = Astro.props;
+
+// Color-coded platform chip using existing palette tokens
+const chipClass: Record<Platform, string> = {
+  Discord: 'bg-lavender/15 text-lavender border-lavender/30',
+  Reddit: 'bg-terracotta/15 text-terracotta border-terracotta/30',
+  YouTube: 'bg-exit-red/10 text-exit-red border-exit-red/30',
+};
+
+let host = '';
+try {
+  host = new URL(url).host.replace(/^www\./, '');
+} catch {
+  host = url;
+}
+---
+
+<a
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer nofollow"
+  class="not-prose block no-underline group"
+>
+  <article class="relative bg-white border-2 border-navy/10 p-4 transition-all duration-200 group-hover:border-navy/30 group-hover:-translate-y-0.5 group-hover:shadow-[3px_3px_0_0_rgba(13,27,46,0.12)]">
+    <div class="flex items-center justify-between gap-3 mb-2">
+      <span class={`inline-block px-2 py-0.5 text-xs font-bold tracking-wider uppercase border ${chipClass[platform]}`}>
+        {platform}
+      </span>
+      <span class="text-xs text-muted/70 font-mono truncate" aria-hidden="true">{host}</span>
+    </div>
+    <h4 class="text-base font-bold text-navy mb-1 group-hover:text-magenta transition-colors leading-tight">
+      {title}
+    </h4>
+    <p class="text-sm text-muted leading-snug">{description}</p>
+  </article>
+</a>

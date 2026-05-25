@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionDivider from '@components/SectionDivider.astro';
+import Callout from '@components/Callout.astro';
+import ResourceCard from '@components/ResourceCard.astro';
 
 const lang = 'ar' as const;
 ---
@@ -116,5 +118,94 @@ const lang = 'ar' as const;
       صوتك مهم، وقصتك قد تساعد شخصاً آخر يشعر بأنه وحيد. شاركها إن
       أردت، بالطريقة التي تناسبك.
     </p>
+
+    <!-- ===== External Resources ===== -->
+    <hr />
+    <h2 id="external-resources">فضاءات مجتمعية خارجية</h2>
+
+    <Callout type="warning">
+      هذه فضاءات مجتمعية خارجية، <strong>ليست تابعة للتجمع</strong>. نُدرجها لأن
+      عراقيين كويريين يتجمعون فيها — لكن كل منصة تجمع بيانات مختلفة عنك،
+      وما تنشره هناك خارج حمايتنا. اقرأ تحذير كل منصة أدناه قبل الانضمام.
+      <strong>استخدم VPN. لا تستخدم اسمك الحقيقي، ولا رقم هاتفك الحقيقي،
+      ولا أي صورة قد تكشف هويتك. أنشئ حساباً جديداً مستعاراً لم تستخدمه
+      في أي مكان آخر.</strong>
+    </Callout>
+
+    <h3>Discord</h3>
+    <p>
+      Discord يطلب التحقق برقم الهاتف في كثير من السيرفرات — <strong>هذا قد
+      يُسرّب رقم هاتفك العراقي إلى Discord، وفي خروقات سابقة إلى مستخدمين
+      آخرين</strong>. استخدم رقماً افتراضياً أو غير عراقي إن أمكن. الرسائل
+      تبقى محفوظة على خوادم Discord إلى أجل غير مسمى. الدردشة الصوتية تكشف
+      صوتك. صور الملف الشخصي مرئية لكل عضو في السيرفر. إن انضممت، استخدم
+      حساباً لم تستخدمه في أي مكان آخر.
+    </p>
+    <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 my-4">
+      <ResourceCard
+        platform="Discord"
+        url="https://discord.gg/hCwyVwFB"
+        title="سيرفر عراقي كويري"
+        description="واحد من ثلاثة سيرفرات Discord مُدرَجة من المشرف، تجمع عراقيين كويريين. التجمع لا يدير هذا السيرفر."
+      />
+      <ResourceCard
+        platform="Discord"
+        url="https://discord.gg/mazVfWbd7u"
+        title="سيرفر عراقي كويري"
+        description="واحد من ثلاثة سيرفرات Discord مُدرَجة من المشرف، تجمع عراقيين كويريين. التجمع لا يدير هذا السيرفر."
+      />
+      <ResourceCard
+        platform="Discord"
+        url="https://discord.gg/2hfjUDBAy"
+        title="سيرفر عراقي كويري"
+        description="واحد من ثلاثة سيرفرات Discord مُدرَجة من المشرف، تجمع عراقيين كويريين. التجمع لا يدير هذا السيرفر."
+      />
+    </div>
+
+    <h3>Reddit</h3>
+    <p>
+      Reddit يسجّل عنوان IP الخاص بك. سجل تعليقاتك وتصويتاتك بالكامل
+      <strong>محفوظ علناً</strong> — بما في ذلك من قبل أطراف ثالثة تنسخ
+      محتوى Reddit. أي حساب استخدمته في مكان آخر يمكن ربطه بأي شيء تقوله
+      هناك. أنشئ حساباً مؤقتاً جديداً خلف VPN، لا تربطه أبداً بأي حساب
+      يعرف هويتك الحقيقية، ولا تنشر أبداً ما لا تريد أن يظهر بعد سنوات.
+    </p>
+    <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 my-4">
+      <ResourceCard
+        platform="Reddit"
+        url="https://www.reddit.com/r/iraqpride/"
+        title="r/iraqpride"
+        description="مجتمع subreddit للفخر العراقي — نقاش ودعم وتجارب مشتركة. المنشورات والتعليقات محفوظة علناً."
+      />
+    </div>
+
+    <h3>YouTube</h3>
+    <p>
+      المشاهدة لا تتطلب حساباً، لكن <strong>التعليق أو الإعجاب أو الاشتراك
+      يتطلب حساب Google</strong> — وGoogle يسجّل كل مشاهدة موقّعة ضد هويتك
+      الحقيقية. شاهد بدون تسجيل دخول، أو في نافذة خاصة / تصفح متخفٍ خلف
+      VPN، إن أردت إبقاء سجل مشاهداتك بعيداً عن ملف Google الشخصي. لا
+      تعلّق من أي حساب مرتبط بهويتك الحقيقية.
+    </p>
+    <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 my-4">
+      <ResourceCard
+        platform="YouTube"
+        url="https://www.youtube.com/@ZFVelvetIris"
+        title="@ZFVelvetIris (القناة)"
+        description="منشئ محتوى عراقي كويري. فيديوهات بالعربية والإنجليزية حول الهوية والعائلة والنجاة."
+      />
+      <ResourceCard
+        platform="YouTube"
+        url="https://youtu.be/6pK6ocmt6ZI"
+        title="فيديو مختار"
+        description="فيديو منتقى من @ZFVelvetIris."
+      />
+      <ResourceCard
+        platform="YouTube"
+        url="https://youtu.be/VtwTQYLHK1A"
+        title="فيديو مختار"
+        description="فيديو منتقى من @ZFVelvetIris."
+      />
+    </div>
   </section>
 </BaseLayout>

@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionDivider from '@components/SectionDivider.astro';
+import Callout from '@components/Callout.astro';
+import ResourceCard from '@components/ResourceCard.astro';
 
 const lang = 'en' as const;
 ---
@@ -118,5 +120,97 @@ const lang = 'en' as const;
       Your voice matters, and your story may help someone else who feels alone.
       Share it if you want to, in the way that works for you.
     </p>
+
+    <!-- ===== External Resources ===== -->
+    <hr />
+    <h2 id="external-resources">External community resources</h2>
+
+    <Callout type="warning">
+      These are <strong>external community spaces, not run by ISPC</strong>. We
+      list them because Iraqi queer people gather there — but each platform
+      collects different data about you, and what you post there is outside our
+      protection. Read each platform's warning below before joining.
+      <strong>Use a VPN. Never use your real name, real phone number, or any
+      photo that could identify you. Create a fresh pseudonymous account that you
+      have never used elsewhere.</strong>
+    </Callout>
+
+    <h3>Discord</h3>
+    <p>
+      Discord requires phone verification on many servers — <strong>this can leak
+      your Iraqi phone number to Discord and, in past breaches, to other users</strong>.
+      Use a virtual / non-Iraqi number if possible. Messages persist indefinitely
+      on Discord's servers. Voice chat reveals your voice. Profile pictures are
+      visible to every server member. If you join, use an account you have never
+      used elsewhere.
+    </p>
+    <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 my-4">
+      <ResourceCard
+        platform="Discord"
+        url="https://discord.gg/hCwyVwFB"
+        title="Iraqi queer community server"
+        description="One of three operator-listed Discord servers gathering queer Iraqis. ISPC does not moderate this server."
+      />
+      <ResourceCard
+        platform="Discord"
+        url="https://discord.gg/mazVfWbd7u"
+        title="Iraqi queer community server"
+        description="One of three operator-listed Discord servers gathering queer Iraqis. ISPC does not moderate this server."
+      />
+      <ResourceCard
+        platform="Discord"
+        url="https://discord.gg/2hfjUDBAy"
+        title="Iraqi queer community server"
+        description="One of three operator-listed Discord servers gathering queer Iraqis. ISPC does not moderate this server."
+      />
+    </div>
+
+    <h3>Reddit</h3>
+    <p>
+      Reddit logs your IP address. Your full comment and voting history is
+      <strong>publicly archived</strong> — including by third parties that mirror
+      Reddit. An account you have used elsewhere can be cross-referenced against
+      anything you say there. Create a fresh throwaway account behind a VPN,
+      never link it to any account that knows your real identity, and never post
+      anything you would not want surfaced years later.
+    </p>
+    <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 my-4">
+      <ResourceCard
+        platform="Reddit"
+        url="https://www.reddit.com/r/iraqpride/"
+        title="r/iraqpride"
+        description="Iraqi pride subreddit — discussion, support, and shared experiences. Posts and comments are publicly archived."
+      />
+    </div>
+
+    <h3>YouTube</h3>
+    <p>
+      Watching does not require an account, but <strong>commenting, liking, or
+      subscribing requires a Google account</strong> — and Google logs every
+      signed-in watch against your real identity. Watch logged out, or in a
+      private / incognito window behind a VPN, if you want to keep your watch
+      history out of your Google profile. Do not comment from any account tied
+      to your real identity.
+    </p>
+    <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 my-4">
+      <ResourceCard
+        platform="YouTube"
+        url="https://www.youtube.com/@ZFVelvetIris"
+        title="@ZFVelvetIris (channel)"
+        description="Iraqi queer creator. Videos in Arabic and English on identity, family, and survival."
+      />
+      <ResourceCard
+        platform="YouTube"
+        url="https://youtu.be/6pK6ocmt6ZI"
+        title="Featured video"
+        description="Selected video from @ZFVelvetIris."
+      />
+      <ResourceCard
+        platform="YouTube"
+        url="https://youtu.be/VtwTQYLHK1A"
+        title="Featured video"
+        description="Selected video from @ZFVelvetIris."
+      />
+    </div>
   </section>
 </BaseLayout>

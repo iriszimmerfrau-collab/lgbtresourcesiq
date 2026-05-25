@@ -97,6 +97,10 @@ The site maintains a curated and continuously-updated security alerts feed for L
 - [Online platform blocking history (Grindr, Telegram)](https://ispc-iq.org/en/security-alerts/online-platform-blocking-history)
 - [UN UPR 2024 — 17 LGBTQ+ recommendations rejected](https://ispc-iq.org/en/security-alerts/un-upr-iraq-2024-recommendations)
 
+## External community resources (third-party, not operated by ISPC)
+
+Discord invites, the r/iraqpride subreddit, and the @ZFVelvetIris YouTube channel are listed at https://ispc-iq.org/en/community#external-resources with per-platform privacy warnings. ISPC does not moderate these spaces; each platform leaks identity differently and the page wraps every link with explicit safety guidance.
+
 ## Optional
 
 - [Stories / القصص (EN)](https://ispc-iq.org/en/stories): Anonymous community stories
