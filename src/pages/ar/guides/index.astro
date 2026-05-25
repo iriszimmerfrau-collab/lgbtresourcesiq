@@ -7,7 +7,7 @@ import { getCollectionByLang, getSlugFromId } from '@lib/collections';
 const lang = 'ar' as const;
 const guides = await getCollectionByLang('guides', lang);
 
-const categoryOrder = ['hrt', 'mental-health', 'safety', 'general'] as const;
+const categoryOrder: readonly string[] = ['hrt', 'mental-health', 'safety', 'identity', 'general'];
 guides.sort((a, b) => {
   const catA = categoryOrder.indexOf(a.data.category);
   const catB = categoryOrder.indexOf(b.data.category);
