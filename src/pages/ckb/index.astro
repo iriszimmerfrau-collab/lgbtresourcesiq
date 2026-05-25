@@ -1,4 +1,80 @@
 ---
-import CkbStub from '@components/CkbStub.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import Card from '@components/Card.astro';
+import TranslationBanner from '@components/TranslationBanner.astro';
+import { t, localizedPath } from '@i18n/utils';
+
+const lang = 'ckb' as const;
 ---
-<CkbStub title="کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراق" arHref="/ar/" pageLabel="پەڕەی سەرەکی" />
+
+<BaseLayout
+  title={t(lang, 'nav.home')}
+  description="کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراق تۆڕێکی هاوکارییە بۆ کوێرە عێراقییەکان. زانیاری، کۆمەڵگا، و هاودەنگی — بە نهێنی."
+  lang={lang}
+  showBanner
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراق',
+    description: 'تۆڕێکی هاوکاریی خەڵکییە بۆ کوێرە عێراقییەکان و کەسانی پرسیارلێکراو لە ناوەوەی عێراق.',
+    url: new URL(localizedPath(lang, '/'), Astro.site).href,
+  }}
+>
+  <TranslationBanner lang={lang} arHref={localizedPath('ar', '/')} />
+
+  <!-- Hero -->
+  <section class="py-16 md:py-24 relative">
+    <div class="max-w-3xl">
+      <SectionDivider />
+      <h1 class="manifesto mb-8">
+        بەرەو <em>شکۆمەندی،</em><br/>پێکەوە.
+      </h1>
+      <p class="text-xl text-muted leading-relaxed mb-10 max-w-2xl">{t(lang, 'home.hero.subtitle')}</p>
+      <div class="flex flex-wrap gap-4">
+        <a href={localizedPath(lang, '/guides')} class="inline-block bg-navy text-cream no-underline px-7 py-4 font-bold text-base tracking-wide hover:bg-magenta hover:-translate-x-1 hover:translate-y-1 transition-all duration-150 shadow-[-5px_5px_0_0_var(--color-magenta)] hover:shadow-[0_0_0_0_var(--color-magenta)]">
+          ← {t(lang, 'home.cta.guides')}
+        </a>
+        <a href={localizedPath(lang, '/community')} class="inline-block border-2 border-navy text-navy no-underline px-7 py-4 font-bold text-base tracking-wide hover:bg-navy hover:text-cream transition-colors">
+          {t(lang, 'home.cta.community')}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three cards -->
+  <section class="py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <Card
+        accent="magenta"
+        title={t(lang, 'home.card.identity.title')}
+        description={t(lang, 'home.card.identity.desc')}
+        href={localizedPath(lang, '/guides')}
+        lang="ckb"
+      />
+      <Card
+        accent="lavender"
+        title={t(lang, 'home.card.health.title')}
+        description={t(lang, 'home.card.health.desc')}
+        href={localizedPath(lang, '/guides')}
+        lang="ckb"
+      />
+      <Card
+        accent="saffron"
+        title={t(lang, 'home.card.safety.title')}
+        description={t(lang, 'home.card.safety.desc')}
+        href={localizedPath(lang, '/safety')}
+        lang="ckb"
+      />
+    </div>
+  </section>
+
+  <!-- About blurb -->
+  <section class="py-12 max-w-2xl">
+    <SectionDivider />
+    <h2 class="text-2xl font-bold mb-4">{t(lang, 'home.about.title')}</h2>
+    <p class="text-muted leading-relaxed mb-4">{t(lang, 'home.about.p1')}</p>
+    <p class="text-muted leading-relaxed mb-4">{t(lang, 'home.about.p2')}</p>
+    <p class="text-muted leading-relaxed">{t(lang, 'home.about.p3')}</p>
+  </section>
+</BaseLayout>

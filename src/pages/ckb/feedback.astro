@@ -1,4 +1,134 @@
 ---
-import CkbStub from '@components/CkbStub.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import TranslationBanner from '@components/TranslationBanner.astro';
+import { t, localizedPath } from '@i18n/utils';
+
+const lang = 'ckb' as const;
 ---
-<CkbStub title="تێبینی بنێرە" arHref="/ar/feedback" pageLabel="تێبینی" />
+
+<BaseLayout
+  title={t(lang, 'feedback.title')}
+  description="تێبینیی نەناسراو بنێرە بۆ کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراق. بێ IP، بێ ناو، بێ بەدواداچوون — تەنیا نامەکەت."
+  lang={lang}
+  articleWidth
+>
+  <section class="prose">
+    <SectionDivider />
+    <h1>{t(lang, 'feedback.title')}</h1>
+
+    <TranslationBanner lang={lang} arHref={localizedPath('ar', '/feedback')} />
+
+    <p>{t(lang, 'feedback.intro')}</p>
+
+    <form id="feedback-form" class="not-prose mt-6 space-y-5" novalidate>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" class="absolute left-[-9999px]" aria-hidden="true" />
+      <div>
+        <label for="fb-category" class="block font-semibold text-sm mb-1">{t(lang, 'feedback.label.category')}</label>
+        <select id="fb-category" name="category" class="w-full p-2 border border-navy/30 bg-white">
+          <option value="bug">{t(lang, 'feedback.cat.bug')}</option>
+          <option value="content">{t(lang, 'feedback.cat.content')}</option>
+          <option value="idea">{t(lang, 'feedback.cat.idea')}</option>
+          <option value="other">{t(lang, 'feedback.cat.other')}</option>
+        </select>
+      </div>
+      <div>
+        <label for="fb-message" class="block font-semibold text-sm mb-1">{t(lang, 'feedback.label.message')}</label>
+        <textarea
+          id="fb-message"
+          name="message"
+          rows="8"
+          required
+          minlength="3"
+          maxlength="4000"
+          placeholder={t(lang, 'feedback.placeholder.message')}
+          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
+        ></textarea>
+      </div>
+      <button
+        type="submit"
+        id="fb-submit"
+        class="px-6 py-3 bg-navy text-cream font-semibold text-sm hover:bg-navy/90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+      >
+        {t(lang, 'feedback.submit')}
+      </button>
+      <p id="fb-status" role="status" aria-live="polite" class="text-sm" hidden></p>
+    </form>
+
+    <p class="mt-6 text-sm text-muted">{t(lang, 'feedback.privacy.note')}</p>
+    <p class="mt-2 text-sm text-muted">
+      پەیامی شیفرەکراو دەخوازیت؟ <a href={localizedPath(lang, '/community')}>لە ڕێگەی XMPP یان ProtonMail پەیوەندیمان پێوەبکە</a>.
+    </p>
+  </section>
+
+  <script
+    is:inline
+    define:vars={{
+      endpoint: 'https://api.ispc-iq.org/feedback',
+      lang,
+      msgSending: t(lang, 'feedback.sending'),
+      msgSuccess: t(lang, 'feedback.success'),
+      msgError: t(lang, 'feedback.error'),
+      msgSubmit: t(lang, 'feedback.submit'),
+      msgVMessage: t(lang, 'feedback.validation.message'),
+    }}
+  >
+    (function () {
+      var form = document.getElementById('feedback-form');
+      var btn = document.getElementById('fb-submit');
+      var status = document.getElementById('fb-status');
+      if (!form || !btn || !status) return;
+
+      function showError(msg) {
+        status.hidden = false;
+        status.textContent = msg;
+        status.className = 'text-sm text-exit-red font-semibold';
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (form.elements['website'].value) {
+          status.hidden = false;
+          status.textContent = msgSuccess;
+          status.className = 'text-sm text-olive font-semibold';
+          form.reset();
+          return;
+        }
+        var data = {
+          category: form.elements['category'].value,
+          message: form.elements['message'].value,
+          lang: lang,
+        };
+        if (!data.message || data.message.trim().length < 3) { showError(msgVMessage); return; }
+        btn.disabled = true;
+        btn.textContent = msgSending;
+        status.hidden = false;
+        status.textContent = msgSending;
+        status.className = 'text-sm text-muted';
+
+        fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        })
+          .then(function (r) {
+            if (!r.ok) throw new Error('http_' + r.status);
+            return r.json();
+          })
+          .then(function () {
+            status.textContent = msgSuccess;
+            status.className = 'text-sm text-olive font-semibold';
+            form.reset();
+            btn.textContent = msgSubmit;
+            btn.disabled = false;
+          })
+          .catch(function () {
+            status.textContent = msgError;
+            status.className = 'text-sm text-exit-red font-semibold';
+            btn.textContent = msgSubmit;
+            btn.disabled = false;
+          });
+      });
+    })();
+  </script>
+</BaseLayout>

@@ -1,4 +1,153 @@
 ---
-import CkbStub from '@components/CkbStub.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionDivider from '@components/SectionDivider.astro';
+import TranslationBanner from '@components/TranslationBanner.astro';
+import { localizedPath } from '@i18n/utils';
+
+const lang = 'ckb' as const;
 ---
-<CkbStub title="تایبەتمەندی" arHref="/ar/privacy" pageLabel="تایبەتمەندی و کۆکردنەوەی داتا" />
+
+<BaseLayout
+  title="تایبەتمەندی و کۆکردنەوەی داتا"
+  description="چ داتایەک ئەم ماڵپەڕە کۆدەکاتەوە، بۆچی، و چۆن ڕەتی بکەیتەوە. پارێزگا و درێژایی سەردانەکە بە شێوەی نەناسراو تەنیا بە ڕەزامەندیی تۆ کۆ دەکەینەوە. هیچ ناونیشانی IP، هیچ کووکی، هیچ بەدواداچوونی لایەنی سێیەم."
+  lang={lang}
+  articleWidth
+>
+  <article class="prose-content py-8">
+    <SectionDivider />
+    <h1 class="text-3xl md:text-4xl font-bold mb-4">تایبەتمەندی و کۆکردنەوەی داتا</h1>
+    <p class="text-muted text-sm mb-8">دوایین نوێکردنەوە: ٢٠٢٦-٠٤-٢٩</p>
+
+    <TranslationBanner lang={lang} arHref={localizedPath('ar', '/privacy')} />
+
+    <h2 class="text-xl font-bold mt-8 mb-3">بە کورتی</h2>
+    <p class="mb-4 leading-relaxed">
+      ئێمە بە شێوەی بنەڕەتی <strong>هیچ شتێک دەربارەی تۆ کۆناکەینەوە</strong>. ئەگەر "ڕێگەپێدان"ت کرد لە سەر شریتی تایبەتمەندی،
+      تەنیا دوو زانیاریی نەناسراو و کۆکراوەی کۆدەکەینەوە:
+    </p>
+    <ul class="list-disc me-6 mb-4 space-y-2">
+      <li><strong>پارێزگاکەت</strong> لە ناوەوەی عێراق — یەک جار بۆ هەر سەردانێک دەردەهێنرێت، و هەرگیز لەگەڵ ناونیشانی IPتدا هەڵناگیرێت.</li>
+      <li>سەردانەکەت چەند خایاندی بە چرکە.</li>
+    </ul>
+    <p class="mb-4 leading-relaxed">
+      ئەمە تەواوی لیستەکەیە. هیچ ناوێک نییە. هیچ ئیمەیڵێک نییە. هیچ ناونیشانی IPیەک هەڵناگیرێت. هیچ کووکی نییە.
+      هیچ بەدواداچوونێک نییە لە نێوان سەردانەکاندا. هیچ ڕاگەیاندنێک نییە. هیچ پیکسلی ڕاگەیاندنی کۆمەڵایەتی نییە. هیچ
+      شوێنپێیەک نییە. هیچ تۆمارکردنەوەی دانیشتنێک نییە. ئەم داتایە بە هیچ شێوەیەک نافرۆشین یان بەشداری ناکەین یان
+      ناینێرین بۆ هیچ لایەنێک.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">بۆچی شتێک کۆدەکەینەوە؟</h2>
+    <p class="mb-4 leading-relaxed">
+      دەمانەوێت بزانین ئایا ئەم ماڵپەڕە دەگاتە خەڵک لە ناوەوەی عێراق، کام پارێزگا پێویستیی بە هۆشیاریی زیاتری
+      هەیە، و ئایا سەردانکەرەکان ڕێنماییەکان بەڕاستی دەخوێننەوە یان لە چەند چرکەدا دەڕۆن. ناتوانین ماڵپەڕەکە
+      بەبێ هیچ ئاماژەیەک سوودبەخش بکەین. باشترین ئاماژەی بچووکمان هەڵبژاردووە کە ئەمەمان پێ بڵێت.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">چۆن کار دەکات (وردەکاریی تەکنیکی)</h2>
+    <p class="mb-4 leading-relaxed">
+      شیکارییەکان بە شێوەی بنەڕەتی ناچالاکن. یەکەم جار سەردانی ماڵپەڕە دەکەیت، شریتێک دەربارەی ڕێگەپێدانی شیکاری
+      پیشان دەدرێت. هەڵبژاردنەکەت لە <code>localStorage</code> ی وێبگەڕەکەت لەژێر کلیلی <code>ispc-analytics</code>
+      هەڵدەگیرێت. ئەگەر ڕەتت کردەوە، هیچ سکریپتێکی شیکاریی هەرگیز بار ناکرێت.
+    </p>
+    <p class="mb-4 leading-relaxed">
+      ئەگەر ڕێگەت دا، ئێمە <a href="https://plausible.io/data-policy" class="text-terracotta underline">Plausible Analytics</a>،
+      دەبارین، کە خزمەتگوزارییەکی سەرچاوەکراوەی هاوبەشە و لە یەکێتیی ئەوروپا میوانداری دەکرێت:
+    </p>
+    <ul class="list-disc me-6 mb-4 space-y-2">
+      <li><strong>ناونیشانی IP</strong> هەڵناگرێت. IPت تەنیا لە بیرگەدا بەکار دەهێنرێت بۆ دۆزینەوەی وڵات/ناوچە، پاشان دەستبەجێ تێکدەشکێنرێت.</li>
+      <li><strong>کووکی</strong> یان هیچ ناسێرێکی بەردەوام بەکار ناهێنێت.</li>
+      <li>ناتوانێت سەردانەکان لە نێوان ڕۆژەکاندا ببەستێتەوە. هیچ ڕێگەیەک نییە بۆ ناسینەوەی تۆ کاتێک دەگەڕێیتەوە.</li>
+      <li>لە یەکێتیی ئەوروپا میوانداری دەکرێت، لەژێر دەسەڵاتی یاسایی GDPR.</li>
+    </ul>
+    <p class="mb-4 leading-relaxed">
+      هەروەها یەک ڕووداو دەنێرین کاتێک سەردانەکەت تەواو دەبێت، کە ماوەکە بە چرکە لەخۆدەگرێت. ئەو ڕووداوەش
+      هیچ ناسێرێکی تێدا نییە.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">ئەوەی ناکەین</h2>
+    <ul class="list-disc me-6 mb-4 space-y-2">
+      <li>هەرگیز ناونیشانی IP تۆمار ناکەین، لە هیچ شوێنێک.</li>
+      <li>Google Analytics، Facebook، TikTok، یان هیچ بەدواداچوونێکی ڕاگەیاندن بەکار ناهێنین.</li>
+      <li>هیچ جۆرە کووکییەک بەکار ناهێنین.</li>
+      <li>YouTube، Twitter، Instagram، یان هیچ ناوەڕۆکێکی لایەنی سێیەم کە بتوانێت داتا تەواو بکات، نابینین.</li>
+      <li>هیچ هەژمارێک یان ئیمەیڵێک داوا ناکەین بۆ بەکارهێنانی ئەم ماڵپەڕە.</li>
+      <li>داتاکان لەگەڵ هیچ حکومەت، حزب، ڕێکخراوی ناحکومی، یان کۆمپانیایەک بەشداری ناکەین.</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">چۆن ڕەتی بکەیتەوە (یان بگەڕێیتەوە و قبووڵی بکەیت)</h2>
+    <p class="mb-4 leading-relaxed">
+      دوگمەی خوارەوە بکێشە بۆ گۆڕینی هەڵبژاردنەکەت لە هەر کاتێکدا. گۆڕانکارییەکە دەستبەجێ بەهێز دەبێت و
+      تەنیا کاریگەری لەسەر ئەم وێبگەڕە لە سەر ئەم ئامێرە دەکات.
+    </p>
+    <div id="ispc-analytics-status-block" class="my-6 p-4 border border-navy/20 bg-cream/40">
+      <p id="ispc-analytics-status" class="font-semibold mb-3">—</p>
+      <button
+        type="button"
+        id="ispc-analytics-toggle"
+        class="px-4 py-2 bg-navy text-cream font-semibold text-sm cursor-pointer hover:bg-navy/90"
+      >
+        گۆڕین
+      </button>
+    </div>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">ئەگەر پێداویستییە ئەمنییەکانت بەرزترن</h2>
+    <p class="mb-4 leading-relaxed">
+      ئەگەر لە مەترسیی بەرزدایت و دەتەوێت هیچ داتایەک لە ئامێرەکەت دەرنەچێت — تەنانەت بە شێوەی نەناسراویش —
+      <strong>شیکارییەکان ڕەت بکەرەوە</strong> و VPN بەکاربێنە. لە لایەنی وێبگەڕیشەوە، دەتوانیت
+      <code>plausible.io</code> لە فایلی hosts یان لە بەربەستی ناوەڕۆکدا ببەستیتەوە. ماڵپەڕەکە بە شێوەیەکی
+      ئاسایی بەردەوام دەبێت.
+    </p>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">دۆخی داتای تری شایانی زانینە</h2>
+    <ul class="list-disc me-6 mb-4 space-y-2">
+      <li><strong>دەرچوونی خێرا</strong> <code>google.com</code> لە تابێکی نوێدا دەکاتەوە و ئەم ماڵپەڕە بە
+        <code>google.com</code> لە تابەکەتدا دەگۆڕێت — بە مەبەست، بۆ ئەوەی ماڵپەڕەکە لە دوگمەی گەڕانەوە لاببرێت.
+        Google لەو ساتەدا سەردانێک دەبینێت.</li>
+      <li><strong>فۆنتەکان</strong> لە ئەم ماڵپەڕەوە پێشکەش دەکرێن، نەک لە Google Fonts یان هیچ CDNیەک.</li>
+      <li><strong>میوانداری:</strong> ئەم ماڵپەڕە لە سەر GitHub Pages میوانداری دەکرێت. ژێرخانی GitHub
+        داتای وەسفیی پێشهەنگی HTTP (IP، user-agent) وەک هەر سێرڤەرێکی وێبی دیکە دەبینێت. ئێمە دەستمان بەو
+        تۆمارانە ناگات و ئەوان هەڵناگرین.</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mt-8 mb-3">پەیوەندی</h2>
+    <p class="mb-4 leading-relaxed">
+      ئەگەر پرسیارت هەیە یان دەتەوێت داوا بکەیت هیچ شتێکت لە ئامارە کۆکراوەکانماندا دەرنەکەوێت، لە ڕێگەی
+      ئەو ڕێگایانەوە کە لە
+      <a href={localizedPath(lang, '/community')} class="text-terracotta underline">پەڕەی کۆمەڵگا</a> هاتوون
+      پەیوەندیمان پێوەبکە.
+    </p>
+  </article>
+
+  <script is:inline>
+    (function () {
+      try {
+        var KEY = 'ispc-analytics';
+        var status = document.getElementById('ispc-analytics-status');
+        var btn = document.getElementById('ispc-analytics-toggle');
+        if (!status || !btn) return;
+        function render() {
+          var v = null;
+          try { v = localStorage.getItem(KEY); } catch (e) {}
+          if (v === 'true') {
+            status.textContent = 'شیکاری نەناسراو: چالاککراوە';
+            btn.textContent = 'ناچالاککردن';
+          } else {
+            status.textContent = 'شیکاری نەناسراو: ناچالاککراوە';
+            btn.textContent = 'چالاککردن';
+          }
+        }
+        render();
+        btn.addEventListener('click', function () {
+          var v = null;
+          try { v = localStorage.getItem(KEY); } catch (e) {}
+          var next = v === 'true' ? 'false' : 'true';
+          try { localStorage.setItem(KEY, next); } catch (e) {}
+          render();
+          if (next === 'true') {
+            location.reload();
+          }
+        });
+      } catch (e) {}
+    })();
+  </script>
+</BaseLayout>

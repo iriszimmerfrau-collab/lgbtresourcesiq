@@ -1,0 +1,38 @@
+---
+/**
+ * Translation provenance banner.
+ *
+ * Used on Sorani (ckb) pages whose content is a machine-assisted draft
+ * from the Arabic source, pending native-speaker review. The banner
+ * names the AR canonical so a reader who wants the verified version
+ * can switch with one tap. When a native speaker reviews and accepts
+ * the page, remove this banner (or set translationStatus: 'native'
+ * in markdown frontmatter and let the page template hide it).
+ */
+import type { Lang } from '@i18n/languages';
+
+interface Props {
+  /** The page's current language. Banner only renders for ckb. */
+  lang: Lang;
+  /** Href to the authoritative AR original. */
+  arHref: string;
+}
+
+const { lang, arHref } = Astro.props;
+---
+
+{lang === 'ckb' && (
+  <aside
+    role="note"
+    class="not-prose mb-8 p-4 border-2 border-saffron/40 bg-saffron/10 text-sm"
+  >
+    <p class="text-navy leading-relaxed">
+      <strong>⚠ وەرگێڕانی ئامرازی، لەژێر پێداچوونەوەی شارەزایانی زمانی کوردیدایە.</strong>
+      سەرچاوەی فەرمیی ڕاستەقینە
+      <a href={arHref} class="font-semibold underline hover:text-magenta">
+        نوسخەی عەرەبیی ئەم پەڕەیە
+      </a>
+      ە. ئەگەر هەڵە دۆزیتەوە، لە ڕێگەی <a href="/ckb/feedback" class="font-semibold underline hover:text-magenta">پەڕەی تێبینی</a> پێمان بڵێ.
+    </p>
+  </aside>
+)}
