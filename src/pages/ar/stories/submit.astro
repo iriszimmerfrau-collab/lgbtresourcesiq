@@ -8,7 +8,7 @@ const lang = 'ar' as const;
 
 <BaseLayout
   title={t(lang, 'stories.submit.title')}
-  description="أرسل قصتك بشكل مجهول إلى التجمع العراقي للتقدم الاجتماعي. نراجعها معك، ننزع التفاصيل التي قد تكشفك، ولا ننشر أبداً دون موافقتك الصريحة."
+  description="شارك قصتك بشكل مجهول مع التجمع العراقي للتقدم الاجتماعي. نراجع معك، نُزيل التفاصيل المُعرِّفة، ولا ننشر دون موافقتك الصريحة."
   lang={lang}
   articleWidth
 >
@@ -21,67 +21,33 @@ const lang = 'ar' as const;
       <input type="text" name="website" tabindex="-1" autocomplete="off" class="absolute left-[-9999px]" aria-hidden="true" />
       <div>
         <label for="s-title" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.title')}</label>
-        <input
-          id="s-title"
-          name="title"
-          type="text"
-          required
-          minlength="3"
-          maxlength="200"
-          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
-        />
+        <input id="s-title" name="title" type="text" required minlength="3" maxlength="200" class="w-full p-2 border border-navy/30 bg-white font-body text-base" />
+      </div>
+      <div>
+        <label for="s-lang" class="block font-semibold text-sm mb-1">لغة قصّتك</label>
+        <select id="s-lang" name="lang" class="w-full p-2 border border-navy/30 bg-white font-body text-base">
+          <option value="ar" selected>العربية</option>
+          <option value="en">English</option>
+          <option value="ckb">کوردی (سۆرانی)</option>
+        </select>
       </div>
       <div>
         <label for="s-story" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.story')}</label>
-        <textarea
-          id="s-story"
-          name="story"
-          rows="14"
-          required
-          minlength="50"
-          maxlength="20000"
-          placeholder={t(lang, 'stories.submit.placeholder.story')}
-          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
-        ></textarea>
+        <textarea id="s-story" name="story" rows="14" required minlength="50" maxlength="20000" placeholder={t(lang, 'stories.submit.placeholder.story')} class="w-full p-2 border border-navy/30 bg-white font-body text-base"></textarea>
       </div>
       <div>
         <label for="s-pseudonym" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.pseudonym')}</label>
-        <input
-          id="s-pseudonym"
-          name="pseudonym"
-          type="text"
-          maxlength="80"
-          placeholder={t(lang, 'stories.submit.placeholder.pseudonym')}
-          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
-        />
+        <input id="s-pseudonym" name="pseudonym" type="text" maxlength="80" placeholder={t(lang, 'stories.submit.placeholder.pseudonym')} class="w-full p-2 border border-navy/30 bg-white font-body text-base" />
       </div>
       <div>
         <label for="s-cw" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.contentWarning')}</label>
-        <input
-          id="s-cw"
-          name="contentWarning"
-          type="text"
-          maxlength="200"
-          placeholder={t(lang, 'stories.submit.placeholder.contentWarning')}
-          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
-        />
+        <input id="s-cw" name="contentWarning" type="text" maxlength="200" placeholder={t(lang, 'stories.submit.placeholder.contentWarning')} class="w-full p-2 border border-navy/30 bg-white font-body text-base" />
       </div>
       <div>
         <label for="s-contact" class="block font-semibold text-sm mb-1">{t(lang, 'stories.submit.label.contact')}</label>
-        <input
-          id="s-contact"
-          name="contact"
-          type="text"
-          maxlength="200"
-          placeholder={t(lang, 'stories.submit.placeholder.contact')}
-          class="w-full p-2 border border-navy/30 bg-white font-body text-base"
-        />
+        <input id="s-contact" name="contact" type="text" maxlength="200" placeholder={t(lang, 'stories.submit.placeholder.contact')} class="w-full p-2 border border-navy/30 bg-white font-body text-base" />
       </div>
-      <button
-        type="submit"
-        id="s-submit"
-        class="px-6 py-3 bg-navy text-cream font-semibold text-sm hover:bg-navy/90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-      >
+      <button type="submit" id="s-submit" class="px-6 py-3 bg-navy text-cream font-semibold text-sm hover:bg-navy/90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
         {t(lang, 'stories.submit.submit')}
       </button>
       <p id="s-status" role="status" aria-live="polite" class="text-sm" hidden></p>
@@ -89,7 +55,7 @@ const lang = 'ar' as const;
 
     <p class="mt-6 text-sm text-muted">{t(lang, 'stories.submit.privacy.note')}</p>
     <p class="mt-2 text-sm text-muted">
-      تريد أقصى خصوصية؟ <a href={localizedPath(lang, '/community')}>أرسل عبر XMPP</a>.
+      تريد أقصى خصوصية؟ <a href={localizedPath(lang, '/community')}>أرسلها عبر XMPP بدلاً من ذلك</a>.
     </p>
   </section>
 
@@ -97,7 +63,7 @@ const lang = 'ar' as const;
     is:inline
     define:vars={{
       endpoint: 'https://api.ispc-iq.org/submissions',
-      lang,
+      defaultLang: lang,
       msgSending: t(lang, 'stories.submit.sending'),
       msgSuccess: t(lang, 'stories.submit.success'),
       msgError: t(lang, 'stories.submit.error'),
@@ -111,61 +77,26 @@ const lang = 'ar' as const;
       var btn = document.getElementById('s-submit');
       var status = document.getElementById('s-status');
       if (!form || !btn || !status) return;
-
-      function showError(msg) {
-        status.hidden = false;
-        status.textContent = msg;
-        status.className = 'text-sm text-exit-red font-semibold';
-      }
-
+      function showError(msg) { status.hidden = false; status.textContent = msg; status.className = 'text-sm text-exit-red font-semibold'; }
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        // Honeypot: if a bot filled the hidden field, fake-success and don't POST.
         if (form.elements['website'].value) {
-          status.hidden = false;
-          status.textContent = msgSuccess;
-          status.className = 'text-sm text-olive font-semibold';
-          form.reset();
-          return;
+          status.hidden = false; status.textContent = msgSuccess;
+          status.className = 'text-sm text-olive font-semibold'; form.reset(); return;
         }
         var data = {
-          title: form.elements['title'].value,
-          story: form.elements['story'].value,
-          pseudonym: form.elements['pseudonym'].value,
-          contentWarning: form.elements['contentWarning'].value,
-          contact: form.elements['contact'].value,
-          lang: lang,
+          title: form.elements['title'].value, story: form.elements['story'].value,
+          pseudonym: form.elements['pseudonym'].value, contentWarning: form.elements['contentWarning'].value,
+          contact: form.elements['contact'].value, lang: form.elements['lang'].value || defaultLang,
         };
         if (!data.title || data.title.trim().length < 3) { showError(msgVTitle); return; }
         if (!data.story || data.story.trim().length < 50) { showError(msgVStory); return; }
-        btn.disabled = true;
-        btn.textContent = msgSending;
-        status.hidden = false;
-        status.textContent = msgSending;
-        status.className = 'text-sm text-muted';
-
-        fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        })
-          .then(function (r) {
-            if (!r.ok) throw new Error('http_' + r.status);
-            return r.json();
-          })
-          .then(function () {
-            status.textContent = msgSuccess;
-            status.className = 'text-sm text-olive font-semibold';
-            form.reset();
-            btn.textContent = msgSubmit;
-            btn.disabled = false;
-          })
-          .catch(function () {
-            status.textContent = msgError;
-            status.className = 'text-sm text-exit-red font-semibold';
-            btn.textContent = msgSubmit;
-            btn.disabled = false;
-          });
+        btn.disabled = true; btn.textContent = msgSending;
+        status.hidden = false; status.textContent = msgSending; status.className = 'text-sm text-muted';
+        fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+          .then(function (r) { if (!r.ok) throw new Error('http_' + r.status); return r.json(); })
+          .then(function () { status.textContent = msgSuccess; status.className = 'text-sm text-olive font-semibold'; form.reset(); btn.textContent = msgSubmit; btn.disabled = false; })
+          .catch(function () { status.textContent = msgError; status.className = 'text-sm text-exit-red font-semibold'; btn.textContent = msgSubmit; btn.disabled = false; });
       });
     })();
   </script>

@@ -1,39 +1,79 @@
 ---
+/**
+ * AR-chrome listing for the unified Stories section. Renders the same flat
+ * stories collection as /en/stories/ and /ckb/stories/ — one section, three
+ * navigation surfaces. Cards link to the canonical un-prefixed
+ * /stories/{slug}/ detail URL.
+ */
 import BaseLayout from '@layouts/BaseLayout.astro';
-import Card from '@components/Card.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getSlugFromId } from '@lib/collections';
 import { t, localizedPath } from '@i18n/utils';
-import { getCollectionByLang, getSlugFromId } from '@lib/collections';
 
 const lang = 'ar' as const;
-const stories = await getCollectionByLang('stories', lang);
-
+const stories = await getCollection('stories', (e: CollectionEntry<'stories'>) => !e.data.draft);
 stories.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+function localeTagFor(l: string): string {
+  return l === 'ar' ? 'ar-IQ' : l === 'ckb' ? 'ckb-IQ' : 'en-US';
+}
+function dirFor(l: string): 'rtl' | 'ltr' {
+  return l === 'ar' || l === 'ckb' ? 'rtl' : 'ltr';
+}
 ---
 
 <BaseLayout
   title={t(lang, 'nav.stories')}
-  description="قصص مجتمعية من العراقيين الكويريين — تُشارك بأسماء مستعارة وبكلماتهم الخاصة."
+  description="قصص بضمير المتكلّم من العراقيين الكويريين — مُشاركة بشكل مجهول وبأصواتهم. القصص تُنشر بلغتها الأصلية (الإنجليزية، العربية، أو الكردية الوسطى) ولا تُترجم."
   lang={lang}
 >
-  <section class="py-8">
+  <section class="py-8 max-w-[800px] mx-auto">
     <div class="flex items-baseline justify-between gap-4 flex-wrap mb-2">
       <h1 class="text-3xl font-bold">{t(lang, 'nav.stories')}</h1>
       <a
         href={localizedPath(lang, '/stories/submit')}
         class="text-sm bg-navy text-cream px-4 py-2 no-underline hover:bg-navy/90 font-semibold"
-      >← {t(lang, 'stories.submit.cta')}</a>
+      >{t(lang, 'stories.submit.cta')} ←</a>
     </div>
-    <p class="text-muted mb-8">أصوات من المجتمع، تُشارك بأسماء مستعارة وبكلماتهم الخاصة.</p>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {stories.map((story) => (
-        <Card
-          title={story.data.title}
-          description={story.data.description}
-          href={localizedPath(lang, `/stories/${getSlugFromId(story.id)}`)}
-          date={story.data.pubDate}
-          lang={lang}
-        />
-      ))}
-    </div>
+    <p class="text-muted mb-8">
+      أصوات من المجتمع، مُشاركة بشكل مجهول وبكلماتهم. القصص محفوظة بلغتها الأصلية —
+      ستجد قصصاً بالإنجليزية والعربية والكردية الوسطى أدناه.
+    </p>
+
+    {stories.length === 0 ? (
+      <p class="text-muted py-8">لا توجد قصص بعد. <a href={localizedPath(lang, '/stories/submit')} class="underline font-semibold">كن أوّل من يُشارك.</a></p>
+    ) : (
+      <div class="grid grid-cols-1 gap-6">
+        {stories.map((story) => {
+          const slug = getSlugFromId(story.id);
+          const storyLang = (story.data.lang ?? 'en') as string;
+          const dir = dirFor(storyLang);
+          const dateLocale = localeTagFor(storyLang);
+          const byline = story.data.anonymous
+            ? (storyLang === 'ar' ? 'مساهم مجهول' : storyLang === 'ckb' ? 'بەشداربووی نەناسراو' : 'Anonymous contributor')
+            : (story.data.pseudonym ?? '');
+          return (
+            <article
+              class="border-s-4 border-magenta/30 bg-cream/30 ps-5 pe-4 py-5 hover:border-magenta transition-colors"
+              lang={storyLang}
+              dir={dir}
+            >
+              <h2 class="text-xl font-bold m-0 mb-2">
+                <a href={`/stories/${slug}/`} class="text-navy hover:text-magenta no-underline">
+                  {story.data.title}
+                </a>
+              </h2>
+              <p class="text-body leading-relaxed m-0 mb-3">{story.data.description}</p>
+              <p class="text-xs text-muted m-0 font-mono">
+                <time datetime={story.data.pubDate.toISOString()}>
+                  {story.data.pubDate.toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+                {byline && <span> · {byline}</span>}
+              </p>
+            </article>
+          );
+        })}
+      </div>
+    )}
   </section>
 </BaseLayout>

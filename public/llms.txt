@@ -116,7 +116,9 @@ Discord invites, the r/iraqpride subreddit, and the @ZFVelvetIris YouTube channe
 
 ## Optional
 
-- [Stories / القصص (EN)](https://ispc-iq.org/en/stories): Anonymous community stories
+- [Community stories (EN listing)](https://ispc-iq.org/en/stories): Anonymous first-person stories from queer Iraqis. Each story lives at the canonical un-prefixed URL https://ispc-iq.org/stories/{slug}/ and is published in its original authored language. The three listings at /en/stories/, /ar/stories/, /ckb/stories/ are navigation surfaces showing the same flat collection.
+- [Community stories (AR listing)](https://ispc-iq.org/ar/stories)
+- [Community stories (CKB listing)](https://ispc-iq.org/ckb/stories)
 - [News / الأخبار (EN)](https://ispc-iq.org/en/news)
 - [Sitemap](https://ispc-iq.org/sitemap-index.xml)
 

@@ -1,9 +1,15 @@
 ---
+/**
+ * Unified story detail page. Single canonical URL per story regardless of
+ * the visitor's site language — the page chrome renders in the story's
+ * own authored language so the reading experience is consistent.
+ */
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import ArticleLayout from '@layouts/ArticleLayout.astro';
 import Callout from '@components/Callout.astro';
 import { estimateReadingTime, getSlugFromId } from '@lib/collections';
-import { t, localizedPath } from '@i18n/utils';
+import { t } from '@i18n/utils';
+import type { Lang } from '@i18n/languages';
 import {
   buildArticleSchema,
   buildBreadcrumbList,
@@ -16,7 +22,7 @@ import {
 } from '@lib/jsonld';
 
 export async function getStaticPaths() {
-  const stories = await getCollection('stories', (e: CollectionEntry<'stories'>) => e.data.lang === 'en' && !e.data.draft);
+  const stories = await getCollection('stories', (e: CollectionEntry<'stories'>) => !e.data.draft);
   return stories.map((story) => ({
     params: { slug: getSlugFromId(story.id) },
     props: { story },
@@ -29,7 +35,7 @@ interface Props {
 
 const { story } = Astro.props as Props;
 const { Content } = await render(story);
-const lang = 'en' as const;
+const lang: Lang = (story.data.lang ?? 'en') as Lang;
 const readingTime = estimateReadingTime(story.body ?? '');
 const wordCount = estimateWordCount(story.body ?? '');
 const enrich: ArticleEnrichment = { wordCount, readingTime };
@@ -40,9 +46,12 @@ const byline = story.data.anonymous
 
 const siteUrl = new URL('/', Astro.site).href;
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
-const ctx: JsonLdContext = { lang, pageUrl, siteUrl, siteName: 'Iraqi Social Progress Collective' };
+const siteName =
+  lang === 'ar' ? 'التجمع العراقي للتقدم الاجتماعي' :
+  lang === 'ckb' ? 'کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراق' :
+  'Iraqi Social Progress Collective';
+const ctx: JsonLdContext = { lang, pageUrl, siteUrl, siteName };
 
-// Build an Article with an inline Person author rather than the org default
 const baseArticle = buildArticleSchema(story as unknown as CollectionEntry<'news'>, ctx, enrich) as Record<string, unknown>;
 const articleSchema = {
   ...baseArticle,
@@ -50,11 +59,21 @@ const articleSchema = {
 };
 const articleWithSpeakable = story.data.tldr ? withSpeakable(articleSchema) : articleSchema;
 
+const storiesLabel =
+  lang === 'ar' ? 'القصص' : lang === 'ckb' ? 'چیرۆکەکان' : 'Stories';
+const homeLabel =
+  lang === 'ar' ? 'الرئيسية' : lang === 'ckb' ? 'سەرەکی' : 'Home';
+
+// Breadcrumb back-link points at the lang-specific listing surface so a
+// reader returning from the story stays in the chrome they started in.
+const storiesListingUrl = new URL(`/${lang}/stories/`, Astro.site).href;
+const homeUrl = new URL(`/${lang}/`, Astro.site).href;
+
 const jsonLd = combineSchemas(
   articleWithSpeakable,
   buildBreadcrumbList([
-    { name: 'Home', url: new URL(localizedPath(lang, '/'), Astro.site).href },
-    { name: t(lang, 'nav.stories'), url: new URL(localizedPath(lang, '/stories'), Astro.site).href },
+    { name: homeLabel, url: homeUrl },
+    { name: storiesLabel, url: storiesListingUrl },
     { name: story.data.title, url: pageUrl },
   ]),
 );
@@ -64,6 +83,9 @@ const article = {
   section: 'stories',
   tags: story.data.keywords?.split(',').map((s) => s.trim()).filter(Boolean),
 };
+
+const cwLabel =
+  lang === 'ar' ? 'تحذير المحتوى' : lang === 'ckb' ? 'ئاگاداریی ناوەڕۆک' : 'Content warning';
 ---
 
 <ArticleLayout
@@ -80,7 +102,7 @@ const article = {
 >
   {story.data.contentWarning && (
     <Callout type="warning">
-      <strong>{t(lang, 'stories.contentWarning')}:</strong> {story.data.contentWarning}
+      <strong>{cwLabel}:</strong> {story.data.contentWarning}
     </Callout>
   )}
   <p class="text-sm text-muted italic mb-6">— {byline}</p>

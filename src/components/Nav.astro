@@ -10,21 +10,33 @@ interface Props {
 
 const { lang, currentPath } = Astro.props;
 
-const links = [
-  { key: 'nav.home' as const, path: '/' },
-  { key: 'nav.about' as const, path: '/about' },
-  { key: 'nav.safety' as const, path: '/safety' },
-  { key: 'nav.community' as const, path: '/community' },
-  { key: 'nav.guides' as const, path: '/guides' },
-  { key: 'nav.faq' as const, path: '/faq' },
-  { key: 'nav.alerts' as const, path: '/security-alerts' },
-  { key: 'nav.stories' as const, path: '/stories' },
-  { key: 'nav.news' as const, path: '/news' },
+interface NavLink {
+  key: 'nav.home' | 'nav.about' | 'nav.safety' | 'nav.community' | 'nav.guides' | 'nav.faq' | 'nav.alerts' | 'nav.stories' | 'nav.news';
+  path: string;
+}
+
+const links: NavLink[] = [
+  { key: 'nav.home', path: '/' },
+  { key: 'nav.about', path: '/about' },
+  { key: 'nav.safety', path: '/safety' },
+  { key: 'nav.community', path: '/community' },
+  { key: 'nav.guides', path: '/guides' },
+  { key: 'nav.faq', path: '/faq' },
+  { key: 'nav.alerts', path: '/security-alerts' },
+  // Stories: per-language listings show the same flat collection (one section,
+  // no duplicate story files), but each listing renders in its own chrome.
+  // Story detail pages live at the canonical un-prefixed /stories/{slug}/.
+  { key: 'nav.stories', path: '/stories' },
+  { key: 'nav.news', path: '/news' },
 ];
 
-function isActive(linkPath: string): boolean {
-  const full = localizedPath(lang, linkPath);
-  if (linkPath === '/') return currentPath === full || currentPath === `${full}/`;
+function hrefFor(link: NavLink): string {
+  return localizedPath(lang, link.path);
+}
+
+function isActive(link: NavLink): boolean {
+  const full = hrefFor(link);
+  if (link.path === '/') return currentPath === full || currentPath === `${full}/`;
   return currentPath.startsWith(full);
 }
 ---
@@ -39,12 +51,12 @@ function isActive(linkPath: string): boolean {
     <div class="hidden md:flex items-center gap-5">
       {links.map(link => (
         <a
-          href={localizedPath(lang, link.path)}
+          href={hrefFor(link)}
           class:list={[
             'text-sm no-underline transition-colors',
-            isActive(link.path) ? 'text-white font-semibold' : 'text-cream/70 hover:text-white',
+            isActive(link) ? 'text-white font-semibold' : 'text-cream/70 hover:text-white',
           ]}
-          aria-current={isActive(link.path) ? 'page' : undefined}
+          aria-current={isActive(link) ? 'page' : undefined}
         >
           {t(lang, link.key)}
         </a>
@@ -71,12 +83,12 @@ function isActive(linkPath: string): boolean {
   <div id="mobile-menu" class="md:hidden hidden bg-navy border-t border-cream/10 px-4 pb-4">
     {links.map(link => (
       <a
-        href={localizedPath(lang, link.path)}
+        href={hrefFor(link)}
         class:list={[
           'block py-2 text-sm no-underline transition-colors',
-          isActive(link.path) ? 'text-white font-semibold' : 'text-cream/70 hover:text-white',
+          isActive(link) ? 'text-white font-semibold' : 'text-cream/70 hover:text-white',
         ]}
-        aria-current={isActive(link.path) ? 'page' : undefined}
+        aria-current={isActive(link) ? 'page' : undefined}
       >
         {t(lang, link.key)}
       </a>

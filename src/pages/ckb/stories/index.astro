@@ -1,4 +1,77 @@
 ---
-import CkbStub from '@components/CkbStub.astro';
+/**
+ * CKB-chrome listing for the unified Stories section. Same flat collection
+ * as /en/stories/ and /ar/stories/. Story detail at canonical /stories/{slug}/.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getSlugFromId } from '@lib/collections';
+import { t, localizedPath } from '@i18n/utils';
+
+const lang = 'ckb' as const;
+const stories = await getCollection('stories', (e: CollectionEntry<'stories'>) => !e.data.draft);
+stories.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+function localeTagFor(l: string): string {
+  return l === 'ar' ? 'ar-IQ' : l === 'ckb' ? 'ckb-IQ' : 'en-US';
+}
+function dirFor(l: string): 'rtl' | 'ltr' {
+  return l === 'ar' || l === 'ckb' ? 'rtl' : 'ltr';
+}
 ---
-<CkbStub title="چیرۆکەکان" arHref="/ar/stories" pageLabel="هەموو چیرۆکەکان" />
+
+<BaseLayout
+  title={t(lang, 'nav.stories')}
+  description="چیرۆکی کەسی یەکەم لە کوێرە عێراقییەکانەوە — بەشداریی نەناسراوەکراو و بە وشەی خۆیان. چیرۆکەکان بە زمانی سەرەکیی خۆیان بڵاو دەکرێنەوە (ئینگلیزی، عەرەبی، یان کوردیی ناوەند) و وەرناگێڕدرێن."
+  lang={lang}
+>
+  <section class="py-8 max-w-[800px] mx-auto">
+    <div class="flex items-baseline justify-between gap-4 flex-wrap mb-2">
+      <h1 class="text-3xl font-bold">{t(lang, 'nav.stories')}</h1>
+      <a
+        href={localizedPath(lang, '/stories/submit')}
+        class="text-sm bg-navy text-cream px-4 py-2 no-underline hover:bg-navy/90 font-semibold"
+      >{t(lang, 'stories.submit.cta')} ←</a>
+    </div>
+    <p class="text-muted mb-8">
+      دەنگەکانی کۆمەڵگا، بەشداریی نەناسراوەکراو و بە وشەی خۆیان. چیرۆکەکان بە زمانی سەرەکیی خۆیان پارێزراون —
+      چیرۆکی ئینگلیزی، عەرەبی، و کوردیی ناوەند لە خوارەوە دەدۆزیتەوە.
+    </p>
+
+    {stories.length === 0 ? (
+      <p class="text-muted py-8">هێشتا چیرۆکێک نییە. <a href={localizedPath(lang, '/stories/submit')} class="underline font-semibold">یەکەم کەس بە لە بەشداریکردن.</a></p>
+    ) : (
+      <div class="grid grid-cols-1 gap-6">
+        {stories.map((story) => {
+          const slug = getSlugFromId(story.id);
+          const storyLang = (story.data.lang ?? 'en') as string;
+          const dir = dirFor(storyLang);
+          const dateLocale = localeTagFor(storyLang);
+          const byline = story.data.anonymous
+            ? (storyLang === 'ar' ? 'مساهم مجهول' : storyLang === 'ckb' ? 'بەشداربووی نەناسراو' : 'Anonymous contributor')
+            : (story.data.pseudonym ?? '');
+          return (
+            <article
+              class="border-s-4 border-magenta/30 bg-cream/30 ps-5 pe-4 py-5 hover:border-magenta transition-colors"
+              lang={storyLang}
+              dir={dir}
+            >
+              <h2 class="text-xl font-bold m-0 mb-2">
+                <a href={`/stories/${slug}/`} class="text-navy hover:text-magenta no-underline">
+                  {story.data.title}
+                </a>
+              </h2>
+              <p class="text-body leading-relaxed m-0 mb-3">{story.data.description}</p>
+              <p class="text-xs text-muted m-0 font-mono">
+                <time datetime={story.data.pubDate.toISOString()}>
+                  {story.data.pubDate.toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+                {byline && <span> · {byline}</span>}
+              </p>
+            </article>
+          );
+        })}
+      </div>
+    )}
+  </section>
+</BaseLayout>

@@ -65,8 +65,10 @@ export default defineConfig({
         if (/\/(en|ar|ckb)\/(security-alerts|guides|stories|news)\/?$/.test(u)) {
           return { ...item, priority: 0.85, changefreq: 'weekly' };
         }
-        // Individual news + stories
-        if (/\/(en|ar|ckb)\/(news|stories)\//.test(u)) {
+        // Individual news + stories. Stories now live at the canonical
+        // un-prefixed /stories/{slug}/ URL — the per-language /{lang}/stories/
+        // routes are listing surfaces only.
+        if (/\/(en|ar|ckb)\/news\//.test(u) || /^https?:\/\/[^/]+\/stories\/[^/]+\/?$/.test(u)) {
           return { ...item, priority: 0.6, changefreq: 'yearly' };
         }
         // Privacy / feedback / stories-submit — low-priority utility pages.
