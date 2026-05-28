@@ -303,11 +303,35 @@ interface ContentSummary {
   draft: boolean;
 }
 
+/**
+ * Disk path for a content file. Stories live in a flat `src/content/stories/`
+ * directory (lang declared in frontmatter only — see Phase 4 unification);
+ * news and alerts still use lang sub-folders.
+ */
+function contentPathFor(type: ContentType, lang: ContentLang, slug: string): string {
+  if (type === 'stories') return `src/content/stories/${slug}.md`;
+  return `src/content/${type}/${lang}/${slug}.md`;
+}
+
+function contentDirFor(type: ContentType, lang: ContentLang): string {
+  if (type === 'stories') return `src/content/stories`;
+  return `src/content/${type}/${lang}`;
+}
+
 async function listContent(env: Env, type: ContentType): Promise<ContentSummary[]> {
-  const langs: ContentLang[] = ['en', 'ar', 'ckb'];
   const results: ContentSummary[] = [];
-  for (const lang of langs) {
-    const dir = `src/content/${type}/${lang}`;
+
+  // Stories are flat — one directory, lang in each file's frontmatter.
+  // News + alerts still split by lang sub-folder.
+  const dirs: Array<{ dir: string; lang: ContentLang | null }> =
+    type === 'stories'
+      ? [{ dir: 'src/content/stories', lang: null }]
+      : (['en', 'ar', 'ckb'] as ContentLang[]).map((lang) => ({
+          dir: `src/content/${type}/${lang}`,
+          lang,
+        }));
+
+  for (const { dir, lang } of dirs) {
     const entries = await listRepoDir(env, dir);
     const mdFiles = entries.filter((e) => e.type === 'file' && e.name.endsWith('.md'));
     const detailed = await Promise.all(
@@ -322,9 +346,14 @@ async function listContent(env: Env, type: ContentType): Promise<ContentSummary[
           const blob = (await res.json()) as FileBlob;
           const md = base64ToUtf8(blob.content);
           const { fm } = parseFrontmatter(md);
+          // For stories the authored language comes from frontmatter, not the
+          // path; fall back to en if frontmatter is missing it.
+          const fileLang: ContentLang =
+            lang ??
+            (fm.lang === 'ar' || fm.lang === 'ckb' || fm.lang === 'en' ? (fm.lang as ContentLang) : 'en');
           return {
             type,
-            lang,
+            lang: fileLang,
             slug,
             path: entry.path,
             sha: blob.sha,
@@ -335,7 +364,7 @@ async function listContent(env: Env, type: ContentType): Promise<ContentSummary[
         } catch {
           return {
             type,
-            lang,
+            lang: (lang ?? 'en') as ContentLang,
             slug,
             path: entry.path,
             sha: entry.sha,
@@ -366,7 +395,7 @@ async function getContentFile(
   lang: ContentLang,
   slug: string,
 ): Promise<ContentDetail | null> {
-  const path = `src/content/${type}/${lang}/${slug}.md`;
+  const path = contentPathFor(type, lang, slug);
   const res = await gh(
     env,
     `/repos/${env.GITHUB_OWNER}/${env.PUBLISH_REPO}/contents/${path}?ref=${env.PUBLISH_BRANCH}`,
@@ -376,9 +405,14 @@ async function getContentFile(
   const blob = (await res.json()) as FileBlob;
   const md = base64ToUtf8(blob.content);
   const { fm } = parseFrontmatter(md);
+  // For stories, authoritative lang comes from frontmatter, not the URL/path.
+  const fileLang: ContentLang =
+    type === 'stories'
+      ? (fm.lang === 'ar' || fm.lang === 'ckb' ? (fm.lang as ContentLang) : 'en')
+      : lang;
   return {
     type,
-    lang,
+    lang: fileLang,
     slug,
     path,
     sha: blob.sha,
@@ -410,12 +444,15 @@ async function saveContentFile(
 ): Promise<void> {
   const validationError = validateMarkdownFrontmatter(markdown);
   if (validationError) throw new Error(`validation: ${validationError}`);
-  const path = `src/content/${type}/${lang}/${slug}.md`;
+  const path = contentPathFor(type, lang, slug);
+  // Stories are flat — keep commit messages short and lang-free since lang
+  // is captured in the file's frontmatter, not the path.
+  const tag = type === 'stories' ? `stories/${slug}` : `${type}/${lang}/${slug}`;
   await putRepoFile(
     env,
     path,
     markdown,
-    expectedSha ? `Update ${type}/${lang}/${slug}` : `Create ${type}/${lang}/${slug}`,
+    expectedSha ? `Update ${tag}` : `Create ${tag}`,
     expectedSha,
   );
 }
@@ -427,12 +464,13 @@ async function deleteContentFile(
   slug: string,
   sha: string,
 ): Promise<void> {
-  const path = `src/content/${type}/${lang}/${slug}.md`;
+  const path = contentPathFor(type, lang, slug);
+  const tag = type === 'stories' ? `stories/${slug}` : `${type}/${lang}/${slug}`;
   const res = await gh(env, `/repos/${env.GITHUB_OWNER}/${env.PUBLISH_REPO}/contents/${path}`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      message: `Delete ${type}/${lang}/${slug}`,
+      message: `Delete ${tag}`,
       sha,
       branch: env.PUBLISH_BRANCH,
     }),
@@ -800,7 +838,10 @@ async function publishStory(env: Env, num: number): Promise<{ path: string; lang
   const issue = await getIssue(env, num);
   const rawTitle = issue.title.replace(/^Story submission:\s*/i, '').trim() || `Story #${num}`;
   const sub = parseSubmissionBody(issue.body || '');
-  const lang = sub.lang === 'ar' ? 'ar' : 'en';
+  // Stories support en, ar, ckb — fall back to en for anything else the
+  // submitter might have stuffed into the field.
+  const lang: ContentLang =
+    sub.lang === 'ar' ? 'ar' : sub.lang === 'ckb' ? 'ckb' : 'en';
   const today = new Date().toISOString().slice(0, 10);
   const isAnonymous = !sub.pseudonym || sub.pseudonym === 'Anonymous';
 
@@ -819,7 +860,10 @@ async function publishStory(env: Env, num: number): Promise<{ path: string; lang
   frontmatterLines.push('---', '');
 
   const fileContent = frontmatterLines.join('\n') + '\n' + sub.story + '\n';
-  const path = `src/content/stories/${lang}/story-${num}.md`;
+  // Stories use the flat `src/content/stories/` directory — language is in
+  // frontmatter, not the path. One canonical URL per story regardless of
+  // authored language.
+  const path = `src/content/stories/story-${num}.md`;
 
   // If a previous publish exists at this path, get its sha so we can update.
   const existing = await getRepoFile(env, path);
@@ -902,9 +946,13 @@ async function handleSubmission(req: Request, env: Env, origin: string): Promise
 }
 
 const ADMIN_MOD_RE = /^\/admin\/api\/issues\/(\d+)\/(close|approve|reject)$/;
-// Content routes: /admin/api/content/(stories|news|alerts)/(en|ar)/(slug)
+// Content routes: /admin/api/content/(stories|news|alerts)/(en|ar|ckb)/(slug)
+// For stories the lang segment is informational only — story files live at
+// the flat src/content/stories/{slug}.md path with lang declared in the
+// frontmatter — but the URL shape stays uniform so the admin UI can keep
+// its single content-routing pattern.
 const ADMIN_CONTENT_LIST_RE = /^\/admin\/api\/content\/(stories|news|alerts)$/;
-const ADMIN_CONTENT_ITEM_RE = /^\/admin\/api\/content\/(stories|news|alerts)\/(en|ar)\/([a-z0-9][a-z0-9-]{0,79})$/;
+const ADMIN_CONTENT_ITEM_RE = /^\/admin\/api\/content\/(stories|news|alerts)\/(en|ar|ckb)\/([a-z0-9][a-z0-9-]{0,79})$/;
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
@@ -1054,7 +1102,7 @@ export default {
           const existing = await getContentFile(env, type, lang, slug);
           if (existing) return json({ error: 'slug_exists' }, 409, allowedOrigin);
           await saveContentFile(env, type, lang, slug, content);
-          return json({ ok: true, path: `src/content/${type}/${lang}/${slug}.md` }, 200, allowedOrigin);
+          return json({ ok: true, path: contentPathFor(type, lang, slug) }, 200, allowedOrigin);
         }
       }
 
