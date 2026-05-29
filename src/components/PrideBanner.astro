@@ -1,0 +1,66 @@
+---
+/**
+ * Pride Month banner — June 1 through June 30, browser-local.
+ *
+ * Rendered hidden by default. The inline detection script in BaseLayout
+ * sets `<html data-pride>` only when the visitor's local clock is in June,
+ * so the banner auto-reveals on June 1 and auto-hides at midnight July 1
+ * with no rebuild required. Dismissal persists for the session.
+ *
+ * Threat-model notes:
+ *  - The gradient uses the ISPC brand palette (magenta → saffron → olive →
+ *    lavender), which scans as "an article" or "a magazine" from across
+ *    the room rather than as a rainbow pride flag. Operators in Iraq who
+ *    weighed in chose celebration over invisibility for this one month.
+ *  - The × dismiss button writes to sessionStorage so a reader on a
+ *    borrowed/shared phone can hide it for the session.
+ *  - Tri-lingual copy is hardcoded so the banner ships identical across
+ *    every page regardless of the chrome language.
+ *  - No emojis, no flag glyphs — those scan instantly under shoulder-surf.
+ */
+---
+
+<aside
+  id="pride-banner"
+  class="pride-banner hidden"
+  role="region"
+  aria-label="Pride Month 2026 message from ISPC"
+>
+  <div class="pride-banner-inner">
+    <p class="pride-banner-text">
+      <span class="pride-banner-mark">Pride 2026</span>
+      <span class="pride-banner-msg" lang="en">You exist. You belong. We are with you.</span>
+      <span class="pride-banner-sep" aria-hidden="true">·</span>
+      <span class="pride-banner-msg" lang="ar" dir="rtl">أنت موجود. أنت تنتمي. نحن معك.</span>
+      <span class="pride-banner-sep" aria-hidden="true">·</span>
+      <span class="pride-banner-msg" lang="ckb" dir="rtl">تۆ هەی. تۆ بەشێکی ئێمەی. ئێمە لەگەڵتاین.</span>
+    </p>
+    <button
+      type="button"
+      id="pride-banner-dismiss"
+      class="pride-banner-dismiss"
+      aria-label="Dismiss Pride banner"
+    >×</button>
+  </div>
+</aside>
+
+<script is:inline>
+  (function () {
+    var banner = document.getElementById('pride-banner');
+    var dismissBtn = document.getElementById('pride-banner-dismiss');
+    if (!banner || !dismissBtn) return;
+
+    // Hide if previously dismissed this session.
+    try {
+      if (sessionStorage.getItem('ispc-pride-dismissed') === '1') {
+        banner.classList.add('hidden');
+        return;
+      }
+    } catch (e) { /* sessionStorage may be blocked; banner still renders */ }
+
+    dismissBtn.addEventListener('click', function () {
+      banner.classList.add('hidden');
+      try { sessionStorage.setItem('ispc-pride-dismissed', '1'); } catch (e) {}
+    });
+  })();
+</script>

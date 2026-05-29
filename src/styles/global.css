@@ -88,6 +88,144 @@ a:hover {
   color: var(--color-cream);
 }
 
+/* ------------------------------------------------------------------
+ * Pride Month theme
+ *
+ * Auto-activated via a small inline script in BaseLayout that sets
+ * `<html data-pride>` only during June (browser-local time). Reverts
+ * automatically at midnight July 1 without requiring a rebuild —
+ * critical because static builds don't run on a schedule.
+ *
+ * Visual restraint: the gradient pulls from the existing ISPC palette
+ * (magenta, saffron, olive, lavender) so it scans as the site's own
+ * brand rather than a literal pride flag. No emoji, no rainbow glyphs
+ * — the threat model still applies to anyone glancing at a queer
+ * Iraqi's screen.
+ * ------------------------------------------------------------------ */
+
+.pride-banner { display: none; }
+[data-pride] .pride-banner { display: block; }
+.pride-banner.hidden { display: none !important; }
+
+.pride-banner {
+  background: linear-gradient(
+    90deg,
+    var(--color-magenta) 0%,
+    var(--color-terracotta) 25%,
+    var(--color-saffron) 50%,
+    var(--color-olive) 75%,
+    var(--color-lavender) 100%
+  );
+  color: var(--color-cream);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.pride-banner-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.pride-banner-text {
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.pride-banner-mark {
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.5rem;
+  background: rgba(13, 27, 46, 0.25);
+  margin-right: 0.5rem;
+  border-radius: 2px;
+}
+
+html[dir="rtl"] .pride-banner-mark {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+.pride-banner-msg {
+  display: inline;
+  font-weight: 500;
+}
+
+.pride-banner-sep {
+  display: inline-block;
+  margin: 0 0.5rem;
+  opacity: 0.6;
+}
+
+.pride-banner-dismiss {
+  background: transparent;
+  border: 0;
+  color: var(--color-cream);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.pride-banner-dismiss:hover {
+  opacity: 1;
+}
+
+/* During pride month, the SectionDivider ornament picks up two extra
+ * stripes (olive + terracotta) so the three-rectangle mark reads as a
+ * six-color brand-palette stripe. Skew + size carry over from the base
+ * styles — the change is additive, not jarring. */
+[data-pride] .ispc-divider::after,
+[data-pride] .ispc-divider::before {
+  content: '';
+  display: inline-block;
+  height: 0.375rem;
+  width: 0.5rem;
+  transform: skewX(-12deg);
+}
+[data-pride] .ispc-divider::before {
+  background: var(--color-terracotta);
+  order: 4;
+}
+[data-pride] .ispc-divider::after {
+  background: var(--color-olive);
+  order: 5;
+  width: 0.375rem;
+}
+html[dir="rtl"][data-pride] .ispc-divider::after,
+html[dir="rtl"][data-pride] .ispc-divider::before {
+  transform: skewX(12deg);
+}
+
+/* Footer pride badge — small wordmark only visible during June. */
+.pride-badge { display: none; }
+[data-pride] .pride-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  background: linear-gradient(
+    90deg,
+    var(--color-magenta),
+    var(--color-saffron),
+    var(--color-olive),
+    var(--color-lavender)
+  );
+  color: var(--color-cream);
+  border-radius: 2px;
+}
+
 .prose {
   max-width: 680px;
   line-height: 1.8;

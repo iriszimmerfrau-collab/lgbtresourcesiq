@@ -19,6 +19,7 @@ import QuickExit from '@components/QuickExit.astro';
 import Nav from '@components/Nav.astro';
 import Footer from '@components/Footer.astro';
 import PrivacyBanner from '@components/PrivacyBanner.astro';
+import PrideBanner from '@components/PrideBanner.astro';
 
 interface ArticleMeta {
   publishedTime: string;
@@ -191,8 +192,35 @@ const baseOrgGraph = {
     <script is:inline>
       (function(){try{var p=window.location.pathname,l=p.split('/')[1];if(l==='en'||l==='ar'||l==='ckb')localStorage.setItem('ispc-lang',l);}catch(e){}})();
     </script>
+    <script is:inline>
+      /* Pride Month time gate.
+       *
+       * Runs early in <head> so the [data-pride] attribute is on <html>
+       * before first paint — banner + theme rules apply without a flash
+       * of unstyled content. Browser-local time is intentional: a
+       * visitor in Iraq sees the theme through Baghdad's June 30
+       * midnight, a visitor in Berlin sees it through Berlin's. The
+       * banner reverts automatically at the start of July with no
+       * rebuild needed (static GitHub Pages builds don't run on a cron).
+       *
+       * getMonth() returns 5 for June (zero-indexed). To preview the
+       * theme out of season, set ispc-pride-preview=1 in localStorage.
+       */
+      (function () {
+        try {
+          var now = new Date();
+          var isJune = now.getMonth() === 5;
+          var preview = false;
+          try { preview = localStorage.getItem('ispc-pride-preview') === '1'; } catch (e) {}
+          if (isJune || preview) {
+            document.documentElement.setAttribute('data-pride', '');
+          }
+        } catch (e) { /* if Date is broken the whole web is broken; do nothing */ }
+      })();
+    </script>
   </head>
   <body class="bg-offwhite text-body min-h-screen flex flex-col">
+    <PrideBanner />
     <QuickExit lang={lang} />
     {showBanner && (
       <div class="bg-exit-red text-white text-center text-sm py-2 px-4 font-semibold" role="alert">
