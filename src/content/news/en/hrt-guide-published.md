@@ -10,12 +10,12 @@ After many months of writing, reviewing, and translation work by community membe
 The guide covers:
 
 - What HRT is and how it works
-- Feminizing HRT — Estrofem, cyproterone acetate (Androcur, Androfarm), bicalutamide, spironolactone, with critical safety information about the long-term meningioma risk of cyproterone
-- Masculinizing HRT — testosterone options, dosing, and timeline
-- Sourcing — practical instruction on Iraqi pharmacies, the show-the-photo method, and the مذخر (warehouse) ordering system
-- Pharmacy script — tested Arabic-language scripts for navigating pharmacy interactions
-- Lab monitoring — what to test, when, and where to get tests done in Iraqi private labs
-- Risks — an honest accounting of what can go wrong
+- Feminizing HRT. Estrofem, cyproterone acetate (Androcur, Androfarm), bicalutamide, spironolactone, with critical safety information about the long-term meningioma risk of cyproterone
+- Masculinizing HRT. Testosterone options, dosing, and timeline
+- Sourcing. Practical instruction on Iraqi pharmacies, the show-the-photo method, and the مذخر (warehouse) ordering system
+- Pharmacy script. Tested Arabic-language scripts for navigating pharmacy interactions
+- Lab monitoring. What to test, when, and where to get tests done in Iraqi private labs
+- Risks. An honest accounting of what can go wrong
 
 Read it: [HRT guide overview](/en/guides/hrt-overview).
 

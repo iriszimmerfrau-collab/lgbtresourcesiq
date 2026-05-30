@@ -10,29 +10,29 @@ order: 4
 
 > **This guide is harm-reduction information.** It is not medical advice. We provide it because most readers do not have access to an informed clinician.
 
-Masculinizing HRT is structurally simpler than feminizing HRT — testosterone is given alone, without an antiandrogen, because testosterone naturally suppresses estrogen production through normal endocrine feedback. This page covers what is available in Iraq and how to use it safely.
+Masculinizing HRT is structurally simpler than feminizing HRT. Testosterone is given alone, without an antiandrogen, because testosterone naturally suppresses estrogen production through normal endocrine feedback. This page covers what is available in Iraq and how to use it safely.
 
 ## Testosterone options in Iraq
 
-### Injectable testosterone — the most common form
+### Injectable testosterone. The most common form
 
 The most widely available testosterone in Iraqi pharmacies is **testosterone enanthate** (sold as **Testoviron Depot** by Bayer-Schering, and as generics) and **testosterone cypionate**. These come as oil-based intramuscular injections.
 
-- **Testoviron Depot 250 mg/mL** — 1 mL ampoules. Most commonly stocked.
-- Generic enanthate or cypionate from regional manufacturers — sometimes available at lower cost.
+- **Testoviron Depot 250 mg/mL**. 1 mL ampoules. Most commonly stocked.
+- Generic enanthate or cypionate from regional manufacturers. Sometimes available at lower cost.
 
 **Typical dosing:**
 
-- **125 mg every 7 days** — a stable, well-tolerated regimen for most trans men.
-- **250 mg every 14 days** — also common, though levels swing more between doses.
-- **Lower starting doses** (62.5 mg weekly) for the first 1–2 months can ease the transition into testosterone effects.
+- **125 mg every 7 days**. A stable, well-tolerated regimen for most trans men.
+- **250 mg every 14 days**. Also common, though levels swing more between doses.
+- **Lower starting doses** (62.5 mg weekly) for the first 1-2 months can ease the transition into testosterone effects.
 
 **Injection technique:**
 
 - Intramuscular injection into the upper-outer quadrant of the gluteus, the lateral thigh, or (subcutaneously, if your needle is fine enough) into the abdomen or thigh fat.
 - Use a clean needle every time. Reuse risks abscess and injection-site infection.
 - Pharmacies sell needles and syringes without questions in most cases.
-- Some communities use 23G or 25G needles for subcutaneous injection of the same medication — this is gentler than IM and equally effective.
+- Some communities use 23G or 25G needles for subcutaneous injection of the same medication. This is gentler than IM and equally effective.
 
 ### Oral testosterone
 
@@ -40,7 +40,7 @@ The most widely available testosterone in Iraqi pharmacies is **testosterone ena
 
 ### Testosterone gel
 
-Testosterone gel (AndroGel and equivalents) is available in larger Iraqi cities but expensive. Daily application gives smoother levels than injection but requires careful handling — the gel can transfer to others through skin contact and contaminate household members or partners. Wash hands thoroughly after application.
+Testosterone gel (AndroGel and equivalents) is available in larger Iraqi cities but expensive. Daily application gives smoother levels than injection but requires careful handling. The gel can transfer to others through skin contact and contaminate household members or partners. Wash hands thoroughly after application.
 
 ## Sourcing testosterone in Iraq
 
@@ -49,23 +49,23 @@ Testosterone is generally easier to source than feminizing medications because I
 **Tips:**
 
 - Brand names like **Testoviron** are recognized on sight; you do not need to explain.
-- The bodybuilding cover story works without effort — Iraqi pharmacies sell large quantities of testosterone for this reason and ask few questions.
+- The bodybuilding cover story works without effort. Iraqi pharmacies sell large quantities of testosterone for this reason and ask few questions.
 - **Going as a man-passing customer dramatically reduces friction.** Once you start passing on testosterone, sourcing becomes much easier.
 
 ## Realistic timeline of changes
 
 | Change | Begins | Mature |
 |---|---|---|
-| Increased oily skin, possible acne | 1–6 weeks | Variable |
-| Increased libido | Weeks | 1–3 months |
-| Fat redistribution (loss in hips/thighs, gain in abdomen) | 3–6 months | 2–5 years |
-| Increased muscle mass and strength | 1–6 months | 2–5 years |
-| Cessation of menstruation | 1–6 months | (Often within 3 months on full dose) |
-| Voice deepening | 3–12 months | 1–2 years (permanent) |
-| Facial hair growth | 6 months – 4 years | Highly variable, often partial |
-| Body hair growth | 3–6 months | 2–5 years |
-| Clitoral growth | 1–6 months | 1–2 years (permanent) |
-| Hair-line recession (male-pattern) | 1–10 years | Variable, partly genetic |
+| Increased oily skin, possible acne | 1-6 weeks | Variable |
+| Increased libido | Weeks | 1-3 months |
+| Fat redistribution (loss in hips/thighs, gain in abdomen) | 3-6 months | 2-5 years |
+| Increased muscle mass and strength | 1-6 months | 2-5 years |
+| Cessation of menstruation | 1-6 months | (Often within 3 months on full dose) |
+| Voice deepening | 3-12 months | 1-2 years (permanent) |
+| Facial hair growth | 6 months. 4 years | Highly variable, often partial |
+| Body hair growth | 3-6 months | 2-5 years |
+| Clitoral growth | 1-6 months | 1-2 years (permanent) |
+| Hair-line recession (male-pattern) | 1-10 years | Variable, partly genetic |
 
 Hip width, height, and breast tissue **do not change** with testosterone. Top surgery is needed for chest reconstruction.
 
@@ -78,7 +78,7 @@ Hip width, height, and breast tissue **do not change** with testosterone. Top su
 - Drinking adequate water
 - Yearly hematocrit checks
 
-**Cardiovascular changes.** Testosterone shifts cholesterol — LDL up, HDL down — which over decades raises cardiovascular risk slightly. Yearly lipid panel.
+**Cardiovascular changes.** Testosterone shifts cholesterol. LDL up, HDL down. Which over decades raises cardiovascular risk slightly. Yearly lipid panel.
 
 **Hair loss.** If male-pattern baldness runs in your family, testosterone is likely to bring it out. Finasteride or dutasteride can slow this, though they have their own profile.
 
@@ -98,10 +98,10 @@ Tapering rather than stopping suddenly reduces mood disruption but is not strict
 
 See the [monitoring page](/en/guides/hrt-monitoring) for the full lab schedule. Briefly:
 
-- **Total testosterone** — target 400–700 ng/dL
-- **Estradiol** — should drop naturally; very high E2 may require an aromatase inhibitor (rare)
-- **Hematocrit** — keep below 54%
-- **Lipid panel** — yearly
-- **Liver function** — yearly
+- **Total testosterone**. Target 400-700 ng/dL
+- **Estradiol**. Should drop naturally; very high E2 may require an aromatase inhibitor (rare)
+- **Hematocrit**. Keep below 54%
+- **Lipid panel**. Yearly
+- **Liver function**. Yearly
 
 A first lab draw 3 months after starting confirms the regimen is working. After that, twice yearly is enough for most people, with yearly liver and lipid checks.

@@ -52,7 +52,7 @@ const isMedical = category === 'hrt' || category === 'mental-health';
 const isEducational = category === 'identity' || category === 'general';
 
 // Wikidata entity overlays live in @lib/entity-overlays so en/ar/ckb routes
-// share identical hints — language differs, but the underlying entities are
+// share identical hints. Language differs, but the underlying entities are
 // universal. AI answer engines use these to disambiguate which Iraq, which
 // estradiol, which gender dysphoria we mean.
 const entityHints = guideEntityHints(slug);
@@ -88,9 +88,9 @@ const pharmacyHowTo =
           { name: 'Take a clear photo of the medication box', text: 'Have a clear, well-lit photo of the medication packaging ready on your phone before you walk into the pharmacy. Photographing the box of someone you trust who already has the medication is the cleanest source.' },
           { name: 'Walk into a private pharmacy alone', text: 'Choose a private pharmacy (not chain, not in your immediate neighborhood). Go alone. Confidence and brevity are your best cover.' },
           { name: 'Show the photo and name the medication', text: 'Show the pharmacist the photo on your phone. Say the brand name aloud (e.g. "Estrofem", "Androcur"). Do not explain why.' },
-          { name: 'Have a cover story ready if asked', text: 'If asked what it is for, use the cover stories in our Pharmacy Script guide — most pharmacists do not ask once they recognize the box.' },
-          { name: 'If not in stock, ask for مذخر order', text: 'If the pharmacy does not stock it, ask them to order it from a مذخر (medical wholesaler). Most can deliver in 1–3 days. Pay a deposit if asked.' },
-          { name: 'Rotate pharmacies for refills', text: 'Do not refill at the same pharmacy month after month. Spread purchases across 3–5 establishments so no single pharmacy sees your full pattern.' },
+          { name: 'Have a cover story ready if asked', text: 'If asked what it is for, use the cover stories in our Pharmacy Script guide. Most pharmacists do not ask once they recognize the box.' },
+          { name: 'If not in stock, ask for مذخر order', text: 'If the pharmacy does not stock it, ask them to order it from a مذخر (medical wholesaler). Most can deliver in 1-3 days. Pay a deposit if asked.' },
+          { name: 'Rotate pharmacies for refills', text: 'Do not refill at the same pharmacy month after month. Spread purchases across 3-5 establishments so no single pharmacy sees your full pattern.' },
         ],
       })
     : null;
@@ -102,12 +102,12 @@ const escapePlanHowTo =
   slug === 'honor-violence'
     ? buildHowToSchema({
         name: 'Emergency escape plan for queer Iraqis facing imminent honor violence',
-        description: 'Ordered safety steps for an Iraqi queer person whose family is about to confine or harm them. Action sequence — do not wait for confirmation.',
+        description: 'Ordered safety steps for an Iraqi queer person whose family is about to confine or harm them. Action sequence. Do not wait for confirmation.',
         ctx,
         totalTime: 'PT1H',
         steps: [
           { name: 'Get out of the house', text: 'Leave with your documents and phone if you can. If forced to choose between safety and possessions, choose safety.' },
-          { name: 'Leave the neighborhood', text: 'Take a taxi or bus to a location your family would not know to search. Pay in cash. Do not give the driver your real destination — get out several streets early and walk the rest.' },
+          { name: 'Leave the neighborhood', text: 'Take a taxi or bus to a location your family would not know to search. Pay in cash. Do not give the driver your real destination. Get out several streets early and walk the rest.' },
           { name: 'Contact your pre-arranged contact', text: 'Message or call the friend or community member you designated in advance. Tell them you are coming and roughly when.' },
           { name: 'Disable shared location services and family accounts', text: 'Many Iraqi families share Google or Apple accounts. Sign out. Disable Find My Phone. Revoke any shared device permissions.' },
           { name: 'Do not return home', text: 'Not "to grab something." Not "to explain." Once your family has decided, returning is what gets people killed.' },
@@ -123,7 +123,7 @@ const articleFallback = isMedical || isEducational ? buildArticleSchema(guide, c
 // answer instead of an arbitrary middle paragraph.
 const primaryWithSpeakable = guide.data.tldr ? withSpeakable(primarySchema as Record<string, unknown>) : primarySchema;
 
-// Per-guide FAQPage schema — paired 1:1 with the CommonQuestions block in
+// Per-guide FAQPage schema. Paired 1:1 with the CommonQuestions block in
 // the rendered HTML. AI engines extract these for related-query answers
 // independent of the central site FAQ.
 const faqPage =

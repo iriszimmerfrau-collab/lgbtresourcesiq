@@ -1,7 +1,7 @@
 ---
 /**
  * Unified story detail page. Single canonical URL per story regardless of
- * the visitor's site language — the page chrome renders in the story's
+ * the visitor's site language. The page chrome renders in the story's
  * own authored language so the reading experience is consistent.
  */
 import { getCollection, render, type CollectionEntry } from 'astro:content';
@@ -41,8 +41,8 @@ const wordCount = estimateWordCount(story.body ?? '');
 const enrich: ArticleEnrichment = { wordCount, readingTime };
 
 const byline = story.data.anonymous
-  ? t(lang, 'stories.anonymous')
-  : (story.data.pseudonym ?? t(lang, 'stories.anonymous'));
+  ? T(lang, 'stories.anonymous')
+  : (story.data.pseudonym ?? T(lang, 'stories.anonymous'));
 
 const siteUrl = new URL('/', Astro.site).href;
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
@@ -105,6 +105,6 @@ const cwLabel =
       <strong>{cwLabel}:</strong> {story.data.contentWarning}
     </Callout>
   )}
-  <p class="text-sm text-muted italic mb-6">— {byline}</p>
+  <p class="text-sm text-muted italic mb-6">,  {byline}</p>
   <Content />
 </ArticleLayout>

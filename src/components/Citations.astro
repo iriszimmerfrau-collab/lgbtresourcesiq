@@ -1,6 +1,6 @@
 ---
 /**
- * Citations — structured source bibliography rendered at the bottom of an
+ * Citations. Structured source bibliography rendered at the bottom of an
  * article when frontmatter declares `citations`. Mirrored into the article's
  * JSON-LD as a `citation` array of CreativeWork refs.
  *
@@ -57,7 +57,7 @@ const heading =
         )}
         {(c.org || c.year) && (
           <span class="text-muted">
-            {' '}—
+            {' '}, 
             {c.org && <span> {c.org}</span>}
             {c.org && c.year && <span>,</span>}
             {c.year && <span> {c.year}</span>}

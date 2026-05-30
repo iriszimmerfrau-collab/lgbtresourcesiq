@@ -175,7 +175,7 @@ if (props.kind === 'real') {
           <p>
             <strong>{t(lang, 'alerts.label.source')}:</strong>{' '}
             {alert!.data.sourceUrl
-              ? <a href={alert!.data.sourceUrl} target="_blank" rel="noopener noreferrer">{alert!.data.source} — {t(lang, 'alerts.label.original')}</a>
+              ? <a href={alert!.data.sourceUrl} target="_blank" rel="noopener noreferrer">{alert!.data.source}. {t(lang, 'alerts.label.original')}</a>
               : alert!.data.source}
           </p>
         </footer>

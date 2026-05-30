@@ -22,7 +22,7 @@ interface Props {
 }
 
 const { title, arHref, pageLabel } = Astro.props;
-const canonicalArUrl = arHref.startsWith('http') ? arHref : new URL(arHref, Astro.site).href;
+const canonicalArUrl = arHref.startsWith('http') ? ArHref : new URL(arHref, Astro.site).href;
 const description = 'وەرگێڕانی کوردیی ئەم پەڕەیە لە ژێر ئامادەکاریدایە. تکایە نوسخەی عەرەبیی بخوێنەرەوە.';
 ---
 
@@ -45,7 +45,7 @@ const description = 'وەرگێڕانی کوردیی ئەم پەڕەیە لە ژ
       </p>
       <p class="text-base leading-relaxed mb-3">
         ئێمە لە سەر ئامادەکردنی وەرگێڕانی کوردیی هەموو ناوەڕۆکی ماڵپەڕەکەین.
-        تا ئەو کاتە، تکایە نوسخەی عەرەبی بخوێنەرەوە — زۆربەی خوێنەرانی کوردی
+        تا ئەو کاتە، تکایە نوسخەی عەرەبی بخوێنەرەوە. زۆربەی خوێنەرانی کوردی
         لە عێراقدا توانای خوێندنەوەی عەرەبیشیان هەیە.
       </p>
       <p class="mt-4">

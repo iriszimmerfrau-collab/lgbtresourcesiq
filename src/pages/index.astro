@@ -1,5 +1,5 @@
 ---
-// Root language router — redirects to /en/, /ar/, or /ckb/ based on saved
+// Root language router. Redirects to /en/, /ar/, or /ckb/ based on saved
 // preference or browser Accept-Language. Static fallback below shows three
 // large buttons for manual selection (works without JS).
 ---
@@ -46,14 +46,14 @@
     <script is:inline define:vars={{ base: import.meta.env.BASE_URL }}>
       (function(){
         try {
-          var prefix = base.endsWith('/') ? base : base + '/';
+          var prefix = base.endsWith('/') ? Base : base + '/';
           var saved = localStorage.getItem('ispc-lang');
           if (saved === 'ar' || saved === 'en' || saved === 'ckb') {
             window.location.replace(prefix + saved + '/');
             return;
           }
           var nav = (navigator.language || '').toLowerCase();
-          // Sorani (Central Kurdish) — BCP-47 'ckb' or ISO-639-1 'ku' fallback
+          // Sorani (Central Kurdish). BCP-47 'ckb' or ISO-639-1 'ku' fallback
           if (nav.startsWith('ckb') || nav.startsWith('ku')) {
             window.location.replace(prefix + 'ckb/');
           } else if (nav.startsWith('ar')) {

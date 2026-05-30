@@ -1,9 +1,9 @@
 ---
 /**
- * EditorialReview — collective-level credibility callout shown on medical
+ * EditorialReview. Collective-level credibility callout shown on medical
  * guides (HRT, mental-health) where E-A-T trust signals matter most. Names
  * the *collective* and its lived-experience credentials, never individuals
- * — the threat model rules out personal bylines.
+ *. The threat model rules out personal bylines.
  *
  * Pair with reviewedBy + lastReviewed in the MedicalWebPage JSON-LD
  * emitted by the route template. The visible block tells human readers
@@ -31,18 +31,18 @@ const copy =
   lang === 'ar'
     ? {
         title: 'كيف كُتب هذا الدليل',
-        body: 'كُتب وراجع هذا الدليل من قبل التجمع العراقي للتقدم الاجتماعي — وهو تجمع لاعراقيين كويريين لديهم خبرة معاشة مباشرة في الحصول على HRT من صيدليات عراقية، تشغيل فحوصاتهم الخاصة في مختبرات عراقية، والتعامل مع منظومة الرعاية الصحية العراقية. الأعضاء يشملون أشخاصاً على HRT منذ 1 إلى 5+ سنوات، تجارب توثيق العنف العائلي، وخبرات حقيقية في تخطيط السلامة الرقمية لمجتمع الميم العراقي. هذه ليست نصيحة طبية بل معلومات لتقليل الأضرار من أناس عاشوا ما يصفونه.',
+        body: 'كُتب وراجع هذا الدليل من قبل التجمع العراقي للتقدم الاجتماعي. وهو تجمع لاعراقيين كويريين لديهم خبرة معاشة مباشرة في الحصول على HRT من صيدليات عراقية، تشغيل فحوصاتهم الخاصة في مختبرات عراقية، والتعامل مع منظومة الرعاية الصحية العراقية. الأعضاء يشملون أشخاصاً على HRT منذ 1 إلى 5+ سنوات، تجارب توثيق العنف العائلي، وخبرات حقيقية في تخطيط السلامة الرقمية لمجتمع الميم العراقي. هذه ليست نصيحة طبية بل معلومات لتقليل الأضرار من أناس عاشوا ما يصفونه.',
         lastReviewed: 'آخر مراجعة',
       }
     : lang === 'ckb'
     ? {
         title: 'چۆن ئەم ڕێبەرە نووسراوە',
-        body: 'ئەم ڕێبەرە لەلایەن کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراقەوە نووسراوە و پێداچوونەوەی بۆ کراوە — کۆڕێکە لە کوێرە عێراقییەکان کە ئەزموونی ژیانیی ڕاستەوخۆیان هەیە لە بەدەستهێنانی HRT لە دەرمانخانە عێراقییەکان، ئەنجامدانی پشکنینەکانیان لە تاقیگە عێراقییەکاندا، و مامەڵە لەگەڵ سیستەمی چاودێریی تەندروستیی عێراقدا. ئەندامەکان ئەو کەسانە لەخۆ دەگرن کە لە ١ بۆ ٥+ ساڵە لەسەر HRT ـن، ئەزموونی بەڵگەنامەکردنی توندوتیژیی خێزانی، و ئەزموونی ڕاستەقینەی پلانی ئاسایشی دیجیتاڵی بۆ کۆمەڵگای کوێری عێراقی. ئەمە ڕاوێژی پزیشکی نییە، بەڵکو زانیاریی کەمکردنەوەی زیانە لە کەسانێکەوە کە بەخۆیان ژیاون بەو شتانەی وەسفیان دەکەن.',
+        body: 'ئەم ڕێبەرە لەلایەن کۆڕی پێشکەوتنی کۆمەڵایەتیی عێراقەوە نووسراوە و پێداچوونەوەی بۆ کراوە. کۆڕێکە لە کوێرە عێراقییەکان کە ئەزموونی ژیانیی ڕاستەوخۆیان هەیە لە بەدەستهێنانی HRT لە دەرمانخانە عێراقییەکان، ئەنجامدانی پشکنینەکانیان لە تاقیگە عێراقییەکاندا، و مامەڵە لەگەڵ سیستەمی چاودێریی تەندروستیی عێراقدا. ئەندامەکان ئەو کەسانە لەخۆ دەگرن کە لە ١ بۆ ٥+ ساڵە لەسەر HRT ـن، ئەزموونی بەڵگەنامەکردنی توندوتیژیی خێزانی، و ئەزموونی ڕاستەقینەی پلانی ئاسایشی دیجیتاڵی بۆ کۆمەڵگای کوێری عێراقی. ئەمە ڕاوێژی پزیشکی نییە، بەڵکو زانیاریی کەمکردنەوەی زیانە لە کەسانێکەوە کە بەخۆیان ژیاون بەو شتانەی وەسفیان دەکەن.',
         lastReviewed: 'دوایین پێداچوونەوە',
       }
     : {
         title: 'How this guide was written',
-        body: 'This guide is written and reviewed by the Iraqi Social Progress Collective — a peer collective of queer Iraqis with direct lived experience sourcing HRT from Iraqi pharmacies, running their own labs at Iraqi private labs, and navigating the Iraqi healthcare landscape. Members include people who have been on HRT for 1 to 5+ years, people who have documented family violence patterns, and people with hands-on experience planning digital safety for the Iraqi queer community. This is not medical advice; it is harm-reduction information from people who have lived what they describe.',
+        body: 'This guide is written and reviewed by the Iraqi Social Progress Collective. A peer collective of queer Iraqis with direct lived experience sourcing HRT from Iraqi pharmacies, running their own labs at Iraqi private labs, and navigating the Iraqi healthcare landscape. Members include people who have been on HRT for 1 to 5+ years, people who have documented family violence patterns, and people with hands-on experience planning digital safety for the Iraqi queer community. This is not medical advice; it is harm-reduction information from people who have lived what they describe.',
         lastReviewed: 'Last reviewed',
       };
 ---

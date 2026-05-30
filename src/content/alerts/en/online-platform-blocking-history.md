@@ -7,7 +7,7 @@ severity: info
 category: surveillance
 source: "Access Now / NetBlocks / Iraqi Communications and Media Commission"
 sourceUrl: "https://netblocks.org/"
-affected: "Iraqi internet users — VPN required for blocked platforms"
+affected: "Iraqi internet users. VPN required for blocked platforms"
 keywords: "Iraq Grindr blocked, Iraq Telegram block, Iraq VPN required, Iraq internet censorship, Iraqi ISP blocking, NetBlocks Iraq, تطبيق Grindr العراق"
 ---
 
@@ -19,7 +19,7 @@ Iraq's Communications and Media Commission has periodically ordered ISPs to bloc
 
 The most popular gay dating app in the world has been blocked in Iraq since mid-2018, accessible only via VPN. The block was ordered without official public explanation but is widely understood to be morality-based.
 
-**What this means:** opening Grindr in Iraq without a VPN will simply fail to load or will time out. The app cannot be downloaded from the Iraqi-region Google Play Store. **Always use a VPN before opening Grindr in Iraq** — and use a VPN that doesn't itself reveal your location to the app.
+**What this means:** opening Grindr in Iraq without a VPN will simply fail to load or will time out. The app cannot be downloaded from the Iraqi-region Google Play Store. **Always use a VPN before opening Grindr in Iraq**. And use a VPN that doesn't itself reveal your location to the app.
 
 ### Other dating apps
 
@@ -57,15 +57,15 @@ For an LGBTQ+ Iraqi, **always-on VPN** is not optional. Even on platforms that a
 
 **Recommended VPNs:**
 
-- **Mullvad** — accepts cash, no email required, audited no-log policy. €5/month. Most privacy-respecting.
-- **ProtonVPN** — free tier available; paid is €5–10/month. EU-based, audited.
-- **IVPN** — similar privacy properties to Mullvad.
+- **Mullvad**. Accepts cash, no email required, audited no-log policy. €5/month. Most privacy-respecting.
+- **ProtonVPN**. Free tier available; paid is €5-10/month. EU-based, audited.
+- **IVPN**. Similar privacy properties to Mullvad.
 
 **Avoid:**
 
 - Free VPNs from Google Play (most are surveillance fronts)
 - VPNs with marketing focused on streaming/Netflix (privacy is not their priority)
-- "Ghost" / "Hola" / similar — these have documented privacy problems
+- "Ghost" / "Hola" / similar. These have documented privacy problems
 
 ### Tor (for highest-risk activity)
 
@@ -85,7 +85,7 @@ A typical day's safe internet use for a queer Iraqi:
 2. **VPN connects automatically** (set up always-on in VPN app settings).
 3. All browser, app, and game traffic flows through VPN.
 4. For high-sensitivity work (asylum research, contacting international orgs, reading this site without ISP visibility), use Tor Browser.
-5. Use Signal or XMPP for sensitive messaging — never SMS, never plain WhatsApp/Telegram for the most sensitive conversations.
+5. Use Signal or XMPP for sensitive messaging. Never SMS, never plain WhatsApp/Telegram for the most sensitive conversations.
 
 ## What's NOT blocked but still risky
 
@@ -94,12 +94,12 @@ A typical day's safe internet use for a queer Iraqi:
 - YouTube (your watch history is logged to your account)
 - Most of the public web
 
-The defense here isn't blocking — it's **not associating queer-related browsing with your real-identity account or device.** Use a clean Google account, browse incognito with VPN, or use a separate device for queer-related research.
+The defense here isn't blocking. It's **not associating queer-related browsing with your real-identity account or device.** Use a clean Google account, browse incognito with VPN, or use a separate device for queer-related research.
 
 ## Resources
 
-- [NetBlocks](https://netblocks.org/) — tracks internet shutdowns and blocks globally
-- [Access Now](https://www.accessnow.org/) — digital rights advocacy
+- [NetBlocks](https://netblocks.org/). Tracks internet shutdowns and blocks globally
+- [Access Now](https://www.accessnow.org/). Digital rights advocacy
 - [Tor Project](https://www.torproject.org/)
 - [Mullvad VPN](https://mullvad.net/)
 - [ProtonVPN](https://protonvpn.com/)

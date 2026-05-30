@@ -87,7 +87,7 @@ const ariaLabel = t(lang, 'quickexit.aria');
   }
 
   function triggerExit() {
-    // 1. White cover — immediately hide all content
+    // 1. White cover. Immediately hide all content
     if (cover) cover.style.display = 'block';
     // 2. Open decoy in new tab
     try { window.open(DECOY, '_blank'); } catch(e) {}
@@ -99,7 +99,7 @@ const ariaLabel = t(lang, 'quickexit.aria');
   if (btnDesktop) btnDesktop.addEventListener('click', triggerExit);
   if (btnMobile) btnMobile.addEventListener('click', triggerExit);
 
-  // ESC key — works even when focus is inside inputs
+  // ESC key. Works even when focus is inside inputs
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') triggerExit();
   });

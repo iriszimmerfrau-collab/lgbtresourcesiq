@@ -1,7 +1,7 @@
 ---
 /**
  * AR-chrome listing for the unified Stories section. Renders the same flat
- * stories collection as /en/stories/ and /ckb/stories/ — one section, three
+ * stories collection as /en/stories/ and /ckb/stories/. One section, three
  * navigation surfaces. Cards link to the canonical un-prefixed
  * /stories/{slug}/ detail URL.
  */
@@ -24,7 +24,7 @@ function dirFor(l: string): 'rtl' | 'ltr' {
 
 <BaseLayout
   title={t(lang, 'nav.stories')}
-  description="قصص بضمير المتكلّم من العراقيين الكويريين — مُشاركة بشكل مجهول وبأصواتهم. القصص تُنشر بلغتها الأصلية (الإنجليزية، العربية، أو الكردية الوسطى) ولا تُترجم."
+  description="قصص بضمير المتكلّم من العراقيين الكويريين. مُشاركة بشكل مجهول وبأصواتهم. القصص تُنشر بلغتها الأصلية (الإنجليزية، العربية، أو الكردية الوسطى) ولا تُترجم."
   lang={lang}
 >
   <section class="py-8 max-w-[800px] mx-auto">
@@ -36,7 +36,7 @@ function dirFor(l: string): 'rtl' | 'ltr' {
       >{t(lang, 'stories.submit.cta')} ←</a>
     </div>
     <p class="text-muted mb-8">
-      أصوات من المجتمع، مُشاركة بشكل مجهول وبكلماتهم. القصص محفوظة بلغتها الأصلية —
+      أصوات من المجتمع، مُشاركة بشكل مجهول وبكلماتهم. القصص محفوظة بلغتها الأصلية , 
       ستجد قصصاً بالإنجليزية والعربية والكردية الوسطى أدناه.
     </p>
 

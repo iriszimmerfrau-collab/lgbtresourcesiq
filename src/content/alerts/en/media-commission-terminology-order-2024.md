@@ -14,7 +14,7 @@ keywords: "Iraq media commission, Iraq sexual deviance, شذوذ جنسي, Iraq 
 On August 9, 2023, the **Iraqi Communications and Media Commission** (هيئة الإعلام والاتصالات) issued an official directive to all licensed media outlets in Iraq, ordering them to:
 
 1. Replace the term **"homosexuality"** (المثلية الجنسية, *al-mithliyya al-jinsiyya*) with **"sexual deviance"** (الشذوذ الجنسي, *al-shudhūdh al-jinsī*) in all news, programming, and social media output.
-2. Replace **"gender"** (الجندر) with **"sex"** (الجنس) — flattening the linguistic distinction that allows discussion of trans identity.
+2. Replace **"gender"** (الجندر) with **"sex"** (الجنس). Flattening the linguistic distinction that allows discussion of trans identity.
 3. Avoid coverage that "contradicts public morals" or "promotes" what the directive describes as deviant behavior.
 
 The directive applied to print, broadcast, and online media operating under Iraqi licenses. **Penalties for non-compliance** included license suspension or revocation. Foreign correspondents covering Iraq were not directly bound by the directive but face informal pressure from the same authorities.

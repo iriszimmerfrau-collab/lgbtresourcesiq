@@ -1,6 +1,6 @@
 ---
 /**
- * Pride Month banner — June 1 through June 30, browser-local.
+ * Pride Month banner. June 1 through June 30, browser-local.
  *
  * Rendered hidden by default. The inline detection script in BaseLayout
  * sets `<html data-pride>` only when the visitor's local clock is in June,
@@ -16,7 +16,7 @@
  *    borrowed/shared phone can hide it for the session.
  *  - Tri-lingual copy is hardcoded so the banner ships identical across
  *    every page regardless of the chrome language.
- *  - No emojis, no flag glyphs — those scan instantly under shoulder-surf.
+ *  - No emojis, no flag glyphs. Those scan instantly under shoulder-surf.
  */
 ---
 
@@ -51,7 +51,7 @@
     if (!banner || !dismissBtn) return;
 
     // Hide if previously dismissed this session.
-    try {
+    Try {
       if (sessionStorage.getItem('ispc-pride-dismissed') === '1') {
         banner.classList.add('hidden');
         return;

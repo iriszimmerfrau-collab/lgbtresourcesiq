@@ -8,7 +8,7 @@ const lang = 'en' as const;
 
 <BaseLayout
   title={t(lang, 'feedback.title')}
-  description="Send anonymous feedback to the Iraqi Social Progress Collective. No IP, no name, no tracking — just your message."
+  description="Send anonymous feedback to the Iraqi Social Progress Collective. No IP, no name, no tracking. Just your message."
   lang={lang}
   articleWidth
 >
@@ -84,7 +84,7 @@ const lang = 'en' as const;
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         // Honeypot: if a bot filled the hidden field, fake-success and don't POST.
-        if (form.elements['website'].value) {
+        If (form.elements['website'].value) {
           status.hidden = false;
           status.textContent = msgSuccess;
           status.className = 'text-sm text-olive font-semibold';

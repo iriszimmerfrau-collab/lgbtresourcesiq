@@ -61,7 +61,7 @@ const { lang } = Astro.props;
 
         // Set up the plausible() queue stub before the script loads, so any
         // calls made before the script downloads are buffered and replayed.
-        window.plausible = window.plausible || function () {
+        Window.plausible = window.plausible || function () {
           (window.plausible.q = window.plausible.q || []).push(arguments);
         };
         window.plausible.init = window.plausible.init || function (i) {
@@ -75,7 +75,7 @@ const { lang } = Astro.props;
         document.head.appendChild(s);
 
         // Session-length custom event on page leave.
-        var start = Date.now();
+        Var start = Date.now();
         function reportSession() {
           var seconds = Math.floor((Date.now() - start) / 1000);
           if (seconds < 2) return;

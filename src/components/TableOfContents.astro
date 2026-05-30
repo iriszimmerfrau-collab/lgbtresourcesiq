@@ -1,6 +1,6 @@
 ---
 /**
- * TableOfContents — auto-rendered ToC for long articles. Uses the headings
+ * TableOfContents. Auto-rendered ToC for long articles. Uses the headings
  * array Astro's content render() returns, so it stays in sync with the
  * markdown automatically. Only renders for guides with at least 4 H2s
  * (below that, scrolling is faster than ToC navigation).
@@ -19,7 +19,7 @@ interface Props {
 
 const { headings, lang } = Astro.props;
 
-// Only the H2s — H3+ would make the ToC noisy on screen.
+// Only the H2s. H3+ would make the ToC noisy on screen.
 const h2s = headings.filter((h) => h.depth === 2);
 
 const label =

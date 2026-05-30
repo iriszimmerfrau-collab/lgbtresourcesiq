@@ -7,7 +7,7 @@ severity: high
 category: border
 source: "Community reports / Outright International"
 affected: "Travelers leaving Iraq, especially via Baghdad International (BGW) and Erbil International (EBL)"
-tldr: "Iraqi border officers at Baghdad (BGW) and Erbil (EBL) international airports are actively searching phones for Grindr, Hornet, Romeo, Tinder same-sex matches, LGBT-tagged Telegram channels, and queer social-media accounts. Trans women and visibly gender-nonconforming travellers report the most scrutiny. The cleanest preparation is travelling with a clean phone — no LGBT-tagged apps, no relevant social accounts, no relevant browser history, no sensitive photos."
+tldr: "Iraqi border officers at Baghdad (BGW) and Erbil (EBL) international airports are actively searching phones for Grindr, Hornet, Romeo, Tinder same-sex matches, LGBT-tagged Telegram channels, and queer social-media accounts. Trans women and visibly gender-nonconforming travellers report the most scrutiny. The cleanest preparation is travelling with a clean phone. No LGBT-tagged apps, no relevant social accounts, no relevant browser history, no sensitive photos."
 keywords: "Iraq airport phone search, Baghdad airport LGBTQ, Erbil airport phone, Iraq border LGBT search, leaving Iraq queer, Iraq exit risk LGBT, BGW phone search Grindr, Iraqi border phone surveillance, queer Iraqi airport detained, Iraqi customs LGBT app"
 commonQuestions:
   - q: "Which Iraqi airports are searching phones for LGBTQ+ content?"
@@ -15,16 +15,16 @@ commonQuestions:
   - q: "What specifically are border officers looking for on phones?"
     a: "Installed dating apps (Grindr, Hornet, Romeo, sometimes Tinder when same-sex matches appear), Telegram channel memberships with LGBT content, Twitter/X follows of queer figures or organisations, browser history showing LGBT site visits, saved photos containing kissing, partial nudity, or rainbow imagery, and social media posts that signal queer identity. Some officers also ask travellers to open specific apps and scroll through chats."
   - q: "Can I refuse to unlock my phone at the Iraqi border?"
-    a: "Practically, no. Refusal is treated as suspicious and almost always escalates to detention, additional questioning, denial of exit, or a more intrusive secondary search. The community-tested pattern is to comply quickly and have nothing incriminating on the phone in the first place — travel with a clean device, or thoroughly clean your daily device before reaching the airport."
+    a: "Practically, no. Refusal is treated as suspicious and almost always escalates to detention, additional questioning, denial of exit, or a more intrusive secondary search. The community-tested pattern is to comply quickly and have nothing incriminating on the phone in the first place. Travel with a clean device, or thoroughly clean your daily device before reaching the airport."
   - q: "What's the cleanest way to prepare a phone for travel out of Iraq?"
-    a: "Best: travel with a separate, clean phone — no dating apps, no LGBT-tagged social accounts logged in, no browser history, no sensitive photos. Second-best: on your daily phone, fully delete (not just hide) all dating apps, sign out of LGBT-related social accounts, clear browser history on every installed browser, delete or move sensitive photos out of cloud-synced folders, and check WhatsApp and Telegram conversations for LGBT-tagged content. Reset notification previews on the lockscreen."
+    a: "Best: travel with a separate, clean phone. No dating apps, no LGBT-tagged social accounts logged in, no browser history, no sensitive photos. Second-best: on your daily phone, fully delete (not just hide) all dating apps, sign out of LGBT-related social accounts, clear browser history on every installed browser, delete or move sensitive photos out of cloud-synced folders, and check WhatsApp and Telegram conversations for LGBT-tagged content. Reset notification previews on the lockscreen."
   - q: "If I am leaving Iraq to seek asylum, should I tell the border officer?"
-    a: "No. Iraqi officials are not obligated to allow you to leave if they suspect you intend to claim asylum, and stating it can result in exit denial or referral to security. Travel as a regular tourist or business traveller — round-trip ticket, hotel booking, modest cash on hand — and make your asylum claim only after you have left Iraqi airspace. See the [FAQ](/en/faq) for more detail on asylum pathways."
+    a: "No. Iraqi officials are not obligated to allow you to leave if they suspect you intend to claim asylum, and stating it can result in exit denial or referral to security. Travel as a regular tourist or business traveller. Round-trip ticket, hotel booking, modest cash on hand. And make your asylum claim only after you have left Iraqi airspace. See the [FAQ](/en/faq) for more detail on asylum pathways."
 citations:
-  - title: "Iraqi Social Progress Collective — community field reports from BGW and EBL"
+  - title: "Iraqi Social Progress Collective. Community field reports from BGW and EBL"
     org: "ISPC"
     year: 2026
-  - title: "Outright International — Border surveillance and LGBTQ+ travellers in Iraq"
+  - title: "Outright International. Border surveillance and LGBTQ+ travellers in Iraq"
     org: "Outright International"
     year: 2024
   - title: "Everyone Wants Me Dead: Killings, Abductions, Torture, and Sexual Violence Against LGBT People in Iraq"
@@ -41,7 +41,7 @@ This is not a formal published policy and has not been confirmed in writing by I
 
 - **Apps flagged as concerning** at search: Grindr, Hornet, Romeo, Tinder (when same-gender pairing is visible), Telegram channels with LGBTQ+ content, Twitter/X accounts following queer figures.
 - **Browser history checked** on Chrome and Safari for visits to LGBTQ+ websites.
-- **Photos reviewed** for content the officer perceives as "indecent" — including kissing, partial nudity, or images of pride flags.
+- **Photos reviewed** for content the officer perceives as "indecent". Including kissing, partial nudity, or images of pride flags.
 - **Social media accounts opened** and scrolled by officers in some cases. Refusal can result in delayed travel or denied exit.
 
 The intensity varies by officer, time of day, and apparent gender of the traveler. Trans women and visibly gender-non-conforming travelers report more intensive scrutiny.
@@ -60,9 +60,9 @@ The cleanest preparation: travel with a phone that has no LGBTQ+ apps, no LGBTQ+
 ### 2. If you must travel with your normal phone
 
 - **Uninstall** all dating apps and queer-coded apps before arriving at the airport.
-- **Sign out** of social media accounts. Don't just close the app — sign out so re-opening requires a password.
+- **Sign out** of social media accounts. Don't just close the app. Sign out so re-opening requires a password.
 - **Clear browser history** on every browser installed (Chrome, Samsung Internet, Firefox, Safari).
-- **Delete or move to a hidden folder** any photos that could be flagged. If your phone supports a hidden/secure folder (Samsung Knox, etc.), use it — but understand that an examiner who knows what they're doing can find it.
+- **Delete or move to a hidden folder** any photos that could be flagged. If your phone supports a hidden/secure folder (Samsung Knox, etc.), use it. But understand that an examiner who knows what they're doing can find it.
 - **Check WhatsApp and Telegram** for any chats with LGBTQ+ content; clear them or back them up to a cloud account and remove from device.
 - **Disable lock screen previews** so notifications don't reveal app names or message content.
 
@@ -76,7 +76,7 @@ The cleanest preparation: travel with a phone that has no LGBTQ+ apps, no LGBTQ+
 ### 4. After the search
 
 - If you make it through, you've still been logged. Future travels through the same airport may face additional scrutiny.
-- If you are detained or denied exit, [contact us via the community page](/en/community) — we can sometimes connect with international advocacy contacts who handle such cases.
+- If you are detained or denied exit, [contact us via the community page](/en/community). We can sometimes connect with international advocacy contacts who handle such cases.
 
 ## On exiting Iraq permanently (asylum)
 

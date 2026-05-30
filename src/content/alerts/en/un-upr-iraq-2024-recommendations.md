@@ -7,11 +7,11 @@ severity: info
 category: legal
 source: "UN Human Rights Council / Outright International / ILGA World"
 sourceUrl: "https://www.ohchr.org/en/hr-bodies/upr/iq-index"
-affected: "All LGBTQ+ Iraqis — international advocacy context"
+affected: "All LGBTQ+ Iraqis. International advocacy context"
 keywords: "Iraq UPR 2024, UN Iraq LGBT, Universal Periodic Review Iraq, ILGA Iraq, OHCHR Iraq LGBT, Iraq Human Rights Council, الاستعراض الدوري الشامل العراق"
 ---
 
-Iraq underwent its fourth-cycle Universal Periodic Review (UPR) at the UN Human Rights Council in late 2024. The UPR is a peer-review mechanism where every UN member state's human rights record is examined every 4–5 years, and member states issue recommendations that the country under review can accept or note (effectively reject).
+Iraq underwent its fourth-cycle Universal Periodic Review (UPR) at the UN Human Rights Council in late 2024. The UPR is a peer-review mechanism where every UN member state's human rights record is examined every 4-5 years, and member states issue recommendations that the country under review can accept or note (effectively reject).
 
 ## The recommendations
 
@@ -63,6 +63,6 @@ These organizations cannot intervene in individual cases the way an asylum lawye
 
 ## Looking forward
 
-Iraq's next UPR cycle will be in 2028–2029. The patterns of rejection are unlikely to change without internal political shifts, but the documentation continues to accumulate — and that documentation is what makes asylum claims more straightforward, what informs international policy, and what records this period for future accountability.
+Iraq's next UPR cycle will be in 2028-2029. The patterns of rejection are unlikely to change without internal political shifts, but the documentation continues to accumulate. And that documentation is what makes asylum claims more straightforward, what informs international policy, and what records this period for future accountability.
 
 For more international context, see our [LGBTQIA+ history guide](/en/guides/lgbtqia-history) including the modern Arab queer movement section.
