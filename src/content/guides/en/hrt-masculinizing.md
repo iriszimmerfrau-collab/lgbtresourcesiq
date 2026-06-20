@@ -44,13 +44,7 @@ Testosterone gel (AndroGel and equivalents) is available in larger Iraqi cities 
 
 ## Sourcing testosterone in Iraq
 
-Testosterone is generally easier to source than feminizing medications because Iraqi men use it for legitimate reasons (low T, post-prostate-treatment recovery, bodybuilding). Pharmacies stock it routinely.
-
-**Tips:**
-
-- Brand names like **Testoviron** are recognized on sight; you do not need to explain.
-- The bodybuilding cover story works without effort. Iraqi pharmacies sell large quantities of testosterone for this reason and ask few questions.
-- **Going as a man-passing customer dramatically reduces friction.** Once you start passing on testosterone, sourcing becomes much easier.
+We have guidance on accessing testosterone in Iraq. Please contact us through the secure channel for more information.
 
 ## Realistic timeline of changes
 

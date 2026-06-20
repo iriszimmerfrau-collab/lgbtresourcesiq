@@ -28,6 +28,15 @@ export function switchLangPath(currentPath: string, targetLang: Lang): string {
   const stripped = currentPath.startsWith(BASE) ? currentPath.slice(BASE.length) : currentPath;
   const segments = stripped.split('/').filter(Boolean);
   if (segments.length === 0) return `${BASE}/${targetLang}/`;
+  // Some routes are language-neutral and carry no locale segment — notably the
+  // shared story detail pages at /stories/<slug>, which have one canonical URL
+  // for every language. Overwriting segment 0 there turned /stories/story-1787
+  // into /ckb/story-1787 and 404'd. Send the reader to the target language's
+  // Stories listing instead, and leave any other locale-less route untouched.
+  if (!(segments[0] in languages)) {
+    if (segments[0] === 'stories') return `${BASE}/${targetLang}/stories/`;
+    return `${BASE}/${segments.join('/')}`;
+  }
   segments[0] = targetLang;
   return `${BASE}/${segments.join('/')}`;
 }
