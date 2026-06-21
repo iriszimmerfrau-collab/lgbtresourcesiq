@@ -12,6 +12,18 @@ interface Props {
 const { alert, href, lang } = Astro.props;
 const { title, description, pubDate, severity, category, source, affected } = alert.data;
 
+// Aggregated RSS alerts sometimes carry raw HTML — including very long
+// tracking URLs — in their description. Strip tags so the card shows clean
+// text instead of rendering markup or overflowing off-screen.
+const cleanDescription = description
+  ? description
+      .replace(/<[^>]*>/g, '')   // strip complete HTML tags
+      .replace(/<[^>]*$/g, '')   // strip a trailing tag left unterminated by truncation
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  : description;
+
 const severityClass: Record<string, string> = {
   critical: 'bg-exit-red text-white border-exit-red',
   high: 'bg-terracotta text-white border-terracotta',
@@ -42,7 +54,7 @@ const severityBar: Record<string, string> = {
       </time>
     </div>
     <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-magenta transition-colors leading-tight">{title}</h3>
-    <p class="text-muted text-sm leading-relaxed mb-2">{description}</p>
+    <p class="text-muted text-sm leading-relaxed mb-2 break-words">{cleanDescription}</p>
     <div class="flex flex-wrap gap-3 text-xs text-muted/80">
       {source && <span><strong>{t(lang, 'alerts.label.source')}:</strong> {source}</span>}
       {affected && <span><strong>{t(lang, 'alerts.label.affected')}:</strong> {affected}</span>}
